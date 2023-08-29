@@ -17,6 +17,7 @@ lazy val microservice = Project("customs-service-status-frontend", file("."))
     ScoverageKeys.coverageMinimumStmtTotal := 80,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
+    playDefaultPort := 8993,
     scalaVersion        := "2.13.10",
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     // https://www.scala-lang.org/2021/01/12/configuring-and-suppressing-warnings.html
