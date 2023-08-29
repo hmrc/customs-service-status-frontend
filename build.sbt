@@ -29,5 +29,9 @@ lazy val microservice = Project("customs-service-status-frontend", file("."))
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings: _*)
+  .settings( //fix scaladoc generation in jenkins
+      Compile / scalacOptions -= "utf8",
+      scalacOptions += "-language:postfixOps"
+  )
 
 evictionErrorLevel := Level.Warn
