@@ -1,3 +1,4 @@
 # Add all the application routes to the app.routes file
-->         /customs-service-status-frontend              app.Routes
-->         /                          health.Routes
+->         /customs-service-status              app.Routes
+->         /                                    health.Routes
+GET        /admin/metrics                       com.kenshoo.play.metrics.MetricsController.metrics
