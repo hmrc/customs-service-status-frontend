@@ -1,7 +1,15 @@
 
 # customs-service-status-frontend
 
-This is a placeholder README.md for a new repository
+This service provides a dashboard view of Service Availability.
+
+## Running the service locally
+`sbt run`
+
+By default, the service runs on port 8993. Navigate to http://localhost:8993/customs-service-status/service-availability
+
+#### Testing the service locally
+`sbt test it:test`
 
 ### License
 

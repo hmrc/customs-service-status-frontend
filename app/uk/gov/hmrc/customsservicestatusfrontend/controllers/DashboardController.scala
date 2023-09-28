@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.HelloWorldPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class HelloWorldController @Inject() (mcc: MessagesControllerComponents, helloWorldPage: HelloWorldPage) extends FrontendController(mcc) {
+class DashboardController @Inject() (mcc: MessagesControllerComponents, dashboardPage: DashboardPage) extends FrontendController(mcc) {
 
-  val helloWorld: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(helloWorldPage()))
+  val show: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(dashboardPage()))
   }
 
 }

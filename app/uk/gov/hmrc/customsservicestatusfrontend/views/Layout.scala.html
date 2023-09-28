@@ -15,17 +15,24 @@
  *@
 
 @import uk.gov.hmrc.customsservicestatusfrontend.config.AppConfig
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.HmrcStandardPageParams
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.ServiceURLs
+@import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 
 @this(
         appConfig: AppConfig,
-        hmrcLayout: HmrcLayout
+        hmrcStandardPage: HmrcStandardPage
 )
+
 @(pageTitle: Option[String] = None)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
-@hmrcLayout(
-    pageTitle = pageTitle,
-    isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled
+@hmrcStandardPage(
+    HmrcStandardPageParams(
+        pageTitle = pageTitle,
+        isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
+        serviceURLs = ServiceURLs(serviceUrl = Some(routes.DashboardController.show.url))
+    )
 )(contentBlock)
 
 @{

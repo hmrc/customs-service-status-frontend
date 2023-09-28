@@ -1,2 +1,8 @@
-service.name = customs-service-status-frontend
-service.text = This is your new service
+service.name = Customs service availability
+
+dashboard.h1 = Service availability
+dashboard.h2 = GVMS component status
+dashboard.inset = Last updated: {0}. {1}Refresh this page{2} for the latest availability status.
+dashboard.table.heading1 = Component
+dashboard.table.heading2 = Availability status
+dashboard.table.heading3 = Last updated

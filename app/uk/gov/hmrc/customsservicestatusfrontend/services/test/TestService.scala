@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(layout: Layout)
+package uk.gov.hmrc.customsservicestatusfrontend.services.test
 
-@()(implicit request: Request[_], messages: Messages)
+import com.google.inject.{Inject, Singleton}
+import uk.gov.hmrc.customsservicestatusfrontend.connectors.test.TestConnector
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-@layout(pageTitle = Some("customs-service-status-frontend")) {
-    <h1 class="govuk-heading-xl">customs-service-status-frontend</h1>
-    <p class="govuk-body">@{messages("service.text")}</p>
-}
+import scala.concurrent.Future
 
-@{
-    //$COVERAGE-OFF$
+@Singleton
+class TestService @Inject() (
+  testConnector: TestConnector
+) {
+
+  def clearAllData(implicit hc: HeaderCarrier): Future[HttpResponse] = testConnector.clearAllData
+
 }
