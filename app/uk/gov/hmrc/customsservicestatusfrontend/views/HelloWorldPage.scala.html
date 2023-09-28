@@ -14,15 +14,56 @@
  * limitations under the License.
  *@
 
-@this(layout: Layout)
+@import uk.gov.hmrc.govukfrontend.views.Aliases.TableRow
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInsetText, GovukTable, _}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
+@import java.time.Instant
+@import java.time.{Instant, LocalDate, ZoneId}
+@import java.util.Locale
+@import java.time.ZoneId
+@import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
+
+@this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
 
 @()(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("customs-service-status-frontend")) {
-    <h1 class="govuk-heading-xl">customs-service-status-frontend</h1>
-    <p class="govuk-body">@{messages("service.text")}</p>
-}
+  <h1 class="govuk-heading-xl">@messages("dashboard.h1")</h1>
+  <h2 class="govuk-heading-x">@messages("dashboard.h2")</h2>
 
-@{
-    //$COVERAGE-OFF$
+ @govukInsetText(InsetText(
+  content = HtmlContent(messages("dashboard.inset", s"<b>${Formatters.instantFormatDate(Instant.now).toString} ${Formatters.instantFormatHours(Instant.now)}</b>", s"""<a href="${uk.gov.hmrc.customsservicestatusfrontend.controllers.routes.HelloWorldController.helloWorld}">""", "</a>"))
+ ))
+
+ @govukTable(Table(
+  head = Some(Seq(
+   HeadCell(
+    content = Text(messages("dashboard.table.heading1"))
+   ),
+   HeadCell(
+    content = Text(messages("dashboard.table.heading2"))
+   ),
+   HeadCell(
+    content = Text(messages("dashboard.table.heading3"))
+   )
+  )),
+  rows = Seq(
+   Seq(
+    TableRow(
+     content = Text("")
+    ),
+    TableRow(
+     content = Text("")
+    ),
+    TableRow(
+     content = Text("")
+    )
+   )
+  ),
+  caption = None,
+  captionClasses = "govuk-table__caption--m",
+  firstCellIsHeader = true
+ ))
 }
