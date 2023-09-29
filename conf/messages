@@ -1,4 +1,4 @@
-service.name = Customs Service Status Frontend
+service.name = Customs service availability
 
 dashboard.h1 = Service availability
 dashboard.h2 = GVMS component status
