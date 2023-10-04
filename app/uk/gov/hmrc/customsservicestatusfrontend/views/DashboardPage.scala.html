@@ -29,7 +29,7 @@
 
 @layout(pageTitle = Some("customs-service-status-frontend")) {
   <h1 class="govuk-heading-xl">@messages("dashboard.h1")</h1>
-  <h2 class="govuk-heading-x">@messages("dashboard.h2")</h2>
+  <h2 class="govuk-heading-m">@messages("dashboard.h2")</h2>
 
  @govukInsetText(InsetText(
   content = HtmlContent(messages("dashboard.inset", s"<b>${Formatters.instantFormatDate(Instant.now).toString} ${Formatters.instantFormatHours(Instant.now)}</b>", s"""<a href="${uk.gov.hmrc.customsservicestatusfrontend.controllers.routes.DashboardController.show}">""", "</a>"))

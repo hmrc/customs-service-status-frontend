@@ -26,7 +26,10 @@ object Formatters {
 
   private def zoneId = ZoneId.of("GMT")
 
-  def instantFormatDate(instant: Instant)(implicit messages: Messages): LocalDate = instant.atZone(zoneId).toLocalDate
+  def instantFormatDate(instant: Instant)(implicit messages: Messages): LocalDate = {
+    val zoneId: ZoneId = ZoneId.of("Europe/London")
+    instant.atZone(zoneId).toLocalDate
+  }
 
   def instantFormatHours(instant: Instant)(implicit messages: Messages): String = hoursFormatter(messages.lang.locale).format(instant)
 
