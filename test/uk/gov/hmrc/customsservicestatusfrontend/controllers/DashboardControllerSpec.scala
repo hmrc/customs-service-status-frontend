@@ -34,11 +34,11 @@ class DashboardControllerSpec extends AnyWordSpec with Matchers with GuiceOneApp
       )
       .build()
 
-  private val fakeRequest = FakeRequest("GET", "/")
+  private val fakeRequest = FakeRequest("GET", "/service-availability")
 
   private val controller = app.injector.instanceOf[DashboardController]
 
-  "GET /" should {
+  "GET /service-availability" should {
     "return 200" in {
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
