@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
-
+@import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
 @import java.time.Instant
 
 @this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
@@ -32,7 +32,7 @@
   <h2 class="govuk-heading-m">@messages("dashboard.h2")</h2>
 
  @govukInsetText(InsetText(
-  content = HtmlContent(messages("dashboard.inset", s"<b>${Formatters.instantFormatDate(Instant.now).toString} ${Formatters.instantFormatHours(Instant.now)}</b>", s"""<a href="${uk.gov.hmrc.customsservicestatusfrontend.controllers.routes.DashboardController.show}">""", "</a>"))
+  content = HtmlContent(messages("dashboard.inset", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>", s"""<a href="${uk.gov.hmrc.customsservicestatusfrontend.controllers.routes.DashboardController.show}">""", "</a>"))
  ))
 
  @govukTable(Table(
