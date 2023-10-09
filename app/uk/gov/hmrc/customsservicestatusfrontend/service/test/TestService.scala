@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.config
+package uk.gov.hmrc.customsservicestatusfrontend.service.test
 
-import com.google.inject.{AbstractModule, Provides}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import com.google.inject.{Inject, Singleton}
+import uk.gov.hmrc.customsservicestatusfrontend.connector.TestConnector
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-import javax.inject.{Named, Singleton}
+import scala.concurrent.Future
 
-class Module extends AbstractModule {
+@Singleton
+class TestService @Inject() (
+  testConnector: TestConnector
+) {
 
-  @Provides
-  @Named("customsServiceStatusUrl")
-  @Singleton
-  def registerCustomsServiceStatusUrlProvider(servicesConfig: ServicesConfig): String =
-    servicesConfig.baseUrl("customs-service-status")
+  def clearAllData(implicit hc: HeaderCarrier): Future[HttpResponse] = testConnector.clearAllData
+
 }
