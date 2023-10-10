@@ -16,10 +16,16 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.config
 
-import com.google.inject.AbstractModule
+import com.google.inject.{AbstractModule, Provides}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import javax.inject.{Named, Singleton}
 
 class Module extends AbstractModule {
 
-  override def configure(): Unit =
-    bind(classOf[AppConfig]).asEagerSingleton()
+  @Provides
+  @Named("customsServiceStatusUrl")
+  @Singleton
+  def registerCustomsServiceStatusUrlProvider(servicesConfig: ServicesConfig): String =
+    servicesConfig.baseUrl("customs-service-status")
 }

@@ -1,0 +1,67 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
+@import uk.gov.hmrc.govukfrontend.views.Aliases.TableRow
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInsetText, GovukTable, _}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
+@import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
+@import java.time.Instant
+
+@this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
+
+@()(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some("customs-service-status-frontend")) {
+  <h1 class="govuk-heading-xl">@messages("dashboard.h1")</h1>
+  <h2 class="govuk-heading-m">@messages("dashboard.h2")</h2>
+
+ @govukInsetText(InsetText(
+  content = HtmlContent(messages("dashboard.inset", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>", s"""<a href="${uk.gov.hmrc.customsservicestatusfrontend.controllers.routes.DashboardController.show}">""", "</a>"))
+ ))
+
+ @govukTable(Table(
+  head = Some(Seq(
+   HeadCell(
+    content = Text(messages("dashboard.table.heading1"))
+   ),
+   HeadCell(
+    content = Text(messages("dashboard.table.heading2"))
+   ),
+   HeadCell(
+    content = Text(messages("dashboard.table.heading3"))
+   )
+  )),
+  rows = Seq(
+   Seq(
+    TableRow(
+     content = Text("")
+    ),
+    TableRow(
+     content = Text("")
+    ),
+    TableRow(
+     content = Text("")
+    )
+   )
+  ),
+  caption = None,
+  captionClasses = "govuk-table__caption--m",
+  firstCellIsHeader = true
+ ))
+}

@@ -1,0 +1,1 @@
+GET           /clear-all                            uk.gov.hmrc.customsservicestatusfrontend.controllers.test.TestController.clearAllData
