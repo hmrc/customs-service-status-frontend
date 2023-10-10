@@ -1,4 +1,5 @@
 service.name = Customs service availability
+service.title.suffix=GOV.UK
 
 dashboard.h1 = Service availability
 dashboard.h2 = GVMS component status
