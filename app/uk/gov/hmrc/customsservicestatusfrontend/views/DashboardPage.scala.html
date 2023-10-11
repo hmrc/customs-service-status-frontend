@@ -27,7 +27,7 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("customs-service-status-frontend")) {
+@layout(pageTitle = Some(s"${messages("dashboard.h1")} - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
   <h1 class="govuk-heading-xl">@messages("dashboard.h1")</h1>
   <h2 class="govuk-heading-m">@messages("dashboard.h2")</h2>
 
