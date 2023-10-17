@@ -16,38 +16,55 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.customsServiceStatusAll
+import uk.gov.hmrc.customsservicestatusfrontend.services.CustomsServiceStatusService
+import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
+import uk.gov.hmrc.http.HeaderCarrier
 
-class DashboardControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
-  override def fakeApplication(): Application =
-    new GuiceApplicationBuilder()
-      .configure(
-        "metrics.jvm"     -> false,
-        "metrics.enabled" -> false
-      )
-      .build()
+import java.time.Instant
+import scala.concurrent.Future
+
+class DashboardControllerSpec extends ControllerBaseSpec {
 
   private val fakeRequest = FakeRequest("GET", "/service-availability")
+  private val dashboardPage: DashboardPage = app.injector.instanceOf[DashboardPage]
+  private val mockService = mock[CustomsServiceStatusService]
 
-  private val controller = app.injector.instanceOf[DashboardController]
+  private val controller = new DashboardController(
+    stubMessagesControllerComponents(),
+    dashboardPage,
+    mockService
+  )
 
   "GET /service-availability" should {
-    "return 200" in {
+    "return success response as expected" in {
+      val now = Instant.now()
+      (mockService
+        .getStatus()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(customsServiceStatusAll))
+
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
-    }
 
-    "return HTML" in {
-      val result = controller.show(fakeRequest)
-      contentType(result) shouldBe Some("text/html")
-      charset(result)     shouldBe Some("utf-8")
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementsByClass("govuk-heading-xl").text()           shouldBe "Service availability"
+      doc.getElementsByClass("govuk-heading-m").text()            shouldBe "GVMS component status"
+      doc.getElementsByClass("govuk-table__header").get(0).text() shouldBe "Component"
+      doc.getElementsByClass("govuk-table__header").get(1).text() shouldBe "Availability status"
+      doc.getElementsByClass("govuk-table__header").get(2).text() shouldBe "Last updated"
+
+      doc
+        .getElementsByClass("govuk-inset-text")
+        .text()                                                   shouldBe s"Last updated: ${Formatters.instantFormatHours(now)}. Refresh this page for the latest availability status."
+      doc.getElementsByClass("govuk-table__header").get(3).text() shouldBe "Haulier"
+      doc.getElementsByClass("govuk-table__cell").text()            should include("OK")
+      doc.getElementsByClass("govuk-table__cell").text()            should include(Formatters.instantFormatDate(now))
     }
   }
 }
