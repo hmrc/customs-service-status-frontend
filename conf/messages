@@ -7,3 +7,6 @@ dashboard.inset = Last updated: {0}. {1}Refresh this page{2} for the latest avai
 dashboard.table.heading1 = Component
 dashboard.table.heading2 = Availability status
 dashboard.table.heading3 = Last updated
+service.state.OK=OK
+service.state.UNAVAILABLE=UNAVAILABLE
+service.state.UNKNOWN=UNKNOWN

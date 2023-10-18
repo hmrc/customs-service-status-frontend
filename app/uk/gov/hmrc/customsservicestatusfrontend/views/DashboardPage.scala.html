@@ -62,7 +62,7 @@
         content = Text(service.name)
        ),
        TableRow(
-        content = HtmlContent(s"""<span class="${statusClasses(service)}">${service.status.state.getOrElse("")}</span>""")
+        content = HtmlContent(s"""<span class="${statusClasses(service)}">${messages(s"service.state.${service.status.state.getOrElse(UNKNOWN).value}")}</span>""")
        ),
        TableRow(
         content = Text(service.status.lastUpdated.map(instantFormatDate).getOrElse(""))
