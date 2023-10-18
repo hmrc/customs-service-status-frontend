@@ -26,11 +26,11 @@ sealed trait State {
 }
 
 object State {
-  case object OK extends State
+  case object AVAILABLE extends State
   case object UNAVAILABLE extends State
   case object UNKNOWN extends State
 
-  val values: Seq[State] = Seq(OK, UNAVAILABLE, UNKNOWN)
+  val values: Seq[State] = Seq(AVAILABLE, UNAVAILABLE, UNKNOWN)
 
   implicit val format: Format[State] = new Format[State] {
 
@@ -38,7 +38,7 @@ object State {
 
     override def reads(json: JsValue): JsResult[State] =
       json.validate[String].flatMap {
-        case OK.value          => JsSuccess(OK)
+        case AVAILABLE.value   => JsSuccess(AVAILABLE)
         case UNAVAILABLE.value => JsSuccess(UNAVAILABLE)
         case UNKNOWN.value     => JsSuccess(UNKNOWN)
         case e                 => JsError(s"invalid value: $e for State type")

@@ -63,7 +63,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .getElementsByClass("govuk-inset-text")
         .text()                                                   shouldBe s"Last updated: ${Formatters.instantFormatHours(now)}. Refresh this page for the latest availability status."
       doc.getElementsByClass("govuk-table__header").get(3).text() shouldBe "Haulier"
-      doc.getElementsByClass("govuk-table__cell").text()            should include("OK")
+      doc.getElementsByClass("govuk-table__cell").text()            should include("AVAILABLE")
       doc.getElementsByClass("govuk-table__cell").text()            should include(Formatters.instantFormatDate(now))
     }
   }
