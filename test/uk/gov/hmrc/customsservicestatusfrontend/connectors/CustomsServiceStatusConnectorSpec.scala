@@ -17,8 +17,8 @@
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.customsServiceStatusAll
-import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatusAll
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,14 +36,14 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
       (mockHttpClient
         .GET(_: String, _: Seq[(String, String)], _: Seq[(String, String)])(
-          _: HttpReads[CustomsServiceStatusAll],
+          _: HttpReads[ServiceStatuses],
           _: HeaderCarrier,
           _: ExecutionContext
         ))
         .expects(*, *, *, *, *, *)
-        .returns(Future.successful(customsServiceStatusAll))
+        .returns(Future.successful(serviceStatuses))
 
-      connector.getStatus().futureValue shouldBe customsServiceStatusAll
+      connector.getStatus().futureValue shouldBe serviceStatuses
     }
   }
 }

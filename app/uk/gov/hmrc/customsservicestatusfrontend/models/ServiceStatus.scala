@@ -53,14 +53,14 @@ object Status {
   implicit val format:        OFormat[Status] = Json.using[Json.WithDefaultValues].format[Status]
 }
 
-case class CustomsServiceStatus(name: String, status: Status, description: String)
+case class ServiceStatus(name: String, status: Status, description: String)
 
-object CustomsServiceStatus {
-  implicit val format: OFormat[CustomsServiceStatus] = Json.format[CustomsServiceStatus]
+object ServiceStatus {
+  implicit val format: OFormat[ServiceStatus] = Json.format[ServiceStatus]
 }
 
-case class CustomsServiceStatusAll(services: List[CustomsServiceStatus])
+case class ServiceStatuses(services: List[ServiceStatus])
 
-object CustomsServiceStatusAll {
-  implicit val format: OFormat[CustomsServiceStatusAll] = Json.format[CustomsServiceStatusAll]
+object ServiceStatuses {
+  implicit val format: OFormat[ServiceStatuses] = Json.format[ServiceStatuses]
 }

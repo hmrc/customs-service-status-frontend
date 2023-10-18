@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.customsservicestatusfrontend.services.CustomsServiceStatusService
+import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -26,14 +26,14 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class DashboardController @Inject() (
-  mcc:                         MessagesControllerComponents,
-  dashboardPage:               DashboardPage,
-  customsServiceStatusService: CustomsServiceStatusService
-)(implicit ec:                 ExecutionContext)
+  mcc:           MessagesControllerComponents,
+  dashboardPage: DashboardPage,
+  statusService: StatusService
+)(implicit ec:   ExecutionContext)
     extends FrontendController(mcc) {
 
   val show: Action[AnyContent] = Action.async { implicit request =>
-    customsServiceStatusService.getStatus().map { statuses =>
+    statusService.getStatus().map { statuses =>
       Ok(dashboardPage(statuses))
     }
   }

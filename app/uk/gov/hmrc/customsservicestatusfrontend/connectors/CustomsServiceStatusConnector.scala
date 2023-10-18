@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatusAll
+import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.{Inject, Named}
@@ -29,6 +29,6 @@ class CustomsServiceStatusConnector @Inject() (
 
   private val baseUrl = s"$customsServiceStatusBaseUrl/customs-service-status"
 
-  def getStatus()(implicit headerCarrier: HeaderCarrier): Future[CustomsServiceStatusAll] =
-    httpClient.GET[CustomsServiceStatusAll](s"$baseUrl/services")
+  def getStatus()(implicit headerCarrier: HeaderCarrier): Future[ServiceStatuses] =
+    httpClient.GET[ServiceStatuses](s"$baseUrl/services")
 }

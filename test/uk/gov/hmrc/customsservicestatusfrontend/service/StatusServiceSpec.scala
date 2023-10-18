@@ -18,27 +18,27 @@ package uk.gov.hmrc.customsservicestatusfrontend.service
 
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.customsServiceStatusAll
-import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatusAll
-import uk.gov.hmrc.customsservicestatusfrontend.services.CustomsServiceStatusService
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class CustomsServiceStatusServiceSpec extends BaseSpec {
+class StatusServiceSpec extends BaseSpec {
 
   val mockConnector = mock[CustomsServiceStatusConnector]
 
-  val service = new CustomsServiceStatusService(mockConnector)
+  val service = new StatusService(mockConnector)
 
   "getStatus" should {
     "return response as expected" in {
       (mockConnector
         .getStatus()(_: HeaderCarrier))
         .expects(*)
-        .returns(Future.successful(customsServiceStatusAll))
+        .returns(Future.successful(serviceStatuses))
 
-      service.getStatus().futureValue shouldBe customsServiceStatusAll
+      service.getStatus().futureValue shouldBe serviceStatuses
     }
 
     "handle any backend exceptions and return empty statuses" in {
@@ -47,7 +47,7 @@ class CustomsServiceStatusServiceSpec extends BaseSpec {
         .expects(*)
         .returns(Future.failed(new RuntimeException("unexpected from backend")))
 
-      service.getStatus().futureValue shouldBe CustomsServiceStatusAll(List.empty)
+      service.getStatus().futureValue shouldBe ServiceStatuses(List.empty)
     }
   }
 }

@@ -20,8 +20,8 @@ import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.customsServiceStatusAll
-import uk.gov.hmrc.customsservicestatusfrontend.services.CustomsServiceStatusService
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.http.HeaderCarrier
@@ -33,7 +33,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
   private val fakeRequest = FakeRequest("GET", "/service-availability")
   private val dashboardPage: DashboardPage = app.injector.instanceOf[DashboardPage]
-  private val mockService = mock[CustomsServiceStatusService]
+  private val mockService = mock[StatusService]
 
   private val controller = new DashboardController(
     stubMessagesControllerComponents(),
@@ -47,7 +47,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       (mockService
         .getStatus()(_: HeaderCarrier))
         .expects(*)
-        .returns(Future.successful(customsServiceStatusAll))
+        .returns(Future.successful(serviceStatuses))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK

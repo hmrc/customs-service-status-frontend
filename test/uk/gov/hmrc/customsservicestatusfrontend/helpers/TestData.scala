@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.OK
-import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, CustomsServiceStatusAll, Status}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{ServiceStatus, ServiceStatuses, Status}
 
 import java.time.Instant
 
@@ -25,7 +25,7 @@ object TestData {
 
   val now: Instant = Instant.now()
 
-  val customsServiceStatus: CustomsServiceStatus = CustomsServiceStatus("Haulier", Status(Some(OK), Some(now)), "some description")
+  val serviceStatus: ServiceStatus = ServiceStatus("Haulier", Status(Some(OK), Some(now)), "some description")
 
-  val customsServiceStatusAll: CustomsServiceStatusAll = CustomsServiceStatusAll(List(customsServiceStatus))
+  val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 }

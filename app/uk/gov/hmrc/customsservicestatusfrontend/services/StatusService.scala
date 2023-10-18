@@ -19,21 +19,20 @@ package uk.gov.hmrc.customsservicestatusfrontend.services
 import com.google.inject.{Inject, Singleton}
 import play.api.Logging
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
-import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatusAll
+import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CustomsServiceStatusService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector)(implicit ec: ExecutionContext)
-    extends Logging {
+class StatusService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector)(implicit ec: ExecutionContext) extends Logging {
 
-  def getStatus()(implicit hc: HeaderCarrier): Future[CustomsServiceStatusAll] =
+  def getStatus()(implicit hc: HeaderCarrier): Future[ServiceStatuses] =
     customsServiceStatusConnector
       .getStatus()
       .recoverWith { case e =>
         //TODO: should we raise an alert if backend fails to return response?
         logger.warn(s"error calling customs-service-status backend, error: ${e.getMessage}")
-        Future.successful(CustomsServiceStatusAll(List.empty))
+        Future.successful(ServiceStatuses(List.empty))
       }
 }
