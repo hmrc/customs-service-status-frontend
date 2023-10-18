@@ -22,16 +22,16 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
 @import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State._
-@import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatus
-@import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatusAll
+@import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatus
+@import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters._
 @import java.time.Instant
 
 @this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
 
-@(statuses: CustomsServiceStatusAll)(implicit request: Request[_], messages: Messages)
+@(statuses: ServiceStatuses)(implicit request: Request[_], messages: Messages)
 
-@statusClasses(service: CustomsServiceStatus) = @{
+@statusClasses(service: ServiceStatus) = @{
      if(service.status.state.contains(OK)) "govuk-tag govuk-tag--green" else "govuk-tag govuk-tag--red"
 }
 
