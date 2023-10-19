@@ -55,8 +55,8 @@
     content = Text(messages("dashboard.table.heading3"))
    )
   )),
-  rows = Seq(
-   statuses.services.flatMap { service =>
+  rows = statuses.services.flatMap { service =>
+    Seq(
      Seq(
        TableRow(
         content = Text(service.name)
@@ -68,8 +68,8 @@
         content = Text(service.status.lastUpdated.map(instantFormatDate).getOrElse(""))
        )
     )
-   }
-  ),
+   )
+   },
   caption = None,
   captionClasses = "govuk-table__caption--m",
   firstCellIsHeader = true
