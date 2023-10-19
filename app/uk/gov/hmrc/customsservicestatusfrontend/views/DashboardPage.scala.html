@@ -21,11 +21,19 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
 @import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
+@import uk.gov.hmrc.customsservicestatusfrontend.models.State._
+@import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatus
+@import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
+@import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters._
 @import java.time.Instant
 
 @this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
 
-@()(implicit request: Request[_], messages: Messages)
+@(statuses: ServiceStatuses)(implicit request: Request[_], messages: Messages)
+
+@statusClasses(service: ServiceStatus) = @{
+     if(service.status.state.contains(AVAILABLE)) "govuk-tag govuk-tag--green" else "govuk-tag govuk-tag--red"
+}
 
 @layout(pageTitle = Some(s"${messages("dashboard.h1")} - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
   <h1 class="govuk-heading-xl">@messages("dashboard.h1")</h1>
@@ -47,19 +55,21 @@
     content = Text(messages("dashboard.table.heading3"))
    )
   )),
-  rows = Seq(
-   Seq(
-    TableRow(
-     content = Text("")
-    ),
-    TableRow(
-     content = Text("")
-    ),
-    TableRow(
-     content = Text("")
+  rows = statuses.services.flatMap { service =>
+    Seq(
+     Seq(
+       TableRow(
+        content = Text(service.name)
+       ),
+       TableRow(
+        content = HtmlContent(s"""<span class="${statusClasses(service)}">${messages(s"service.state.${service.status.state.getOrElse(UNKNOWN).value}")}</span>""")
+       ),
+       TableRow(
+        content = Text(service.status.lastUpdated.map(instantFormatDate).getOrElse(""))
+       )
     )
    )
-  ),
+   },
   caption = None,
   captionClasses = "govuk-table__caption--m",
   firstCellIsHeader = true

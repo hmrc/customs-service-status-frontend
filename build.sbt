@@ -4,7 +4,7 @@ import sbt.Keys.evictionErrorLevel
 
 val appName = "customs-service-status-frontend"
 
-lazy val microservice = Project("customs-service-status-frontend", file("."))
+lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(
     majorVersion := 0,
