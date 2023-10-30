@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customsservicestatusfrontend.models
 
 import play.api.libs.json._
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import java.time.Instant
 
@@ -49,8 +48,7 @@ object State {
 case class Status(state: Option[State], lastUpdated: Option[Instant])
 
 object Status {
-  implicit val instantFormat: Format[Instant] = MongoJavatimeFormats.instantFormat
-  implicit val format:        OFormat[Status] = Json.using[Json.WithDefaultValues].format[Status]
+  implicit val format: OFormat[Status] = Json.using[Json.WithDefaultValues].format[Status]
 }
 
 case class ServiceStatus(name: String, status: Status, description: String)
