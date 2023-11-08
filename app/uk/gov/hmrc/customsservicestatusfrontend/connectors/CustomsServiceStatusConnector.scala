@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
 import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}

@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
 @import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State._
-@import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatus
+@import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatus
 @import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters._
 @import java.time.Instant
@@ -31,8 +31,8 @@
 
 @(statuses: ServiceStatuses)(implicit request: Request[_], messages: Messages)
 
-@statusClasses(service: ServiceStatus) = @{
-     if(service.status.state.contains(AVAILABLE)) "govuk-tag govuk-tag--green" else "govuk-tag govuk-tag--red"
+@statusClasses(service: CustomsServiceStatus) = @{
+     if(service.state.contains(AVAILABLE)) "govuk-tag govuk-tag--green" else "govuk-tag govuk-tag--red"
 }
 
 @layout(pageTitle = Some(s"${messages("dashboard.h1")} - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
@@ -62,10 +62,10 @@
         content = Text(service.name)
        ),
        TableRow(
-        content = HtmlContent(s"""<span class="${statusClasses(service)}">${messages(s"service.state.${service.status.state.getOrElse(UNKNOWN).value}")}</span>""")
+        content = HtmlContent(s"""<span class="${statusClasses(service)}">${messages(s"service.state.${service.state.getOrElse(UNKNOWN).value}")}</span>""")
        ),
        TableRow(
-        content = Text(service.status.lastUpdated.map(instantFormatDate).getOrElse(""))
+        content = Text(service.lastUpdated.map(instantFormatDate).getOrElse(""))
        )
     )
    )

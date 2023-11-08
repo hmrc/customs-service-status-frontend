@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.models
 
+import play.api.libs.json.Json.WithDefaultValues
 import play.api.libs.json._
 
 import java.time.Instant
@@ -45,19 +46,13 @@ object State {
   }
 }
 
-case class Status(state: Option[State], lastUpdated: Option[Instant])
+case class CustomsServiceStatus(name: String, description: String, state: Option[State], lastUpdated: Option[Instant])
 
-object Status {
-  implicit val format: OFormat[Status] = Json.using[Json.WithDefaultValues].format[Status]
+object CustomsServiceStatus {
+  implicit val format: OFormat[CustomsServiceStatus] = Json.using[WithDefaultValues].format[CustomsServiceStatus]
 }
 
-case class ServiceStatus(name: String, status: Status, description: String)
-
-object ServiceStatus {
-  implicit val format: OFormat[ServiceStatus] = Json.format[ServiceStatus]
-}
-
-case class ServiceStatuses(services: List[ServiceStatus])
+case class ServiceStatuses(services: List[CustomsServiceStatus])
 
 object ServiceStatuses {
   implicit val format: OFormat[ServiceStatuses] = Json.format[ServiceStatuses]
