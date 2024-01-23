@@ -46,7 +46,13 @@ object State {
   }
 }
 
-case class CustomsServiceStatus(name: String, description: String, state: Option[State], lastUpdated: Option[Instant])
+case class CustomsServiceStatus(
+  name:           String,
+  description:    String,
+  state:          Option[State],
+  stateChangedAt: Option[Instant],
+  lastUpdated:    Option[Instant]
+)
 
 object CustomsServiceStatus {
   implicit val format: OFormat[CustomsServiceStatus] = Json.using[WithDefaultValues].format[CustomsServiceStatus]
