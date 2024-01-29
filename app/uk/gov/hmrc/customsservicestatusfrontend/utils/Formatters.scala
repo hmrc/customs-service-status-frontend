@@ -28,7 +28,7 @@ object Formatters {
 
   def instantFormatDate(instant: Instant): String =
     DateTimeFormatter
-      .ofPattern("dd MMM yyyy")
+      .ofPattern("dd MMMM yyyy")
       .withZone(zoneId)
       .format(instant)
 
