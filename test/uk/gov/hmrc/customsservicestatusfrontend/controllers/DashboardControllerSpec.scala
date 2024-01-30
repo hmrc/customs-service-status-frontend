@@ -20,13 +20,14 @@ import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.http.HeaderCarrier
 
-import java.time.Instant
 import scala.concurrent.Future
 
 class DashboardControllerSpec extends ControllerBaseSpec {
@@ -42,8 +43,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
   )
 
   "GET /service-availability" should {
-    "return success response as expected" in {
-      val now = Instant.now()
+    "show dashboard content as expected when there are no issues" in {
       (mockService
         .getStatus()(_: HeaderCarrier))
         .expects(*)
@@ -53,18 +53,62 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       status(result) shouldBe Status.OK
 
       val doc = Jsoup.parse(contentAsString(result))
-      doc.getElementsByClass("govuk-heading-xl").text()           shouldBe "Service availability"
-      doc.getElementsByClass("govuk-heading-m").text()            shouldBe "GVMS component status"
-      doc.getElementsByClass("govuk-table__header").get(0).text() shouldBe "Component"
-      doc.getElementsByClass("govuk-table__header").get(1).text() shouldBe "Availability status"
-      doc.getElementsByClass("govuk-table__header").get(2).text() shouldBe "Last updated"
+      doc.getElementsByClass("govuk-heading-l").text()  shouldBe "Current GVMS availability"
+      doc.getElementsByClass("govuk-body").text()         should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
+      doc.getElementsByClass("govuk-tag--green").text() shouldBe "AVAILABLE"
+      doc.getElementsByClass("govuk-body").text() should include(
+        "There are currently no issues with creating and updating a goods movement reference."
+      )
+    }
 
-      doc
-        .getElementsByClass("govuk-inset-text")
-        .text()                                                   shouldBe s"Last updated: ${Formatters.instantFormatHours(now)}. Refresh this page for the latest availability status."
-      doc.getElementsByClass("govuk-table__header").get(3).text() shouldBe "Haulier"
-      doc.getElementsByClass("govuk-table__cell").text()            should include("AVAILABLE")
-      doc.getElementsByClass("govuk-table__cell").text()            should include(Formatters.instantFormatDate(now))
+    "show dashboard content as expected when there are issues" in {
+      val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
+      val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
+
+      (mockService
+        .getStatus()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(serviceStatuses))
+
+      val result = controller.show(fakeRequest)
+      status(result) shouldBe Status.OK
+
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Current GVMS availability"
+      doc.getElementsByClass("govuk-tag--orange").text() shouldBe "KNOWN ISSUES"
+
+      val body = doc.getElementsByClass("govuk-body").text()
+      body                                                should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
+      body                                                should include(s"Known issues since: ${Formatters.instantFormatHours(now)} on ${Formatters.instantFormatDate(now)}")
+      body                                                should include("We are currently investigating this issue.")
+      body                                                should include("You may not be able to:")
+      doc.getElementsByClass("govuk-list--bullet").text() should include("create a Goods Movement Reference (GMR) manage your GMRs")
+      body                                                should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
+
+      doc.getElementsByClass("govuk-heading-m").text() shouldBe "What you can do next"
+      body                                               should include("Do not travel to the border if you do not have a valid GMR.")
+
+      doc.getElementsByClass("govuk-list--bullet").text() should include(
+        "if HMRC has published an action plan to help keep your goods moving if there is any planned downtime for GVMS"
+      )
+    }
+
+    "show dashboard content as expected when status is unknown" in {
+      val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("Haulier", "description", Some(UNKNOWN), Some(now), Some(now))
+      val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
+      (mockService
+        .getStatus()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(serviceStatuses))
+
+      val result = controller.show(fakeRequest)
+      status(result) shouldBe Status.OK
+
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementsByClass("govuk-heading-l").text() shouldBe "GVMS availability unknown"
+      doc.getElementsByClass("govuk-body").text()        should include("The Check GVMS availability service is not working right now.")
+      doc.getElementsByClass("govuk-body").text()        should include("You can log into the Goods Vehicle Movement Service (GVMS) to check this yourself.")
+      doc.getElementById("gvms_url").attr("href")      shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
     }
   }
 }

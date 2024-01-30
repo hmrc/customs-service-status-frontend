@@ -25,7 +25,7 @@ object TestData {
 
   val now: Instant = Instant.now()
 
-  val serviceStatus: CustomsServiceStatus = CustomsServiceStatus("Haulier", "description", Some(AVAILABLE), Some(now))
+  val serviceStatus: CustomsServiceStatus = CustomsServiceStatus("Haulier", "description", Some(AVAILABLE), Some(now), Some(now))
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 }

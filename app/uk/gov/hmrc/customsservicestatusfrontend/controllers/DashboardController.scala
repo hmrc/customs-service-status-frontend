@@ -17,10 +17,12 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import java.time.Instant
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
@@ -34,7 +36,16 @@ class DashboardController @Inject() (
 
   val show: Action[AnyContent] = Action.async { implicit request =>
     statusService.getStatus().map { statuses =>
-      Ok(dashboardPage(statuses))
+      val uiState =
+        if (statuses.services.forall(_.state.contains(AVAILABLE)))
+          AVAILABLE
+        else if (statuses.services.exists(_.state.contains(UNAVAILABLE)))
+          UNAVAILABLE
+        else
+          UNKNOWN
+
+      val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
+      Ok(dashboardPage(uiState, stateChangedAt))
     }
   }
 }
