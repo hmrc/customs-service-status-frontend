@@ -2,18 +2,19 @@ import sbt._
 
 object AppDependencies {
 
-  private val bootstrapVersion = "7.21.0"
-  private val hmrcMongoVersion = "1.3.0"
+  private val bootstrapVersion = "8.4.0"
+  private val hmrcMongoVersion = "1.7.0"
+  private val playVersion = "play-30"
 
   val compile = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-frontend-play-28" % bootstrapVersion,
-    "uk.gov.hmrc"             %% "play-frontend-hmrc"         % "7.19.0-play-28",
-    "uk.gov.hmrc.mongo"       %% "hmrc-mongo-play-28"         % hmrcMongoVersion
+    "uk.gov.hmrc"             %% s"bootstrap-frontend-$playVersion"         % bootstrapVersion,
+    "uk.gov.hmrc"             %% s"play-frontend-hmrc-$playVersion"         % "8.2.0",
+    "uk.gov.hmrc.mongo"       %% "hmrc-mongo-play-30"                       % hmrcMongoVersion
   )
 
   val test = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-test-play-28"     % bootstrapVersion    % "test, it",
-    "org.scalamock"           %% "scalamock"                  % "5.1.0"             % Test,
-    "org.jsoup"               %  "jsoup"                      % "1.13.1"            % Test
+    "uk.gov.hmrc"             %% s"bootstrap-test-$playVersion"     % bootstrapVersion    % "test, it",
+    "org.scalamock"           %% "scalamock"                        % "5.1.0"             % Test,
+    "org.jsoup"               %  "jsoup"                            % "1.16.1"            % Test
   )
 }
