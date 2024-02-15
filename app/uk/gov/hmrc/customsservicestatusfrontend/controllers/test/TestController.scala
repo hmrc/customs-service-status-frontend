@@ -30,8 +30,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TestController @Inject() (
-  dashboardPage: DashboardPage,
-  testService:   TestService
+  dashboardPage:   DashboardPage,
+  testService:     TestService
 )(implicit val ec: ExecutionContext, mcc: MessagesControllerComponents)
     extends FrontendController(mcc)
     with Logging {
