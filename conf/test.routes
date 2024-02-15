@@ -1,1 +1,4 @@
 GET           /clear-all                            uk.gov.hmrc.customsservicestatusfrontend.controllers.test.TestController.clearAllData
+GET           /service-availability/available       uk.gov.hmrc.customsservicestatusfrontend.controllers.test.TestController.showAvailable
+GET           /service-availability/unavailable     uk.gov.hmrc.customsservicestatusfrontend.controllers.test.TestController.showUnavailable
+GET           /service-availability/unknown         uk.gov.hmrc.customsservicestatusfrontend.controllers.test.TestController.showUnknown
