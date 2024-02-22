@@ -69,7 +69,7 @@
     <h1 class="govuk-heading-l">@messages("dashboard.h1")</h1>
     <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
     <label class="govuk-label govuk-visually-hidden" for="gvms-status">
-    @messages("dashboard.status.screen.reader")
+        @messages("dashboard.status.screen.reader")
     </label>
     <strong class="@statusClass">@messages("service.state.UNAVAILABLE")</strong>
 
