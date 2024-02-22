@@ -54,6 +54,9 @@
 @availableContent = {
     <h1 class="govuk-heading-l">@messages("dashboard.h1")</h1>
     <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
+    <label class="govuk-label govuk-visually-hidden" for="gvms-status">
+        @messages("dashboard.status.screen.reader")
+    </label>
     <p class="govuk-body @statusClass">@messages("service.state.AVAILABLE")</p>
     <p class="govuk-body">@messages("dashboard.available.p1")</p>
     <hr aria-hidden="true" class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
@@ -65,6 +68,9 @@
 @unavailableContent = {
     <h1 class="govuk-heading-l">@messages("dashboard.h1")</h1>
     <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
+    <label class="govuk-label govuk-visually-hidden" for="gvms-status">
+    @messages("dashboard.status.screen.reader")
+    </label>
     <strong class="@statusClass">@messages("service.state.UNAVAILABLE")</strong>
 
     @govukInsetText(InsetText(
