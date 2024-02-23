@@ -45,7 +45,7 @@ class DashboardController @Inject() (
           UNKNOWN
 
       val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
-      Ok(dashboardPage(uiState, stateChangedAt))
+      Ok(dashboardPage(uiState, stateChangedAt, "haulier")) // The hard coded haulier will be fixed in the forthcoming ticket.
     }
   }
 }
