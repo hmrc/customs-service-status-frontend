@@ -36,7 +36,7 @@ object Formatters {
 
   def hoursFormatter(locale: Locale): DateTimeFormatter =
     DateTimeFormatter
-      .ofPattern("hh:mma z")
+      .ofPattern("h:mma z")
       .withLocale(locale)
       .withZone(zoneId)
 }
