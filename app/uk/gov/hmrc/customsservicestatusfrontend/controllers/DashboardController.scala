@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatus
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
@@ -45,7 +46,10 @@ class DashboardController @Inject() (
           UNKNOWN
 
       val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
-      Ok(dashboardPage(uiState, stateChangedAt, "haulier")) // The hard coded haulier will be fixed in the forthcoming ticket.
+
+      val serviceName = statuses.services.find(_.id.equalsIgnoreCase("haulier")).map(_.name).getOrElse("")
+
+      Ok(dashboardPage(uiState, stateChangedAt, serviceName)) // The hard coded haulier will be fixed in the forthcoming ticket.
     }
   }
 }
