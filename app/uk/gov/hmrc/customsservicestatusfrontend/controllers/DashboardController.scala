@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatus
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
