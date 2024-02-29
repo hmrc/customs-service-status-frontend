@@ -47,7 +47,6 @@ object State {
 }
 
 case class CustomsServiceStatus(
-  id:             String,
   name:           String,
   description:    String,
   state:          Option[State],

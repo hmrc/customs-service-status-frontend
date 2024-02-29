@@ -62,7 +62,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     }
 
     "show dashboard content as expected when there are issues" in {
-      val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
+      val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
       val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
 
       (mockService
@@ -94,7 +94,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     }
 
     "show dashboard content as expected when status is unknown" in {
-      val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNKNOWN), Some(now), Some(now))
+      val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("Haulier", "description", Some(UNKNOWN), Some(now), Some(now))
       val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
       (mockService
         .getStatus()(_: HeaderCarrier))
