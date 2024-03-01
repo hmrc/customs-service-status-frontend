@@ -110,7 +110,9 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementsByClass("govuk-body").text() should include(
         "You can check if the service is working by logging in to the Goods Vehicle Movement Service."
       )
-      doc.getElementById("gvms_url").attr("href") shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
+      doc
+        .getElementById("service_url")
+        .attr("href") shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
     }
   }
 }
