@@ -7,7 +7,7 @@ addSbtPlugin("uk.gov.hmrc"       % "sbt-distributables" % "2.5.0")
 addSbtPlugin("org.playframework" % "sbt-plugin"         % "3.0.1")
 addSbtPlugin("org.scoverage"     % "sbt-scoverage"      % "2.0.9")
 addSbtPlugin("com.typesafe.sbt"  % "sbt-gzip"           % "1.0.2")
-addSbtPlugin("org.scalameta"     % "sbt-scalafmt"       % "2.5.0")
+addSbtPlugin("org.scalameta"     % "sbt-scalafmt"       % "2.5.2")
 addSbtPlugin("org.wartremover"   % "sbt-wartremover"    % "3.1.3")
 
 evictionErrorLevel := Level.Warn

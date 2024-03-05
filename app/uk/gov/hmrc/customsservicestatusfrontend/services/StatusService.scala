@@ -31,7 +31,7 @@ class StatusService @Inject() (customsServiceStatusConnector: CustomsServiceStat
     customsServiceStatusConnector
       .getStatus()
       .recoverWith { case e =>
-        //TODO: should we raise an alert if backend fails to return response?
+        // TODO: should we raise an alert if backend fails to return response?
         logger.warn(s"error calling customs-service-status backend, error: ${e.getMessage}")
         Future.successful(ServiceStatuses(List.empty))
       }

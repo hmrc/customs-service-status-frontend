@@ -11,6 +11,7 @@ lazy val microservice = Project(appName, file("."))
     playDefaultPort := 8993,
     scalaVersion := "2.13.12",
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
+    scalafmtOnCompile := true,
     // https://www.scala-lang.org/2021/01/12/configuring-and-suppressing-warnings.html
     // suppress warnings in generated routes files
     scalacOptions += "-Wconf:src=routes/.*:s",
