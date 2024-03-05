@@ -26,7 +26,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TestConnector @Inject() (
   httpClient:                                                    HttpClient,
   @Named("customsServiceStatusUrl") customsServiceStatusBaseUrl: String
-)(implicit ec:                                                   ExecutionContext) {
+)(implicit ec: ExecutionContext) {
 
   def clearAllData()(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] =
     httpClient.GET[HttpResponse](url("/customs-service-status/test-only/clear-all"))

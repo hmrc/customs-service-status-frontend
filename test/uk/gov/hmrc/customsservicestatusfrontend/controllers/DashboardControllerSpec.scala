@@ -78,10 +78,10 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementsByClass("govuk-tag--orange").text() shouldBe "KNOWN ISSUES"
 
       val body = doc.getElementsByClass("govuk-body").text()
-      body                                                should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
-      body                                                should include(s"Known issues since: ${Formatters.instantFormatHours(now)} on ${Formatters.instantFormatDate(now)}")
-      body                                                should include("We are currently investigating this issue.")
-      body                                                should include("You may not be able to:")
+      body should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
+      body should include(s"Known issues since: ${Formatters.instantFormatHours(now)} on ${Formatters.instantFormatDate(now)}")
+      body should include("We are currently investigating this issue.")
+      body should include("You may not be able to:")
       doc.getElementsByClass("govuk-list--bullet").text() should include("create a Goods Movement Reference (GMR) manage your GMRs")
       body                                                should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
 
@@ -107,8 +107,8 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementsByClass("govuk-heading-l").text() shouldBe "GVMS availability unknown"
       doc.getElementsByClass("govuk-body").text()        should include("The Check GVMS availability service is not working right now.")
-      doc.getElementsByClass("govuk-body").text()        should include("You can log into the Goods Vehicle Movement Service (GVMS) to check this yourself.")
-      doc.getElementById("gvms_url").attr("href")      shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
+      doc.getElementsByClass("govuk-body").text() should include("You can log into the Goods Vehicle Movement Service (GVMS) to check this yourself.")
+      doc.getElementById("gvms_url").attr("href") shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
     }
   }
 }

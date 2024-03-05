@@ -31,7 +31,7 @@ class DashboardController @Inject() (
   mcc:           MessagesControllerComponents,
   dashboardPage: DashboardPage,
   statusService: StatusService
-)(implicit ec:   ExecutionContext)
+)(implicit ec: ExecutionContext)
     extends FrontendController(mcc) {
 
   val show: Action[AnyContent] = Action.async { implicit request =>
