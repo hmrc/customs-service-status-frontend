@@ -54,10 +54,10 @@
 @availableContent = {
     <h1 class="govuk-heading-l">@messages("dashboard.h1")</h1>
     <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
-    <p class="govuk-visually-hidden-focusable">
+    <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
-    </p>
-    <p class="govuk-body @statusClass" id="service-status" >
+    </span>
+    <p class="govuk-body @statusClass" id="service-status">
         @messages("service.state.AVAILABLE")
     </p>
     <p class="govuk-body">@messages("dashboard.available.p1")</p>
@@ -70,9 +70,9 @@
 @unavailableContent = {
     <h1 class="govuk-heading-l">@messages("dashboard.h1")</h1>
     <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
-    <p class="govuk-visually-hidden-focusable">
+    <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
-    </p>
+    </span>
     <p class="govuk-body @statusClass" id="service-status">
         @messages("service.state.UNAVAILABLE")
     </p>
