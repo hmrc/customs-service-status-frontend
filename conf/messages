@@ -23,6 +23,9 @@ dashboard.unknown.p1=The Check GVMS availability service is not working right no
 dashboard.unknown.p2=You can log into the {0} to check this yourself.
 dashboard.gvms.link_text=Goods Vehicle Movement Service (GVMS)
 
+dashboard.status.screen.reader=Availability status for the {0}
+dashboard.status.haulier.longName=Goods Vehicle Movement Service
+
 service.state.AVAILABLE=AVAILABLE
 service.state.UNAVAILABLE=KNOWN ISSUES
 service.state.UNKNOWN=UNKNOWN

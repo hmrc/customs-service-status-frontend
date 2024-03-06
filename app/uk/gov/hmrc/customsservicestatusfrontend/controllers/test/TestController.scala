@@ -46,14 +46,14 @@ class TestController @Inject() (
     }
 
   val showAvailable: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(dashboardPage(AVAILABLE, Instant.now())))
+    Future.successful(Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier")))
   }
 
   val showUnavailable: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(dashboardPage(UNAVAILABLE, Instant.now())))
+    Future.successful(Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier")))
   }
 
   val showUnknown: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(dashboardPage(UNKNOWN, Instant.now())))
+    Future.successful(Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier")))
   }
 }

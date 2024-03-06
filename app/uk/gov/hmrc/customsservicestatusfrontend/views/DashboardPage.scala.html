@@ -30,7 +30,7 @@
 
 @this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
 
-@(state: State, stateChangedAt: Instant)(implicit request: Request[_], messages: Messages)
+@(state: State, stateChangedAt: Instant, serviceId: String)(implicit request: Request[_], messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -54,7 +54,12 @@
 @availableContent = {
     <h1 class="govuk-heading-l">@messages("dashboard.h1")</h1>
     <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
-    <p class="govuk-body @statusClass">@messages("service.state.AVAILABLE")</p>
+    <span class="govuk-visually-hidden-focusable" for="service-status">
+        @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
+    </span>
+    <p class="govuk-body @statusClass" id="service-status">
+        @messages("service.state.AVAILABLE")
+    </p>
     <p class="govuk-body">@messages("dashboard.available.p1")</p>
     <hr aria-hidden="true" class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
     <p class="govuk-body">
@@ -65,7 +70,12 @@
 @unavailableContent = {
     <h1 class="govuk-heading-l">@messages("dashboard.h1")</h1>
     <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
-    <strong class="@statusClass">@messages("service.state.UNAVAILABLE")</strong>
+    <span class="govuk-visually-hidden-focusable" for="service-status">
+        @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
+    </span>
+    <p class="govuk-body @statusClass" id="service-status">
+        @messages("service.state.UNAVAILABLE")
+    </p>
 
     @govukInsetText(InsetText(
         content = HtmlContent(unavailableInsetContent)
