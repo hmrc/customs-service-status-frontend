@@ -107,8 +107,12 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementsByClass("govuk-heading-l").text() shouldBe "GVMS availability unknown"
       doc.getElementsByClass("govuk-body").text()        should include("The Check GVMS availability service is not working right now.")
-      doc.getElementsByClass("govuk-body").text() should include("You can log into the Goods Vehicle Movement Service (GVMS) to check this yourself.")
-      doc.getElementById("gvms_url").attr("href") shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
+      doc.getElementsByClass("govuk-body").text() should include(
+        "You can check if the service is working by logging in to the Goods Vehicle Movement Service."
+      )
+      doc
+        .getElementById("service_url")
+        .attr("href") shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
     }
   }
 }

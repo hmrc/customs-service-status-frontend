@@ -110,9 +110,7 @@
 @unknownContent = {
     <h1 class="govuk-heading-l">@messages("dashboard.unknown.h1")</h1>
     <p class="govuk-body">@messages("dashboard.unknown.p1")</p>
-    <p class="govuk-body">@Html(messages("dashboard.unknown.p2", gvmsLink))</p>
+    <p class="govuk-body">@Html(messages("dashboard.unknown.p2", serviceLink))</p>
 }
 
-@gvmsLink = {
-    <a id="gvms_url" href="https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference" class="govuk-link govuk-link--no-visited-state">@messages("dashboard.gvms.link_text")</a>
-}
+@serviceLink = {<a id="service_url" href="@messages(s"dashboard.status.unknown.$serviceId.link")" class="govuk-link govuk-link--no-visited-state">@messages(s"dashboard.$serviceId.link_text")</a>}

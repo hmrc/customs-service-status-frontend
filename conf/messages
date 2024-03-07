@@ -20,8 +20,9 @@ dashboard.unavailable.what_can_you_do_next.details.l2=if there is any planned do
 
 dashboard.unknown.h1=GVMS availability unknown
 dashboard.unknown.p1=The Check GVMS availability service is not working right now.
-dashboard.unknown.p2=You can log into the {0} to check this yourself.
-dashboard.gvms.link_text=Goods Vehicle Movement Service (GVMS)
+dashboard.unknown.p2=You can check if the service is working by {0}
+dashboard.haulier.link_text=logging in to the Goods Vehicle Movement Service.
+dashboard.status.unknown.haulier.link=https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference
 
 dashboard.status.screen.reader=Availability status for the {0}
 dashboard.status.haulier.longName=Goods Vehicle Movement Service
