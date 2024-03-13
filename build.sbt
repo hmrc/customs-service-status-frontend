@@ -6,6 +6,7 @@ val appName = "customs-service-status-frontend"
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
+  .disablePlugins(JUnitXmlReportPlugin)
   .settings(
     majorVersion := 0,
     playDefaultPort := 8993,
