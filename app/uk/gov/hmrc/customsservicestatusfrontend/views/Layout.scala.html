@@ -18,18 +18,22 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcReportTechnicalIssueHelper
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.HmrcStandardPageParams
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.Banners
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.ServiceURLs
+@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
+@import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 
 @this(
-        appConfig: AppConfig,
-        hmrcStandardPage: HmrcStandardPage,
-        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
-)
+    appConfig: AppConfig,
+    hmrcStandardPage: HmrcStandardPage,
+    standardBetaBanner: StandardBetaBanner,
+    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
+)(implicit cfConfig: ContactFrontendConfig)
 
 @(pageTitle: Option[String] = None)(mainContent: Html)(implicit request: Request[_], messages: Messages)
 
-@mainContentWithTechIssueHelper = {
+@contentBlock = {
     @mainContent
     <br/>
     <br/>
@@ -40,9 +44,10 @@
     HmrcStandardPageParams(
         pageTitle = pageTitle,
         isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
-        serviceURLs = ServiceURLs(serviceUrl = Some(routes.DashboardController.show.url))
+        serviceURLs = ServiceURLs(serviceUrl = Some(routes.DashboardController.show.url)),
+        banners = Banners(phaseBanner = Some(standardBetaBanner()))
     )
-)(mainContentWithTechIssueHelper)
+)(contentBlock)
 
 @{
     //$COVERAGE-OFF$
