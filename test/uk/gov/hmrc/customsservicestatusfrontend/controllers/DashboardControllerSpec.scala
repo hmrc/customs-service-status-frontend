@@ -80,17 +80,22 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       val body = doc.getElementsByClass("govuk-body").text()
       body should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
       body should include(s"Known issues since: ${Formatters.instantFormatHours(now)} on ${Formatters.instantFormatDate(now)}")
-      body should include("We are currently investigating this issue.")
-      body should include("You may not be able to:")
-      doc.getElementsByClass("govuk-list--bullet").text() should include("create a Goods Movement Reference (GMR) manage your GMRs")
-      body                                                should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
+      body should include("We are currently investigating.")
 
-      doc.getElementsByClass("govuk-heading-m").text() shouldBe "What you can do next"
-      body                                               should include("Do not travel to the border if you do not have a valid GMR.")
+      doc.getElementsByClass("govuk-heading-m").text      should include("Issues with the service")
+      body                                                should include("You may not be able to:")
+      doc.getElementsByClass("govuk-list--bullet").text() should include("create a Goods Movement Reference (GMR) manage your GMRs")
+      doc.getElementsByClass("govuk-list--bullet").text() should include("manage your GMRs")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("What you can do next")
+      body                                             should include("Do not travel to the border if you do not have a valid GMR.")
+      body should include("This page does not currently show information about action plans. You can find out:")
 
       doc.getElementsByClass("govuk-list--bullet").text() should include(
         "if HMRC has published an action plan to help keep your goods moving if there is any planned downtime for GVMS"
       )
+      doc.getElementsByClass("govuk-list--bullet").text() should include("if there is any planned downtime for GVMS")
+      body                                                should include("By going to the GVMS service information page")
     }
 
     "show dashboard content as expected when status is unknown" in {
