@@ -73,9 +73,9 @@
     <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
     </span>
-    <p class="govuk-body @statusClass" id="service-status">
+    <strong class="@statusClass" id="service-status">
         @messages("service.state.UNAVAILABLE")
-    </p>
+    </strong>
 
     @govukInsetText(InsetText(
         content = HtmlContent(unavailableInsetContent)
