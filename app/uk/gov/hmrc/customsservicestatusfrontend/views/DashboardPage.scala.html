@@ -73,29 +73,29 @@
     <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
     </span>
-    <p class="govuk-body @statusClass" id="service-status">
+    <strong class="@statusClass" id="service-status">
         @messages("service.state.UNAVAILABLE")
-    </p>
+    </strong>
 
     @govukInsetText(InsetText(
         content = HtmlContent(unavailableInsetContent)
     ))
 
-    <p class="govuk-body">@messages("dashboard.unavailable.details.p1")</p>
+    <h2 class="govuk-heading-m">@messages("dashboard.unavailable.issues_with_the_service.header")</h2>
+    <p class="govuk-body">@messages("dashboard.unavailable.issues_with_the_service.p1")</p>
     <ul class="govuk-list govuk-list--bullet">
-        <li class="govuk-body">@messages("dashboard.unavailable.details.l1")</li>
-        <li class="govuk-body">@messages("dashboard.unavailable.details.l2")</li>
+        <li class="govuk-body">@messages("dashboard.unavailable.issues_with_the_service.l1")</li>
+        <li class="govuk-body">@messages("dashboard.unavailable.issues_with_the_service.l2")</li>
     </ul>
 
-    <h2 class="govuk-heading-m">@messages("dashboard.unavailable.what_can_you_do_next")</h2>
+    <h2 class="govuk-heading-m">@messages("dashboard.unavailable.what_can_you_do_next.header")</h2>
     <p class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.p1")</p>
-
-    <p class="govuk-body">@Html(messages("dashboard.unavailable.what_can_you_do_next.details.p1", saPageUrlContent))</p>
+    <p class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.p2")</p>
     <ul class="govuk-list govuk-list--bullet">
-        <li class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.details.l1")</li>
-        <li class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.details.l2")</li>
+        <li class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.l1")</li>
+        <li class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.l2")</li>
     </ul>
-
+    <p class="govuk-body">@Html(messages("dashboard.unavailable.what_can_you_do_next.p3", saPageUrlContent))</p>
 }
 
 @unavailableInsetContent = {
@@ -103,9 +103,7 @@
     <p class="govuk-body">@messages("dashboard.unavailable.inset.p2")</p>
 }
 
-@saPageUrlContent = {
-    <a href="https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues" class="govuk-link govuk-link--no-visited-state">@messages("dashboard.unavailable.what_can_you_do_next.details.link_text")</a>
-}
+@saPageUrlContent = {<a href="https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues" class="govuk-link govuk-link--no-visited-state">@messages("dashboard.unavailable.what_can_you_do_next.link_text")</a>}
 
 @unknownContent = {
     <h1 class="govuk-heading-l">@messages("dashboard.unknown.h1")</h1>
