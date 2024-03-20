@@ -1,6 +1,12 @@
 service.name=Check GVMS availability
 service.title.suffix=GOV.UK
 
+service_unavailable.title=Sorry, there is a problem with the service
+service_unavailable.heading=Sorry, there is a problem with the service
+service_unavailable.message=The Check GVMS availability service is not working right now. You might still be able to use the Goods Vehicle Movement Service (GVMS).
+service_unavailable.p1=You can check if GVMS is working by {0}.
+service_unavailable.logging_in.label=logging in
+
 dashboard.h1=Current GVMS availability
 dashboard.p1=Last updated: {0}
 dashboard.available.p1=There are currently no issues with creating and updating a goods movement reference.
