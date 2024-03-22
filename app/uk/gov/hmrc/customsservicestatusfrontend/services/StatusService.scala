@@ -22,17 +22,11 @@ import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusC
 import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
-class StatusService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector)(implicit ec: ExecutionContext) extends Logging {
+class StatusService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) extends Logging {
 
   def getStatus()(implicit hc: HeaderCarrier): Future[ServiceStatuses] =
-    customsServiceStatusConnector
-      .getStatus()
-      .recoverWith { case e =>
-        // TODO: should we raise an alert if backend fails to return response?
-        logger.warn(s"error calling customs-service-status backend, error: ${e.getMessage}")
-        Future.successful(ServiceStatuses(List.empty))
-      }
+    customsServiceStatusConnector.getStatus()
 }

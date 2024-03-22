@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.config
 
+import org.jsoup.Jsoup
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.test.FakeRequest
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.test.FakeRequest
 
 class ErrorHandlerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
@@ -44,4 +45,22 @@ class ErrorHandlerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
     }
   }
 
+  "internalServerErrorTemplate" should {
+    "render service unavailable HTML" in {
+
+      val html = handler.internalServerErrorTemplate(fakeRequest)
+      html.contentType shouldBe "text/html"
+
+      val doc = Jsoup.parse(html.body)
+      doc.getElementsByClass("govuk-heading-l").text() shouldBe "Sorry, there is a problem with the service"
+      doc.getElementsByClass("govuk-body").text() should include(
+        "The Check GVMS availability service is not working right now. You might still be able to use the Goods Vehicle Movement Service (GVMS)."
+      )
+      doc.getElementsByClass("govuk-body").text() should include("You can check if GVMS is working by logging in.")
+      doc
+        .getElementById("gvms_service_url")
+        .attr("href") shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
+
+    }
+  }
 }

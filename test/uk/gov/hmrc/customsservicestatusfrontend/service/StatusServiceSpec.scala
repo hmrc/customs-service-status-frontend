@@ -40,14 +40,5 @@ class StatusServiceSpec extends BaseSpec {
 
       service.getStatus().futureValue shouldBe serviceStatuses
     }
-
-    "handle any backend exceptions and return empty statuses" in {
-      (mockConnector
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.failed(new RuntimeException("unexpected from backend")))
-
-      service.getStatus().futureValue shouldBe ServiceStatuses(List.empty)
-    }
   }
 }
