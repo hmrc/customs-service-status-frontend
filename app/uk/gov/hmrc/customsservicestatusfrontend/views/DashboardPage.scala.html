@@ -57,9 +57,11 @@
     <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
     </span>
-    <p class="govuk-body @statusClass" id="service-status">
+    <strong class="@statusClass" id="service-status">
         @messages("service.state.AVAILABLE")
-    </p>
+    </strong>
+    <br>
+    <br>
     <p class="govuk-body">@messages("dashboard.available.p1")</p>
     <hr aria-hidden="true" class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
     <p class="govuk-body">
