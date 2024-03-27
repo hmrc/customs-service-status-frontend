@@ -55,7 +55,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementsByClass("govuk-heading-l").text()  shouldBe "Current GVMS availability"
       doc.getElementsByClass("govuk-body").text()         should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
-      doc.getElementsByClass("govuk-tag--green").text() shouldBe "AVAILABLE"
+      doc.getElementsByClass("govuk-tag--green").text() shouldBe "Available"
       doc.getElementsByClass("govuk-body").text() should include(
         "There are currently no issues with creating and updating a goods movement reference."
       )
@@ -75,7 +75,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Current GVMS availability"
-      doc.getElementsByClass("govuk-tag--orange").text() shouldBe "KNOWN ISSUES"
+      doc.getElementsByClass("govuk-tag--orange").text() shouldBe "Known issues"
 
       val body = doc.getElementsByClass("govuk-body").text()
       body should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
