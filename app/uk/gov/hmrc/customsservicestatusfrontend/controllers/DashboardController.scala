@@ -32,7 +32,7 @@ class DashboardController @Inject() (
   dashboardPage: DashboardPage,
   statusService: StatusService
 )(implicit ec: ExecutionContext)
-    extends FrontendController(mcc) {
+    extends BaseFrontendController(mcc) {
 
   val show: Action[AnyContent] = Action.async { implicit request =>
     statusService.getStatus().map { statuses =>
