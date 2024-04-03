@@ -35,6 +35,6 @@ dashboard.status.unknown.haulier.link=https://www.gov.uk/guidance/get-a-goods-mo
 dashboard.status.screen.reader=Statws argaeledd ar gyfer y {0}
 dashboard.status.haulier.longName=Gwasanaeth Symud Cerbydau Nwyddau
 
-service.state.AVAILABLE=Ar Gael
+service.state.AVAILABLE=Ar gael
 service.state.UNAVAILABLE=Problemau hysbys
 service.state.UNKNOWN=Anhysbys
