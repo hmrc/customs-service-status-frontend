@@ -31,10 +31,10 @@
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
 }
 
-@pageTitlePrefix = {
-    @if(state == AVAILABLE || state == UNAVAILABLE) {
-        @messages(s"dashboard.$serviceId.h1")
-    } else { @messages(s"dashboard.$serviceId.unknown.h1") }
+@pageTitlePrefix = @{
+    if(state == AVAILABLE || state == UNAVAILABLE) {
+        messages(s"dashboard.$serviceId.h1")
+    } else { messages(s"dashboard.$serviceId.unknown.h1") }
 }
 
 @layout(pageTitle = Some(s"$pageTitlePrefix - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
