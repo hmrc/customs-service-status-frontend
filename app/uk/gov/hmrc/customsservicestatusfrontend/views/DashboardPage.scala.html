@@ -14,18 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-@import uk.gov.hmrc.govukfrontend.views.Aliases.TableRow
-@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInsetText, GovukTable, _}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
-@import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
-@import uk.gov.hmrc.customsservicestatusfrontend.models.State._
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State
-@import uk.gov.hmrc.customsservicestatusfrontend.models.CustomsServiceStatus
-@import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
-@import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters._
+@import uk.gov.hmrc.customsservicestatusfrontend.models.State._
+@import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
+@import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInsetText, GovukTable, _}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
+
 @import java.time.Instant
 
 @this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
@@ -36,13 +31,13 @@
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
 }
 
-@pageTitlePrefix = {
-    @if(state == AVAILABLE || state == UNAVAILABLE) {
-        @messages("dashboard.h1")
-    } else { @messages("dashboard.unknown.h1") }
+@pageTitlePrefix = @{
+    if(state == AVAILABLE || state == UNAVAILABLE) {
+        messages(s"dashboard.$serviceId.h1")
+    } else { messages(s"dashboard.$serviceId.unknown.h1") }
 }
 
-@layout(pageTitle = Some(s"${pageTitlePrefix} - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
+@layout(pageTitle = Some(s"$pageTitlePrefix - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
 
  @if(state == AVAILABLE) {
    @availableContent
@@ -52,7 +47,7 @@
 }
 
 @availableContent = {
-    <h1 class="govuk-heading-l">@messages("dashboard.h1")</h1>
+    <h1 class="govuk-heading-l">@messages(s"dashboard.$serviceId.h1")</h1>
     <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
     <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
@@ -62,15 +57,13 @@
     </strong>
     <br>
     <br>
-    <p class="govuk-body">@messages("dashboard.available.p1")</p>
+    <p class="govuk-body">@messages(s"dashboard.available.$serviceId.p1")</p>
     <hr aria-hidden="true" class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-    <p class="govuk-body">
-        <a href="https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues" class="govuk-link govuk-link--no-visited-state">@messages("dashboard.planned_downtime")</a>
-    </p>
+    <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p2.link", s"dashboard.available.$serviceId.p2", "available_p2_link")</p>
 }
 
 @unavailableContent = {
-    <h1 class="govuk-heading-l">@messages("dashboard.h1")</h1>
+    <h1 class="govuk-heading-l">@messages(s"dashboard.$serviceId.h1")</h1>
     <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
     <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
@@ -86,18 +79,18 @@
     <h2 class="govuk-heading-m">@messages("dashboard.unavailable.issues_with_the_service.header")</h2>
     <p class="govuk-body">@messages("dashboard.unavailable.issues_with_the_service.p1")</p>
     <ul class="govuk-list govuk-list--bullet">
-        <li class="govuk-body">@messages("dashboard.unavailable.issues_with_the_service.l1")</li>
-        <li class="govuk-body">@messages("dashboard.unavailable.issues_with_the_service.l2")</li>
+        <li class="govuk-body">@messages(s"dashboard.unavailable.issues_with_the_service.$serviceId.l1")</li>
+        <li class="govuk-body">@messages(s"dashboard.unavailable.issues_with_the_service.$serviceId.l2")</li>
     </ul>
 
     <h2 class="govuk-heading-m">@messages("dashboard.unavailable.what_can_you_do_next.header")</h2>
-    <p class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.p1")</p>
-    <p class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.p2")</p>
+    <p class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p1")</p>
+    <p class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p2")</p>
     <ul class="govuk-list govuk-list--bullet">
-        <li class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.l1")</li>
-        <li class="govuk-body">@messages("dashboard.unavailable.what_can_you_do_next.l2")</li>
+        <li class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.l1")</li>
+        <li class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.l2")</li>
     </ul>
-    <p class="govuk-body">@Html(messages("dashboard.unavailable.what_can_you_do_next.p3", saPageUrlContent))</p>
+    <p class="govuk-body">@Html(messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3", optionalLink(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3.link", s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3.link_text", "service_info_link")))</p>
 }
 
 @unavailableInsetContent = {
@@ -105,12 +98,14 @@
     <p class="govuk-body">@messages("dashboard.unavailable.inset.p2")</p>
 }
 
-@saPageUrlContent = {<a href="https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues" class="govuk-link govuk-link--no-visited-state">@messages("dashboard.unavailable.what_can_you_do_next.link_text")</a>}
-
-@unknownContent = {
-    <h1 class="govuk-heading-l">@messages("dashboard.unknown.h1")</h1>
-    <p class="govuk-body">@messages("dashboard.unknown.p1")</p>
-    <p class="govuk-body">@Html(messages("dashboard.unknown.p2", serviceLink))</p>
+@optionalLink(linkMsgKey: String, linkTextKey: String, anchorId: String) = @{
+    Option(messages(linkMsgKey)).filter(_.nonEmpty).fold(Html(""))(link(_, linkTextKey, anchorId))
 }
 
-@serviceLink = {<a id="service_url" href="@messages(s"dashboard.status.unknown.$serviceId.link")" class="govuk-link govuk-link--no-visited-state">@messages(s"dashboard.$serviceId.link_text")</a>}
+@link(url: String, linkTextKey: String, anchorId: String) = {<a id="@anchorId" href="@url" class="govuk-link govuk-link--no-visited-state">@messages(linkTextKey)</a>}
+
+@unknownContent = {
+    <h1 class="govuk-heading-l">@messages(s"dashboard.$serviceId.unknown.h1")</h1>
+    <p class="govuk-body">@messages(s"dashboard.$serviceId.unknown.p1")</p>
+    <p class="govuk-body">@Html(messages(s"dashboard.$serviceId.unknown.p2", optionalLink(s"dashboard.status.unknown.$serviceId.link", s"dashboard.$serviceId.link_text", "service_url")))</p>
+}
