@@ -59,7 +59,7 @@
     <br>
     <p class="govuk-body">@messages(s"dashboard.available.$serviceId.p1")</p>
     <hr aria-hidden="true" class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-    @optionalLink(s"dashboard.available.$serviceId.p2.link", s"dashboard.available.$serviceId.p2", "available_p2_link", isBlock = true)
+    <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p2.link", s"dashboard.available.$serviceId.p2", "available_p2_link")</p>
 }
 
 @unavailableContent = {
@@ -90,7 +90,7 @@
         <li class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.l1")</li>
         <li class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.l2")</li>
     </ul>
-    <p class="govuk-body">@Html(messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3", optionalLink(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3.link", s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3.link_text", "service_info_link", isBlock = false)))</p>
+    <p class="govuk-body">@Html(messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3", optionalLink(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3.link", s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3.link_text", "service_info_link")))</p>
 }
 
 @unavailableInsetContent = {
@@ -98,14 +98,14 @@
     <p class="govuk-body">@messages("dashboard.unavailable.inset.p2")</p>
 }
 
-@optionalLink(linkMsgKey: String, linkTextKey: String, anchorId: String, isBlock: Boolean) = @{
-    Option(messages(linkMsgKey)).filter(_.nonEmpty).fold(Html(""))(link(_, linkTextKey, anchorId, isBlock))
+@optionalLink(linkMsgKey: String, linkTextKey: String, anchorId: String) = @{
+    Option(messages(linkMsgKey)).filter(_.nonEmpty).fold(Html(""))(link(_, linkTextKey, anchorId))
 }
 
-@link(url: String, linkTextKey: String, anchorId: String, isBlock: Boolean) = {<p class="govuk-body"><a id="@anchorId" href="@url" class="govuk-link govuk-link--no-visited-state">@messages(linkTextKey)</a></p>}
+@link(url: String, linkTextKey: String, anchorId: String) = {<a id="@anchorId" href="@url" class="govuk-link govuk-link--no-visited-state">@messages(linkTextKey)</a>}
 
 @unknownContent = {
     <h1 class="govuk-heading-l">@messages(s"dashboard.$serviceId.unknown.h1")</h1>
     <p class="govuk-body">@messages(s"dashboard.$serviceId.unknown.p1")</p>
-    <p class="govuk-body">@Html(messages(s"dashboard.$serviceId.unknown.p2", optionalLink(s"dashboard.status.unknown.$serviceId.link", s"dashboard.$serviceId.link_text", "service_url", isBlock = false)))</p>
+    <p class="govuk-body">@Html(messages(s"dashboard.$serviceId.unknown.p2", optionalLink(s"dashboard.status.unknown.$serviceId.link", s"dashboard.$serviceId.link_text", "service_url")))</p>
 }
