@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.connectors.test
 
 import com.google.inject.Singleton
+import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.{Inject, Named}
@@ -29,8 +30,6 @@ class TestConnector @Inject() (
 )(implicit ec: ExecutionContext) {
 
   def clearAllData()(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] =
-    httpClient.GET[HttpResponse](url("/customs-service-status/test-only/clear-all"))
-
-  private def url(path: String) = s"$customsServiceStatusBaseUrl$path"
+    httpClient.GET[HttpResponse](s"$customsServiceStatusBaseUrl/customs-service-status/test-only/clear-all")
 
 }

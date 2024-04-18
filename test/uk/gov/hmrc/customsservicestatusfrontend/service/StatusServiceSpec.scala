@@ -19,7 +19,6 @@ package uk.gov.hmrc.customsservicestatusfrontend.service
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
-import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -27,7 +26,7 @@ import scala.concurrent.Future
 
 class StatusServiceSpec extends BaseSpec {
 
-  val mockConnector = mock[CustomsServiceStatusConnector]
+  val mockConnector: CustomsServiceStatusConnector = mock[CustomsServiceStatusConnector]
 
   val service = new StatusService(mockConnector)
 
