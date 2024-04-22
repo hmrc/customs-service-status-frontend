@@ -20,7 +20,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import java.time.Instant
 import javax.inject.{Inject, Singleton}

@@ -27,6 +27,6 @@ class TestService @Inject() (
   testConnector: TestConnector
 ) {
 
-  def clearAllData(implicit hc: HeaderCarrier): Future[HttpResponse] = testConnector.clearAllData
+  def clearAllData(implicit hc: HeaderCarrier): Future[HttpResponse] = testConnector.clearAllData()
 
 }
