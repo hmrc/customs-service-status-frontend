@@ -27,5 +27,8 @@ lazy val microservice = Project(appName, file("."))
     Compile / scalacOptions -= "utf8",
     scalacOptions += "-language:postfixOps"
   )
+  .settings(
+    addCommandAlias("runTestOnly", "run -Dplay.http.router=testOnlyDoNotUseInAppConf.Routes")
+  )
 
 evictionErrorLevel := Level.Warn
