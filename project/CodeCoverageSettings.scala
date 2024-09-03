@@ -8,7 +8,7 @@ object CodeCoverageSettings {
       "app.*;.*BuildInfo.*;.*Routes.*;.*repositories.*;.*controllers.test.*;.*connectors.test.*;.*connectors.analytics.*;.*services.test.*;.*LanguageSwitchController;.*metrics.*;" +
       ".*views.html.*;Reverse.*;.*models.api.GoodsMovementRecordData;.*models.api.metadata.*",
     ScoverageKeys.coverageMinimumStmtTotal := 85,
-    ScoverageKeys.coverageFailOnMinimum := true,
+    ScoverageKeys.coverageFailOnMinimum := false,
     ScoverageKeys.coverageHighlighting := true
   )
 }

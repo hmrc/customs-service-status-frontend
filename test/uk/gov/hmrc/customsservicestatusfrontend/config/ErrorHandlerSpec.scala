@@ -23,6 +23,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
 
 class ErrorHandlerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
@@ -40,7 +41,7 @@ class ErrorHandlerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
 
   "standardErrorTemplate" should {
     "render HTML" in {
-      val html = handler.standardErrorTemplate("title", "heading", "message")(fakeRequest)
+      val html = await(handler.standardErrorTemplate("title", "heading", "message")(fakeRequest))
       html.contentType shouldBe "text/html"
     }
   }
@@ -48,7 +49,7 @@ class ErrorHandlerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
   "internalServerErrorTemplate" should {
     "render service unavailable HTML" in {
 
-      val html = handler.internalServerErrorTemplate(fakeRequest)
+      val html = await(handler.internalServerErrorTemplate(fakeRequest))
       html.contentType shouldBe "text/html"
 
       val doc = Jsoup.parse(html.body)

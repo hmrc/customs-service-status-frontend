@@ -31,7 +31,7 @@
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
 )(implicit cfConfig: ContactFrontendConfig)
 
-@(pageTitle: Option[String] = None)(mainContent: Html)(implicit request: Request[_], messages: Messages)
+@(pageTitle: Option[String] = None)(mainContent: Html)(implicit request: RequestHeader, messages: Messages)
 
 @contentBlock = {
     @mainContent

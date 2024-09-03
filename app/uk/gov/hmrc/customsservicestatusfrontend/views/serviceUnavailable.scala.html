@@ -16,7 +16,7 @@
 
 @this(layout: Layout)
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: RequestHeader, messages: Messages)
 
 @layout(pageTitle = Some(s"${messages("service_unavailable.title")} - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
    <h1 class="govuk-heading-l">@messages("service_unavailable.heading")</h1>

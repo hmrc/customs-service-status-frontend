@@ -19,13 +19,16 @@ package uk.gov.hmrc.customsservicestatusfrontend.connectors
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
 import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 
+import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
-  val mockHttpClient = mock[HttpClient]
+  val mockHttpClient:    HttpClientV2   = mock[HttpClientV2]
+  val mockRequestHolder: RequestBuilder = mock[RequestBuilder]
 
   val url = "http://localhost:8991/customs-service-status"
 
@@ -34,14 +37,8 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
   "getStatus" should {
     "return response as expected" in {
 
-      (mockHttpClient
-        .GET(_: String, _: Seq[(String, String)], _: Seq[(String, String)])(
-          _: HttpReads[ServiceStatuses],
-          _: HeaderCarrier,
-          _: ExecutionContext
-        ))
-        .expects(*, *, *, *, *, *)
-        .returns(Future.successful(serviceStatuses))
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
+      (mockRequestHolder.execute(_: HttpReads[ServiceStatuses], _: ExecutionContext)).expects(*, *).returns(Future.successful(serviceStatuses))
 
       connector.getStatus().futureValue shouldBe serviceStatuses
     }
