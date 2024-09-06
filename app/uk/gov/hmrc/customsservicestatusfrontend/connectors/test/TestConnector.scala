@@ -17,20 +17,23 @@
 package uk.gov.hmrc.customsservicestatusfrontend.connectors.test
 
 import com.google.inject.Singleton
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
 
 import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TestConnector @Inject() (
-  httpClient:                                                    HttpClient,
+  httpClient:                                                    HttpClientV2,
   @Named("customsServiceStatusUrl") customsServiceStatusBaseUrl: String
 )(implicit ec: ExecutionContext) {
 
   implicit val rawReads: HttpReads[HttpResponse] = HttpReads.Implicits.throwOnFailure(HttpReads.Implicits.readEitherOf(HttpReads.Implicits.readRaw))
 
   def clearAllData()(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] =
-    httpClient.GET[HttpResponse](s"$customsServiceStatusBaseUrl/customs-service-status/test-only/clear-all")
+    httpClient
+      .get(url"$customsServiceStatusBaseUrl/customs-service-status/test-only/clear-all")
+      .execute
 
 }

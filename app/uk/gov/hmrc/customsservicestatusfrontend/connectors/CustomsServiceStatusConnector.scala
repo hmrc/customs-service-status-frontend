@@ -18,18 +18,21 @@ package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
 import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
 import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsServiceStatusConnector @Inject() (
-  httpClient:                                                    HttpClient,
+  httpClient:                                                    HttpClientV2,
   @Named("customsServiceStatusUrl") customsServiceStatusBaseUrl: String
 )(implicit ec: ExecutionContext) {
 
   private val baseUrl = s"$customsServiceStatusBaseUrl/customs-service-status"
 
   def getStatus()(implicit headerCarrier: HeaderCarrier): Future[ServiceStatuses] =
-    httpClient.GET[ServiceStatuses](s"$baseUrl/services")
+    httpClient
+      .get(url"$baseUrl/services")
+      .execute
 }

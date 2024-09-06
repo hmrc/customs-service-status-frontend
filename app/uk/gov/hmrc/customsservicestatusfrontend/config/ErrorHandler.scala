@@ -17,20 +17,25 @@
 package uk.gov.hmrc.customsservicestatusfrontend.config
 
 import play.api.i18n.MessagesApi
-import play.api.mvc.Request
+import play.api.mvc.{Request, RequestHeader}
 import play.twirl.api.Html
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.{ErrorTemplate, serviceUnavailable}
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ErrorHandler @Inject() (errorTemplate: ErrorTemplate, serviceUnavailable: serviceUnavailable, val messagesApi: MessagesApi)
-    extends FrontendErrorHandler {
+class ErrorHandler @Inject() (
+  errorTemplate:      ErrorTemplate,
+  serviceUnavailable: serviceUnavailable,
+  val messagesApi:    MessagesApi,
+  val ec:             ExecutionContext
+) extends FrontendErrorHandler {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
-    errorTemplate(pageTitle, heading, message)
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader): Future[Html] =
+    Future.successful(errorTemplate(pageTitle, heading, message))
 
-  override def internalServerErrorTemplate(implicit request: Request[_]): Html =
-    serviceUnavailable()
+  override def internalServerErrorTemplate(implicit request: RequestHeader): Future[Html] =
+    Future.successful(serviceUnavailable())
 }
