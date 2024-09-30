@@ -8,6 +8,5 @@ addSbtPlugin("org.playframework" % "sbt-plugin"         % "3.0.5")
 addSbtPlugin("org.scoverage"     % "sbt-scoverage"      % "2.1.1")
 addSbtPlugin("com.typesafe.sbt"  % "sbt-gzip"           % "1.0.2")
 addSbtPlugin("org.scalameta"     % "sbt-scalafmt"       % "2.5.2")
-addSbtPlugin("org.wartremover"   % "sbt-wartremover"    % "3.2.0")
 
 evictionErrorLevel := Level.Warn
