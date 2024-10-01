@@ -20,7 +20,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings: _*)
   .settings( //fix scaladoc generation in jenkins
-    Compile / scalacOptions -= "utf8",
     scalacOptions += "-language:postfixOps"
   )
   .settings(
