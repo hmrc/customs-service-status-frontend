@@ -20,7 +20,8 @@ lazy val microservice = Project(appName, file("."))
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings: _*)
   .settings( //fix scaladoc generation in jenkins
-    scalacOptions += "-language:postfixOps"
+    scalacOptions += "-language:postfixOps",
+    scalacOptions += "-no-indent"
   )
   .settings(
     addCommandAlias("runTestOnly", "run -Dplay.http.router=testOnlyDoNotUseInAppConf.Routes")
