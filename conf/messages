@@ -7,6 +7,13 @@ service_unavailable.message=The Check GVMS availability service is not working r
 service_unavailable.p1=You can check if GVMS is working by {0}.
 service_unavailable.logging_in.label=logging in
 
+landing.title=GVMS availability
+landing.heading=GVMS availability
+landing.card.title.status=GVMS service status
+landing.card.status.paragraph=Current availability of the Goods Vehicle Movement Service (GVMS).
+landing.card.title.planned=Planned work
+landing.card.planned.paragraph=Planned service interruptions such as scheduled maintenance.
+
 dashboard.haulier.h1=Current GVMS availability
 dashboard.p1=Last updated: {0}
 dashboard.available.haulier.p1=There are currently no issues with creating and updating a goods movement reference.

@@ -1,1 +1,81 @@
-@import "lib/govuk-frontend/govuk/base";
+$govuk-assets-path: "/customs-service-status-frontend/assets/lib/govuk-frontend/govuk/assets/";
+$hmrc-assets-path: "/customs-service-status-frontend/assets/lib/hmrc-frontend/hmrc/";
+
+@import "lib/govuk-frontend/dist/govuk/index";
+@import "lib/hmrc-frontend/hmrc/all";
+
+ .cards-container {
+    display: flex;
+    gap: 20px;
+  }
+
+  .cards__item {
+    flex: 1;
+    display: block;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 0.5px solid#b1b4b6;
+    border-radius: 0px;
+    background:#f3f2f1;
+    text-decoration: none;
+    color:#0b0c0c;
+    transition: background-color 0.2s;
+    font-size: 18px;
+  }
+
+  .cards__item:hover {
+    background-color:#1d70b8;
+  }
+
+  .cards__item:active {
+    background-color: #ffeb3b; /* yellow while clicking */
+  }
+
+  .cards__item.active {
+    background-color: #ffeb3b; /* yellow after click */
+  }
+
+  .cards__item__header {
+      margin-top: 0;
+      color: #1d70b8;
+      font-size: 19px;
+  }
+
+  a:hover .cards__item__header {
+    color: #ffffff;
+  }
+
+  .govuk-grid-row {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+  .govuk-grid-row::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  .govuk-grid-column-full {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 15px;
+  }
+  @media (min-width: 40.0625em) {
+    .govuk-grid-column-full {
+      width: 100%;
+      float: left;
+    }
+  }
+
+  .govuk-grid-column-one-half {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 15px;
+  }
+  @media (min-width: 40.0625em) {
+    .govuk-grid-column-one-half {
+      width: 50%;
+      float: left;
+    }
+  }
+
