@@ -23,11 +23,11 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class LandingController @Inject (
-  mcc: MessagesControllerComponents,
+  mcc:         MessagesControllerComponents,
   landingPage: LandingPage
-                                  )(implicit ec: ExecutionContext)
-extends BaseFrontendController(mcc) {
-  
+)(implicit ec: ExecutionContext)
+    extends BaseFrontendController(mcc) {
+
   val show: Action[AnyContent] = Action { implicit request =>
     Ok(landingPage())
   }
