@@ -16,17 +16,16 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
+import jakarta.inject.Inject
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.LandingPage
 
-import javax.inject.Inject
-
-class LandingController @Inject (
-  mcc:         MessagesControllerComponents,
-  landingPage: LandingPage
-) extends BaseFrontendController(mcc) {
+class PlannedWorkController @Inject() (
+                                        mcc: MessagesControllerComponents
+                                      ) extends BaseFrontendController(mcc) {
 
   val show: Action[AnyContent] = Action { implicit request =>
-    Ok(landingPage())
+    Ok
   }
+
+
 }

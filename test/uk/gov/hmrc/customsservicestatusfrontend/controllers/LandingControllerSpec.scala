@@ -25,14 +25,13 @@ import uk.gov.hmrc.customsservicestatusfrontend.views.html.LandingPage
 class LandingControllerSpec extends ControllerBaseSpec with MockitoSugar {
 
   val view = new LandingPage(
-    layout = layout,
-    link = "some link"
+    layout = layout
   )
 
   val controller = new LandingController(
     stubMessagesControllerComponents(),
     view
-  )(ec)
+  )
 
   "show" should {
 

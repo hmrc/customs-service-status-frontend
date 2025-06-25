@@ -15,8 +15,10 @@
  *@
 
 @import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
+@import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 
-@this(layout: Layout, link: String)
+
+@this(layout: Layout)
 
 @()(implicit request: RequestHeader, messages: Messages)
 
@@ -31,14 +33,14 @@
   <div class="govuk-grid-row">
 
    <div class="govuk-grid-column-one-half">
-    <a href="@link" class="cards__item">
+    <a href="@routes.DashboardController.show.url" class="cards__item">
      <h3 class="govuk-heading-s cards__item__header">@messages("landing.card.title.status")</h3>
      <p class="govuk-body">@messages("landing.card.status.paragraph")</p>
     </a>
    </div>
 
    <div class="govuk-grid-column-one-half">
-    <a href="@link" class="cards__item">
+    <a href="@routes.PlannedWorkController.show.url" class="cards__item">
      <h3 class="govuk-heading-s cards__item__header">@messages("landing.card.title.planned")</h3>
      <p class="govuk-body">@messages("landing.card.planned.paragraph")</p>
     </a>
