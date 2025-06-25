@@ -20,12 +20,11 @@ import jakarta.inject.Inject
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 
 class PlannedWorkController @Inject() (
-                                        mcc: MessagesControllerComponents
-                                      ) extends BaseFrontendController(mcc) {
+  mcc: MessagesControllerComponents
+) extends BaseFrontendController(mcc) {
 
   val show: Action[AnyContent] = Action { implicit request =>
     Ok
   }
-
 
 }
