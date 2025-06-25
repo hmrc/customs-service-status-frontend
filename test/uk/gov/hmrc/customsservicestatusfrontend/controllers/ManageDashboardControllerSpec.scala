@@ -20,15 +20,15 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.LandingPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardPage
 
-class LandingControllerSpec extends ControllerBaseSpec with MockitoSugar {
+class ManageDashboardControllerSpec extends ControllerBaseSpec with MockitoSugar {
 
-  val view = new LandingPage(
+  val view = new ManageDashboardPage(
     layout = layout
   )
 
-  val controller = new LandingController(
+  val controller = new ManageDashboardController(
     stubMessagesControllerComponents(),
     view
   )
@@ -38,7 +38,7 @@ class LandingControllerSpec extends ControllerBaseSpec with MockitoSugar {
     "return OK and the correct view for a GET" in {
 
       val result = controller.show()(
-        FakeRequest(routes.LandingController.show)
+        FakeRequest(routes.ManageDashboardController.show)
       )
 
       val document = Jsoup.parse(contentAsString(result))

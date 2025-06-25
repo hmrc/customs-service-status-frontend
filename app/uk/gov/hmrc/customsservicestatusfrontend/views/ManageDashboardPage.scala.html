@@ -22,10 +22,10 @@
 
 @()(implicit request: RequestHeader, messages: Messages)
 
-@layout(pageTitle = Some(s"${messages("landingPage.title")} - ${messages("service.name")} - ${messages("generic.title.suffix")}")) {
+@layout(pageTitle = Some(s"${messages("manageDashboard.title")} - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
 
 
-<h1 class="govuk-heading-l">@messages("landing.heading")</h1>
+<h1 class="govuk-heading-l">@messages("manageDashboard.heading")</h1>
 
 <div class="govuk-grid-row">
  <div class="govuk-grid-column-full">
@@ -34,15 +34,15 @@
 
    <div class="govuk-grid-column-one-half">
     <a href="@routes.DashboardController.show.url" class="cards__item">
-     <h3 class="govuk-heading-s cards__item__header">@messages("landing.card.title.status")</h3>
-     <p class="govuk-body">@messages("landing.card.status.paragraph")</p>
+     <h3 class="govuk-heading-s cards__item__header">@messages("manageDashboard.card.title.status")</h3>
+     <p class="govuk-body">@messages("manageDashboard.card.status.paragraph")</p>
     </a>
    </div>
 
    <div class="govuk-grid-column-one-half">
     <a href="@routes.PlannedWorkController.show.url" class="cards__item">
-     <h3 class="govuk-heading-s cards__item__header">@messages("landing.card.title.planned")</h3>
-     <p class="govuk-body">@messages("landing.card.planned.paragraph")</p>
+     <h3 class="govuk-heading-s cards__item__header">@messages("manageDashboard.card.title.planned")</h3>
+     <p class="govuk-body">@messages("manageDashboard.card.planned.paragraph")</p>
     </a>
    </div>
 
