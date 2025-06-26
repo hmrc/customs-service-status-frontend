@@ -40,3 +40,9 @@ dashboard.status.haulier.longName=Goods Vehicle Movement Service
 service.state.AVAILABLE=Available
 service.state.UNAVAILABLE=Known issues
 service.state.UNKNOWN=Unknown
+
+planned_work.title=Planned work that will affect GVMS
+planned_work.link=Return to Check GVMS availability page
+planned_work.from=From:
+planned_work.to=To:
+planned_work.details=Details:
