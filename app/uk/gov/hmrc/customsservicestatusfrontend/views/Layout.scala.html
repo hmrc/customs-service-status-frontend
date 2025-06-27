@@ -52,7 +52,7 @@
         templateOverrides = TemplateOverrides(additionalHeadBlock = Some(head), mainContentLayout = Some(govukLayout(_))),
         pageTitle = pageTitle,
         isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
-        serviceURLs = ServiceURLs(serviceUrl = Some(routes.DashboardController.show.url)),
+        serviceURLs = ServiceURLs(serviceUrl = Some(routes.ManageDashboardController.show.url)),
         banners = Banners(phaseBanner = Some(standardBetaBanner()))
     )
 )(contentBlock)
