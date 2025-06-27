@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
-@(contentBlock: Html)
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardPage
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    @contentBlock
-  </div>
-</div>
+import javax.inject.{Inject, Singleton}
+
+@Singleton
+class ManageDashboardController @Inject (
+  mcc:                 MessagesControllerComponents,
+  manageDashboardPage: ManageDashboardPage
+) extends BaseFrontendController(mcc) {
+
+  val show: Action[AnyContent] = Action { implicit request =>
+    Ok(manageDashboardPage())
+  }
+}

@@ -30,7 +30,7 @@ import play.api.http.{HeaderNames, Status}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits, ResultExtractors}
 import uk.gov.hmrc.customsservicestatusfrontend.config.AppConfig
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.{Layout, govukLayoutFullWidth, link_with_datalink_text}
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.{Layout, govukLayoutFullWidth}
 import uk.gov.hmrc.govukfrontend.views.html.components.{FixedWidthPageLayout, GovukBackLink, GovukButton, GovukExitThisPage, GovukFooter, GovukHeader, GovukLayout, GovukPhaseBanner, GovukSkipLink, GovukTag, GovukTemplate, TwoThirdsMainContent}
 import uk.gov.hmrc.govukfrontend.views.html.helpers.GovukLogo
 import uk.gov.hmrc.hmrcfrontend.config.{AccessibilityStatementConfig, AssetsConfig, ContactFrontendConfig, LanguageConfig, RebrandConfig, TrackingConsentConfig, TudorCrownConfig}
@@ -55,6 +55,7 @@ trait BaseSpec
     with HeaderNames
     with ResultExtractors
     with GuiceOneAppPerSuite
+    with StubMessageControllerComponents
     with MockFactory {
 
   implicit lazy val ec:           ExecutionContext      = scala.concurrent.ExecutionContext.Implicits.global
@@ -118,7 +119,6 @@ trait BaseSpec
   val govukExitThisPage    = new GovukExitThisPage(govukButton = new GovukButton)
   val defaultMainContent   = new TwoThirdsMainContent
   val fixedWidthPageLayout = new FixedWidthPageLayout
-  val linkWithDataLinkText = new link_with_datalink_text()
 
   val hmrcStandardPage = new HmrcStandardPage(
     govukLayout = govukLayout,
@@ -138,8 +138,10 @@ trait BaseSpec
 
   val layout = new Layout(
     appConfig = applicationConfig,
+    govukLayout = govukLayoutFullWidth,
     hmrcStandardPage = hmrcStandardPage,
     standardBetaBanner = standardBetaBanner,
     hmrcReportTechnicalIssueHelper = hmrcReportTechnicalIssueHelper
   )(cfConfig)
+
 }
