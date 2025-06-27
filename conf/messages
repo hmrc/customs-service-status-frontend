@@ -37,6 +37,18 @@ dashboard.status.unknown.haulier.link=https://www.gov.uk/guidance/get-a-goods-mo
 dashboard.status.screen.reader=Availability status for the {0}
 dashboard.status.haulier.longName=Goods Vehicle Movement Service
 
+planned_work.title=Planned work that will affect GVMS
+planned_work.heading=Planned work that will affect GVMS
+planned_work.paragraph=No maintenance work is planned at the moment.
+planned_work.availability.heading=View live service availability
+planned_work.availability.link=GVMS service status
+planned_work.services.heading=Other HMRC services
+planned_work.services.link=Track availability for other HRMC services
+
+
+
+
+
 service.state.AVAILABLE=Available
 service.state.UNAVAILABLE=Known issues
 service.state.UNKNOWN=Unknown

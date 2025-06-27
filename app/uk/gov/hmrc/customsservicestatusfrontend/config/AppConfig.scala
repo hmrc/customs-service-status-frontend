@@ -20,7 +20,9 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
-class AppConfig @Inject() (config: Configuration) {
+class AppConfig @Inject() (val config: Configuration) {
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+
+  def trackAvailabilityForOtherServicesUrl: String = config.get[String]("urls.trackAvailabilityForOtherServicesUrl")
 
 }

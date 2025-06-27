@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.config
+package uk.gov.hmrc.customsservicestatusfrontend.views.helpers
 
-import com.google.inject.{AbstractModule, Provides}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import play.twirl.api.Html
 
-import javax.inject.{Named, Singleton}
-
-class Module extends AbstractModule {
-
-  @Provides
-  @Named("customsServiceStatusUrl")
-  @Singleton
-  def registerCustomsServiceStatusUrlProvider(servicesConfig: ServicesConfig): String =
-    servicesConfig.baseUrl("customs-service-status")
-
+object DisplayHelpers {
+  def hideForScreenReader(visualKey: String, screenReaderKey: Option[String]): Html =
+    screenReaderKey.fold(
+      Html(s"<span aria-hidden='true'>$visualKey</span>")
+    )(screenReaderAlt => Html(s"<span aria-hidden='true'>$visualKey</span> <span class='govuk-visually-hidden'>$screenReaderAlt</span>"))
 }
