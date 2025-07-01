@@ -19,26 +19,20 @@ package uk.gov.hmrc.customsservicestatusfrontend.connectors
 import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.http.HttpReads.Implicits
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class PlannedWorkConnector @Inject() (
-  httpClient:     HttpClientV2,
-  servicesConfig: ServicesConfig
+  httpClient: HttpClientV2
 )(implicit ec: ExecutionContext) {
 
-  lazy val serviceUrl: String = servicesConfig.baseUrl("customs-service-status")
+  lazy val url: String = "http://localhost:8991/customs-service-status/services/planned-work"
 
   def getPlannedWork()(implicit headerCarrier: HeaderCarrier): Future[List[PlannedWork]] =
     httpClient
-      .get(url"$serviceUrl/customs-service-status/services/planned-work")
+      .get(url"$url")
       .execute[List[PlannedWork]]
-      .map { plannedWork =>
-        println("BBBB" + plannedWork)
-        plannedWork
-      }
 
 }

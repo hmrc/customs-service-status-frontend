@@ -14,19 +14,31 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.services
+package uk.gov.hmrc.customsservicestatusfrontend.service
 
-import play.api.Logging
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.PlannedWorkConnector
-import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
+import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.fakePlannedWorks
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
-@Singleton
-class PlannedWorkService @Inject() (plannedWorkConnector: PlannedWorkConnector) extends Logging {
+class PlannedWorkServiceSpec extends BaseSpec {
 
-  def getPlannedWorkService()(implicit hc: HeaderCarrier): Future[List[PlannedWork]] = plannedWorkConnector.getPlannedWork()
+  val mockConnector: PlannedWorkConnector = mock[PlannedWorkConnector]
+
+  val service = new PlannedWorkService(mockConnector)
+
+  "getPlannedWorkService" should {
+    "return planned work as expected" in {
+      (mockConnector
+        .getPlannedWork()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(fakePlannedWorks))
+
+      service.getPlannedWorkService().futureValue shouldBe fakePlannedWorks
+    }
+  }
 
 }

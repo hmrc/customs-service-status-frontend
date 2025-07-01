@@ -14,27 +14,26 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
-@import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 @import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
+@import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 
-@this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
+@this(layout: Layout)
 
-@()(implicit request: RequestHeader, messages: Messages)
+@(plannedWorks: List[PlannedWork])(implicit request: RequestHeader, messages: Messages)
 
-@plannedWorkInstance = {
- <tr>
-  <p>
-   <strong>@messages("planned_work.to")</strong>
-  </p>
-  <p>
-   <strong>@messages("planned_work.from")</strong>
-  </p>
-  <p>
-   <strong>@messages("planned_work.details")</strong>
-  </p>
- </tr>
+@plannedWorkInstance(plannedWorks: List[PlannedWork]) = {
+ @plannedWorks.map { plannedWork =>
+  <tr class="govuk-planned-work-table__row">
+   <td class="govuk-table__cell">
+    <div><strong>@messages("planned_work.from")</strong> @Formatters.instantFormatDate(plannedWork.dateFrom) @messages("planned_work.at") @Formatters.instantFormatHours(plannedWork.dateFrom)</div>
+    <br>
+    <div><strong>@messages("planned_work.to")</strong> @Formatters.instantFormatDate(plannedWork.dateTo) @messages("planned_work.at") @Formatters.instantFormatHours(plannedWork.dateTo)</div>
+    <br>
+    <div><strong>@messages("planned_work.details")</strong> @plannedWork.details <br></div>
+   </td>
+  </tr>
+ }
 }
 
 @layout(pageTitle = Some(messages("planned_work.title"))) {
@@ -43,29 +42,12 @@
 
  <table class="govuk-table">
   <tbody class="govuk-table__body">
-   <tr class="govuk-planned-work-table__row">
-    <td class="govuk-table__cell">
-     <div><strong>@messages("planned_work.from")</strong> </div>
-     <br>
-     <div><strong>@messages("planned_work.to")</strong> </div>
-     <br>
-     <div><strong>@messages("planned_work.details")</strong> dvsdagbfdabdfabfd <br>vavafvfba</div>
-    </td>
-   </tr>
-   <tr class="govuk-planned-work-table__row">
-    <td class="govuk-table__cell">
-     <div><strong>@messages("planned_work.from")</strong> </div>
-     <br>
-     <div><strong>@messages("planned_work.to")</strong> </div>
-     <br>
-     <div><strong>@messages("planned_work.details")</strong> dvsdagbfdabdfabfd <br>vavafvfba</div>
-    </td>
-   </tr>
+    @plannedWorkInstance(plannedWorks)
   </tbody>
  </table>
 
  <p class="govuk-body">
-   <a href="@routes.DashboardController.show.url" class="govuk-link">@messages("planned_work.link")</a>
+   <a id="plannedPage-link" href="@routes.DashboardController.show.url" class="govuk-link">@messages("planned_work.link")</a>
  </p>
 
 }

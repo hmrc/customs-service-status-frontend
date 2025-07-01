@@ -20,17 +20,18 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import java.time.Instant
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.ExecutionContext
 
+@Singleton
 class PlannedWorkController @Inject() (mcc: MessagesControllerComponents, plannedWorkPage: PlannedWorkPage, plannedWorkService: PlannedWorkService)(
   implicit ec: ExecutionContext
 ) extends BaseFrontendController(mcc) {
 
   def show: Action[AnyContent] = Action.async { implicit request =>
-    plannedWorkService.getPlannedWorkService().map { plannedWork =>
-      println("AAAA" + plannedWork)
-      Ok(plannedWorkPage())
+    plannedWorkService.getPlannedWorkService().map { plannedWorks =>
+      Ok(plannedWorkPage(plannedWorks.sortBy(_.dateFrom)(Ordering[Instant].reverse)))
     }
   }
 }
