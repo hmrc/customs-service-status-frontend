@@ -17,9 +17,10 @@
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 @import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-@import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
+@import uk.gov.hmrc.customsservicestatusfrontend.views.html.govukLayoutTwoThirds
 
-@this(layout: Layout)
+@this(layout: govukLayoutTwoThirds)
+
 @(plannedWorks: List[PlannedWork])(implicit request: RequestHeader, messages: Messages)
 
 @plannedWorkInstance(plannedWorks: List[PlannedWork]) = {
@@ -37,8 +38,6 @@
 }
 
 @layout(pageTitle = Some(messages("planned_work.title"))) {
-<div class="govuk-grid-row">
- <div class="govuk-grid-column-two-thirds-from-desktop">
    <h1 class="govuk-heading-l">@messages("planned_work.title")</h1>
 
    <table class="govuk-table">
@@ -50,6 +49,4 @@
    <p class="govuk-body">
      <a id="plannedPage-link" href="@routes.ManageDashboardController.show.url" class="govuk-link">@messages("planned_work.link")</a>
    </p>
- </div>
-</div>
 }
