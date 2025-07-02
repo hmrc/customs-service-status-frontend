@@ -17,14 +17,13 @@
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State._
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-@import uk.gov.hmrc.customsservicestatusfrontend.views.html.govukLayoutFullWidth
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
-@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInsetText, GovukTable, _}
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
 
 @import java.time.Instant
 
-@this(layout: govukLayoutFullWidth, govukInsetText : GovukInsetText, govukTable : GovukTable)
+@this(layout: govukLayoutFullWidth, govukInsetText : GovukInsetText)
 
 @(state: State, stateChangedAt: Instant, serviceId: String)(implicit request: RequestHeader, messages: Messages)
 

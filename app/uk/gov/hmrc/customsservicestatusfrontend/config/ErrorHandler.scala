@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.config
 
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Request, RequestHeader}
+import play.api.mvc.RequestHeader
 import play.twirl.api.Html
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.{ErrorTemplate, serviceUnavailable}
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler

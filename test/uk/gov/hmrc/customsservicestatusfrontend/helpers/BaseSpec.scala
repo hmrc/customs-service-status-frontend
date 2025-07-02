@@ -18,7 +18,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.Materializer
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.ConfigFactory
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.*
 import org.scalatest.concurrent.ScalaFutures

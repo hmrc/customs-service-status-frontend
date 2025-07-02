@@ -19,6 +19,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.connectors
 import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
