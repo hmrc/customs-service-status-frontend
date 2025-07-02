@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.config
+package uk.gov.hmrc.customsservicestatusfrontend.controllers
+
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardPage
 
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
 
 @Singleton
-class AppConfig @Inject() (val config: Configuration) {
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+class ManageDashboardController @Inject (
+  mcc:                 MessagesControllerComponents,
+  manageDashboardPage: ManageDashboardPage
+) extends BaseFrontendController(mcc) {
 
+  val show: Action[AnyContent] = Action { implicit request =>
+    Ok(manageDashboardPage())
+  }
 }

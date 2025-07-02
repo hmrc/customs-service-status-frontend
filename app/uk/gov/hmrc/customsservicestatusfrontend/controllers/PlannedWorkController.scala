@@ -25,13 +25,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class PlannedWorkController @Inject() (mcc: MessagesControllerComponents, plannedWorkPage: PlannedWorkPage, plannedWorkService: PlannedWorkService)(
+class PlannedWorkController @Inject() (mcc: MessagesControllerComponents, plannedWorkView: PlannedWorkPage, plannedWorkService: PlannedWorkService)(
   implicit ec: ExecutionContext
 ) extends BaseFrontendController(mcc) {
 
   def show: Action[AnyContent] = Action.async { implicit request =>
     plannedWorkService.getPlannedWorkService().map { plannedWorks =>
-      Ok(plannedWorkPage(plannedWorks.sortBy(_.dateFrom)(Ordering[Instant].reverse)))
+      Ok(plannedWorkView(plannedWorks.sortBy(_.dateFrom)(Ordering[Instant].reverse)))
     }
   }
 }

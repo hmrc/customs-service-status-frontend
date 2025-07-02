@@ -18,9 +18,9 @@ package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.Materializer
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 import org.scalamock.scalatest.MockFactory
-import org.scalatest._
+import org.scalatest.*
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -30,6 +30,13 @@ import play.api.http.{HeaderNames, Status}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits, ResultExtractors}
 import uk.gov.hmrc.customsservicestatusfrontend.config.AppConfig
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.{Layout, govukLayoutFullWidth}
+import uk.gov.hmrc.govukfrontend.views.html.components.{FixedWidthPageLayout, GovukBackLink, GovukButton, GovukExitThisPage, GovukFooter, GovukHeader, GovukLayout, GovukPhaseBanner, GovukSkipLink, GovukTag, GovukTemplate, TwoThirdsMainContent}
+import uk.gov.hmrc.govukfrontend.views.html.helpers.GovukLogo
+import uk.gov.hmrc.hmrcfrontend.config.{AccessibilityStatementConfig, AssetsConfig, ContactFrontendConfig, LanguageConfig, RebrandConfig, TrackingConsentConfig, TudorCrownConfig}
+import uk.gov.hmrc.hmrcfrontend.views.config.{HmrcFooterItems, StandardBetaBanner}
+import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcBanner, HmrcFooter, HmrcHeader, HmrcLanguageSelect, HmrcReportTechnicalIssue, HmrcUserResearchBanner}
+import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcHead, HmrcLanguageSelectHelper, HmrcReportTechnicalIssueHelper, HmrcScripts, HmrcStandardFooter, HmrcStandardHeader, HmrcStandardPage, HmrcTrackingConsentSnippet}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
@@ -48,12 +55,16 @@ trait BaseSpec
     with HeaderNames
     with ResultExtractors
     with GuiceOneAppPerSuite
+    with StubMessageControllerComponents
     with MockFactory {
 
-  implicit lazy val ec:           ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
-  implicit lazy val hc:           HeaderCarrier    = HeaderCarrier()
-  implicit lazy val system:       ActorSystem      = ActorSystem()
-  implicit lazy val materializer: Materializer     = Materializer(system)
+  implicit lazy val ec:           ExecutionContext      = scala.concurrent.ExecutionContext.Implicits.global
+  implicit lazy val hc:           HeaderCarrier         = HeaderCarrier()
+  implicit lazy val system:       ActorSystem           = ActorSystem()
+  implicit lazy val materializer: Materializer          = Materializer(system)
+  implicit lazy val cfConfig:     ContactFrontendConfig = app.injector.instanceOf[ContactFrontendConfig]
+
+  val assetsConfig = new AssetsConfig()
 
   def configuration: Configuration = Configuration(ConfigFactory.parseResources("application.conf"))
 
@@ -66,5 +77,71 @@ trait BaseSpec
         "metrics.enabled" -> false
       )
       .build()
+
+  val govukLogo = new GovukLogo
+
+  val govukLayoutFullWidth = new govukLayoutFullWidth()
+
+  val govukLayout = new GovukLayout(
+    govukTemplate = new GovukTemplate(
+      govukHeader = new GovukHeader(TudorCrownConfig(configuration), RebrandConfig(configuration), govukLogo),
+      govukFooter = new GovukFooter(RebrandConfig(configuration), govukLogo),
+      govukSkipLink = new GovukSkipLink,
+      fixedWidthPageLayout = new FixedWidthPageLayout,
+      rebrandConfig = RebrandConfig(configuration)
+    ),
+    govukHeader = new GovukHeader(TudorCrownConfig(configuration), RebrandConfig(configuration), govukLogo),
+    govukFooter = new GovukFooter(RebrandConfig(configuration), govukLogo),
+    govukBackLink = new GovukBackLink,
+    defaultMainContentLayout = new TwoThirdsMainContent,
+    fixedWidthPageLayout = new FixedWidthPageLayout
+  )
+
+  val govukTag = new GovukTag
+  val tudorCrownConfig: TudorCrownConfig = TudorCrownConfig(applicationConfig.config)
+  val hmrcBanner             = new HmrcBanner(tudorCrownConfig)
+  val hmrcUserResearchBanner = new HmrcUserResearchBanner
+  val govukPhaseBanner       = new GovukPhaseBanner(govukTag)
+  val hmrcHeader = new HmrcHeader(hmrcBanner, hmrcUserResearchBanner, govukPhaseBanner, tudorCrownConfig, RebrandConfig(configuration), govukLogo)
+  val hmrcStandardHeader           = new HmrcStandardHeader(hmrcHeader)
+  val govukFooter                  = new GovukFooter(RebrandConfig(configuration), govukLogo)
+  val hmrcFooter                   = new HmrcFooter(govukFooter)
+  val accessibilityStatementConfig = new AccessibilityStatementConfig(applicationConfig.config)
+  val hmrcFooterItems              = new HmrcFooterItems(accessibilityStatementConfig)
+  val hmrcStandardFooter           = new HmrcStandardFooter(hmrcFooter, hmrcFooterItems)
+  val trackingConsentConfig        = new TrackingConsentConfig(applicationConfig.config)
+  val hmrcTrackingConsentSnippet   = new HmrcTrackingConsentSnippet(trackingConsentConfig)
+  val hmrcHead                     = new HmrcHead(hmrcTrackingConsentSnippet, assetsConfig)
+  val hmrcLanguageSelectHelper =
+    new HmrcLanguageSelectHelper(hmrcLanguageSelect = new HmrcLanguageSelect, languageConfig = new LanguageConfig(applicationConfig.config))
+  val hmrcScripts          = new HmrcScripts(assetsConfig)
+  val govukBackLink        = new GovukBackLink
+  val govukExitThisPage    = new GovukExitThisPage(govukButton = new GovukButton)
+  val defaultMainContent   = new TwoThirdsMainContent
+  val fixedWidthPageLayout = new FixedWidthPageLayout
+
+  val hmrcStandardPage = new HmrcStandardPage(
+    govukLayout = govukLayout,
+    hmrcStandardHeader = hmrcStandardHeader,
+    hmrcStandardFooter = hmrcStandardFooter,
+    hmrcHead = hmrcHead,
+    hmrcLanguageSelectHelper = hmrcLanguageSelectHelper,
+    hmrcScripts = hmrcScripts,
+    govukBackLink = govukBackLink,
+    govukExitThisPage = govukExitThisPage,
+    defaultMainContent = defaultMainContent,
+    fixedWidthPageLayout = fixedWidthPageLayout
+  )
+
+  val standardBetaBanner             = new StandardBetaBanner
+  val hmrcReportTechnicalIssueHelper = new HmrcReportTechnicalIssueHelper(HmrcReportTechnicalIssue(), cfConfig)
+
+  val layout = new Layout(
+    appConfig = applicationConfig,
+    govukLayout = govukLayoutFullWidth,
+    hmrcStandardPage = hmrcStandardPage,
+    standardBetaBanner = standardBetaBanner,
+    hmrcReportTechnicalIssueHelper = hmrcReportTechnicalIssueHelper
+  )(cfConfig)
 
 }

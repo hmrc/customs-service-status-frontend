@@ -23,15 +23,22 @@
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
+@import views.html.helper.CSPNonce
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.TemplateOverrides
 
 @this(
     appConfig: AppConfig,
+    govukLayout: govukLayoutFullWidth,
     hmrcStandardPage: HmrcStandardPage,
     standardBetaBanner: StandardBetaBanner,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
 )(implicit cfConfig: ContactFrontendConfig)
 
 @(pageTitle: Option[String] = None)(mainContent: Html)(implicit request: RequestHeader, messages: Messages)
+
+@head = {
+<!--[if gt IE 8]><!--><link @{CSPNonce.attr} href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="screen" rel="stylesheet" type="text/css" /><!--<![endif]-->
+}
 
 @contentBlock = {
     @mainContent
@@ -42,9 +49,10 @@
 
 @hmrcStandardPage(
     HmrcStandardPageParams(
+        templateOverrides = TemplateOverrides(additionalHeadBlock = Some(head), mainContentLayout = Some(govukLayout(_))),
         pageTitle = pageTitle,
         isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
-        serviceURLs = ServiceURLs(serviceUrl = Some(routes.DashboardController.show.url)),
+        serviceURLs = ServiceURLs(serviceUrl = Some(routes.ManageDashboardController.show.url)),
         banners = Banners(phaseBanner = Some(standardBetaBanner()))
     )
 )(contentBlock)
