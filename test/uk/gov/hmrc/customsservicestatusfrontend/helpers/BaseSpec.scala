@@ -56,6 +56,7 @@ trait BaseSpec
     with ResultExtractors
     with GuiceOneAppPerSuite
     with StubMessageControllerComponents
+    with AllMocks
     with MockFactory {
 
   implicit lazy val ec:           ExecutionContext      = scala.concurrent.ExecutionContext.Implicits.global
