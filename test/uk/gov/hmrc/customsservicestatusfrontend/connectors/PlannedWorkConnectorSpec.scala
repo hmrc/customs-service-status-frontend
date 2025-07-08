@@ -27,12 +27,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class PlannedWorkConnectorSpec extends BaseSpec {
 
+  val mockHttpClient:     HttpClientV2   = mock[HttpClientV2]
+  val mockRequestBuilder: RequestBuilder = mock[RequestBuilder]
+
   val url = "http://localhost:8991/customs-service-status/services/planned-work"
 
   val connector = new PlannedWorkConnector(mockHttpClient, url)
 
   "getPlannedWork" should {
-    "return planned work" ignore {
+    "return planned work" in {
       (mockHttpClient
         .get(_: URL)(_: HeaderCarrier))
         .expects(*, *)

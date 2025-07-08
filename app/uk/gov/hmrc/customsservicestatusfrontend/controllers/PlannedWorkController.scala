@@ -20,7 +20,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
 
-import java.time.Instant
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
@@ -31,7 +30,7 @@ class PlannedWorkController @Inject() (mcc: MessagesControllerComponents, planne
 
   def show: Action[AnyContent] = Action.async { implicit request =>
     plannedWorkService.getPlannedWorkService().map { plannedWorks =>
-      Ok(plannedWorkView(plannedWorks.sortBy(_.dateFrom)(Ordering[Instant].reverse)))
+      Ok(plannedWorkView(plannedWorks.sortBy(_.dateFrom)))
     }
   }
 }
