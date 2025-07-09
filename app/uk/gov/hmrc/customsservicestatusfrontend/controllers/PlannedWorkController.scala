@@ -30,7 +30,7 @@ class PlannedWorkController @Inject() (mcc: MessagesControllerComponents, planne
 
   def show: Action[AnyContent] = Action.async { implicit request =>
     plannedWorkService.getPlannedWorkService().map { plannedWorks =>
-      Ok(plannedWorkView(plannedWorks.sortBy(_.dateFrom)))
+      Ok(plannedWorkView(plannedWorks))
     }
   }
 }
