@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
+import uk.gov.hmrc.customsservicestatusfrontend.config.AppConfig
 import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
@@ -26,15 +27,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PlannedWorkConnector @Inject() (
-  httpClient:                                                    HttpClientV2,
-  @Named("customsServiceStatusUrl") customsServiceStatusBaseUrl: String
-)(implicit ec: ExecutionContext) {
-
-  private val baseUrl: String = s"$customsServiceStatusBaseUrl/customs-service-status/services/planned-work"
+  httpClient: HttpClientV2
+)(implicit ec: ExecutionContext, appConfig: AppConfig) {
 
   def getPlannedWork()(implicit headerCarrier: HeaderCarrier): Future[List[PlannedWork]] =
     httpClient
-      .get(url"$baseUrl")
+      .get(url"${appConfig.plannedWorkUrl}")
       .execute[List[PlannedWork]]
 
 }

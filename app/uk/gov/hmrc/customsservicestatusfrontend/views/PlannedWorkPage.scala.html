@@ -22,7 +22,7 @@
 
 @(plannedWorks: List[PlannedWork])(implicit request: RequestHeader, messages: Messages)
 
-@plannedWorkInstance(plannedWorks: List[PlannedWork]) = {
+@renderPlannedWorks(plannedWorks: List[PlannedWork]) = {
  @plannedWorks.map { plannedWork =>
   <tr class="govuk-table__row">
    <td class="govuk-table__cell">
@@ -41,7 +41,7 @@
 
    <table class="govuk-table">
      <tbody class="govuk-table__body">
-       @plannedWorkInstance(plannedWorks)
+       @renderPlannedWorks(plannedWorks)
      </tbody>
    </table>
 

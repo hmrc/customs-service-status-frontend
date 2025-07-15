@@ -38,6 +38,7 @@ import uk.gov.hmrc.hmrcfrontend.views.config.{HmrcFooterItems, StandardBetaBanne
 import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcBanner, HmrcFooter, HmrcHeader, HmrcLanguageSelect, HmrcReportTechnicalIssue, HmrcUserResearchBanner}
 import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcHead, HmrcLanguageSelectHelper, HmrcReportTechnicalIssueHelper, HmrcScripts, HmrcStandardFooter, HmrcStandardHeader, HmrcStandardPage, HmrcTrackingConsentSnippet}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.ExecutionContext
 
@@ -67,8 +68,9 @@ trait BaseSpec
   val assetsConfig = new AssetsConfig()
 
   def configuration: Configuration = Configuration(ConfigFactory.parseResources("application.conf"))
+  def servicesConfig = new ServicesConfig(configuration)
 
-  implicit def applicationConfig: AppConfig = new AppConfig(configuration)
+  implicit def applicationConfig: AppConfig = new AppConfig(configuration, servicesConfig)
 
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()

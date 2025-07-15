@@ -32,7 +32,7 @@ class PlannedWorkConnectorSpec extends BaseSpec {
 
   val url = "http://localhost:8991/customs-service-status/services/planned-work"
 
-  val connector = new PlannedWorkConnector(mockHttpClient, url)
+  val connector = new PlannedWorkConnector(mockHttpClient)
 
   "getPlannedWork" should {
     "return planned work" in {

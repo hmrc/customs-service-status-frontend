@@ -18,9 +18,14 @@ package uk.gov.hmrc.customsservicestatusfrontend.config
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class AppConfig @Inject() (val config: Configuration) {
+class AppConfig @Inject() (val config: Configuration, servicesConfig: ServicesConfig) {
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+
+  val frontendBaseUrl: String = servicesConfig.baseUrl("customs-service-status-frontend")
+
+  val plannedWorkUrl: String = s"$frontendBaseUrl/customs-service-status/services/planned-work"
 
 }
