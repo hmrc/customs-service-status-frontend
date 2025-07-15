@@ -39,6 +39,6 @@ class CustomsServiceStatusConnector @Inject() (
 
   def getPlannedWork()(implicit headerCarrier: HeaderCarrier): Future[List[PlannedWork]] =
     httpClient
-      .get(url"$baseUrl")
+      .get(url"$baseUrl/services/planned-work")
       .execute[List[PlannedWork]]
 }
