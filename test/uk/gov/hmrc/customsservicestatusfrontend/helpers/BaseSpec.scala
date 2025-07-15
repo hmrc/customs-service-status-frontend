@@ -70,7 +70,7 @@ trait BaseSpec
   def configuration: Configuration = Configuration(ConfigFactory.parseResources("application.conf"))
   def servicesConfig = new ServicesConfig(configuration)
 
-  implicit def applicationConfig: AppConfig = new AppConfig(configuration, servicesConfig)
+  implicit def applicationConfig: AppConfig = new AppConfig(configuration)
 
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()

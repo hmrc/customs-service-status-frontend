@@ -18,8 +18,8 @@ package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
 import org.mockito.Mockito.*
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
-import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{fakePlannedWorks, serviceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{PlannedWork, ServiceStatuses}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import uk.gov.hmrc.http.*
 
@@ -42,6 +42,22 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
       (mockRequestBuilder.execute(_: HttpReads[ServiceStatuses], _: ExecutionContext)).expects(*, ec).returns(Future.successful(serviceStatuses))
 
       connector.getStatus().futureValue shouldBe serviceStatuses
+    }
+  }
+
+  "getPlannedWork" should {
+    "return planned work" in {
+      (mockHttpClient
+        .get(_: URL)(_: HeaderCarrier))
+        .expects(*, *)
+        .returns(mockRequestBuilder)
+
+      (mockRequestBuilder
+        .execute(_: HttpReads[List[PlannedWork]], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future(fakePlannedWorks))
+
+      connector.getPlannedWork().futureValue shouldBe fakePlannedWorks
     }
   }
 }

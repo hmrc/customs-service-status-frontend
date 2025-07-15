@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,9 @@ package uk.gov.hmrc.customsservicestatusfrontend.config
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class AppConfig @Inject() (val config: Configuration, servicesConfig: ServicesConfig) {
+class AppConfig @Inject() (val config: Configuration) {
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-
-  val frontendBaseUrl: String = servicesConfig.baseUrl("customs-service-status-frontend")
-
-  val plannedWorkUrl: String = s"$frontendBaseUrl/customs-service-status/services/planned-work"
 
 }

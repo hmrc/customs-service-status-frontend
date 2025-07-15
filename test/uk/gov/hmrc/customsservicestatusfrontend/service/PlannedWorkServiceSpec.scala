@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.service
 
-import uk.gov.hmrc.customsservicestatusfrontend.connectors.PlannedWorkConnector
+import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -26,8 +26,7 @@ import scala.concurrent.Future
 
 class PlannedWorkServiceSpec extends BaseSpec {
 
-  val mockConnector: PlannedWorkConnector = mock[PlannedWorkConnector]
-
+  val mockConnector: CustomsServiceStatusConnector = mock[CustomsServiceStatusConnector]
   val service = new PlannedWorkService(mockConnector)
 
   "getPlannedWorkService" should {
