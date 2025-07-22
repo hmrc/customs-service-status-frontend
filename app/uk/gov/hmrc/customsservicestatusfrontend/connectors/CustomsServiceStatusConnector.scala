@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
 
 import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,4 +36,9 @@ class CustomsServiceStatusConnector @Inject() (
     httpClient
       .get(url"$baseUrl/services")
       .execute
+
+  def getPlannedWork()(implicit headerCarrier: HeaderCarrier): Future[List[PlannedWork]] =
+    httpClient
+      .get(url"$baseUrl/services/planned-work")
+      .execute[List[PlannedWork]]
 }
