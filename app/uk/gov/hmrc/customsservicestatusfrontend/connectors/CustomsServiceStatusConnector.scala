@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.models.{ServiceStatuses, UnplannedOutageData}
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
@@ -35,4 +35,10 @@ class CustomsServiceStatusConnector @Inject() (
     httpClient
       .get(url"$baseUrl/services")
       .execute
+
+  def getList()(implicit headerCarrier: HeaderCarrier): Future[List[UnplannedOutageData]] =
+    httpClient
+      .get(url"$baseUrl/services/messages")
+      .execute
+
 }

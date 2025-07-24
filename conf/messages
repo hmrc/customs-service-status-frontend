@@ -14,11 +14,15 @@ manage_dashboard.card.status.paragraph=Current availability of the Goods Vehicle
 manage_dashboard.card.title.planned=Planned work
 manage_dashboard.card.planned.paragraph=Planned service interruptions such as scheduled maintenance.
 
-dashboard.haulier.h1=Current GVMS availability
-dashboard.p1=Last updated: {0}
-dashboard.available.haulier.p1=There are currently no issues with creating and updating a goods movement reference.
-dashboard.available.haulier.p2=Find out if there is planned downtime for GVMS
+dashboard.haulier.h1=Service availability for GVMS
+dashboard.h2=Live service status
+dashboard.available.haulier.link.p1=Refresh this page
+dashboard.available.haulier.p1=to check for changes.
+dashboard.h3=Planned work
+dashboard.available.haulier.p2=Find out when future outages are happening
 dashboard.available.haulier.p2.link=https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues
+dashboard.h4=Other HMRC services
+dashboard.available.haulier.link.p3=Track availability for other HMRC services
 
 dashboard.unavailable.inset.p1=Known issues since: {0} on {1}.
 dashboard.unavailable.inset.p2=We are currently investigating.
@@ -44,6 +48,6 @@ dashboard.status.unknown.haulier.link=https://www.gov.uk/guidance/get-a-goods-mo
 dashboard.status.screen.reader=Availability status for the {0}
 dashboard.status.haulier.longName=Goods Vehicle Movement Service
 
-service.state.AVAILABLE=Available
+service.state.AVAILABLE=No issues detected
 service.state.UNAVAILABLE=Known issues
 service.state.UNKNOWN=Unknown

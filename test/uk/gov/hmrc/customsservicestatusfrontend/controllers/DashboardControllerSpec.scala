@@ -20,10 +20,10 @@ import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses, validUnplannedOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses}
-import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
+import uk.gov.hmrc.customsservicestatusfrontend.services.{StatusService, UnplannedOutageService}
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.http.HeaderCarrier
@@ -34,31 +34,74 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
   private val fakeRequest = FakeRequest("GET", "/service-availability")
   private val dashboardPage: DashboardPage = app.injector.instanceOf[DashboardPage]
-  private val mockService = mock[StatusService]
+  private val mockService       = mock[StatusService]
+  private val mockOutageService = mock[UnplannedOutageService]
 
   private val controller = new DashboardController(
     stubMessagesControllerComponents(),
     dashboardPage,
-    mockService
+    mockService,
+    mockOutageService
   )
 
   "GET /service-availability" should {
-    "show dashboard content as expected when there are no issues" in {
+    "show dashboard content as expected when there are no issues or planned work and no CLS updates posted" in {
       (mockService
         .getStatus()(_: HeaderCarrier))
         .expects(*)
         .returns(Future.successful(serviceStatuses))
 
+      (mockOutageService
+        .getList()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(List.empty))
+
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
 
       val doc = Jsoup.parse(contentAsString(result))
-      doc.getElementsByClass("govuk-heading-l").text()  shouldBe "Current GVMS availability"
-      doc.getElementsByClass("govuk-body").text()         should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
-      doc.getElementsByClass("govuk-tag--green").text() shouldBe "Available"
-      doc.getElementsByClass("govuk-body").text() should include(
-        "There are currently no issues with creating and updating a goods movement reference."
-      )
+      doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
+      doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
+
+      doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
+      doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+      doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
+      doc.getElementsByClass("govuk-body").text()      should include("Find out when future outages are happening")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+      doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+
+    }
+    "show dashboard content as expected when there are no issues or planned work and there is a CLS update" in {
+      (mockService
+        .getStatus()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(serviceStatuses))
+
+      (mockOutageService
+        .getList()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(validUnplannedOutageData))
+
+      val result = controller.show(fakeRequest)
+      status(result) shouldBe Status.OK
+
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
+      doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
+
+      doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
+      doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+      doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
+      doc.getElementsByClass("govuk-body").text()      should include("Find out when future outages are happening")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+      doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+
     }
 
     "show dashboard content as expected when there are issues" in {
@@ -70,15 +113,20 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .expects(*)
         .returns(Future.successful(serviceStatuses))
 
+      (mockOutageService
+        .getList()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(validUnplannedOutageData))
+
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
 
       val doc = Jsoup.parse(contentAsString(result))
-      doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Current GVMS availability"
+      doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Service availability for GVMS"
       doc.getElementsByClass("govuk-tag--orange").text() shouldBe "Known issues"
 
       val body = doc.getElementsByClass("govuk-body").text()
-      body should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
+      // body should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
       body should include(s"Known issues since: ${Formatters.instantFormatHours(now)} on ${Formatters.instantFormatDate(now)}")
       body should include("We are currently investigating.")
 
@@ -105,6 +153,11 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .getStatus()(_: HeaderCarrier))
         .expects(*)
         .returns(Future.successful(serviceStatuses))
+
+      (mockOutageService
+        .getList()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(validUnplannedOutageData))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK

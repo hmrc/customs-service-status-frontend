@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
+import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{InternalReference, Preview}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
-import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses, UnplannedOutageData}
 
 import java.time.Instant
 
@@ -28,4 +29,7 @@ object TestData {
   val serviceStatus: CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(AVAILABLE), Some(now), Some(now))
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
+
+  val validUnplannedOutageData: List[UnplannedOutageData] =
+    List(UnplannedOutageData(InternalReference("Test reference"), Preview("Test details"), Instant.now(), None))
 }

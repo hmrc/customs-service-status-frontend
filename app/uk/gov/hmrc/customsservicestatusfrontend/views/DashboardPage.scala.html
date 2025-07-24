@@ -20,12 +20,14 @@
 @import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInsetText, GovukTable, _}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
+@import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
+@import uk.gov.hmrc.customsservicestatusfrontend.models.UnplannedOutageData
 
 @import java.time.Instant
 
 @this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
 
-@(state: State, stateChangedAt: Instant, serviceId: String)(implicit request: RequestHeader, messages: Messages)
+@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: List[UnplannedOutageData])(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -48,7 +50,7 @@
 
 @availableContent = {
     <h1 class="govuk-heading-l">@messages(s"dashboard.$serviceId.h1")</h1>
-    <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
+    <p class="govuk-heading-m">@Html(messages("dashboard.h2"))</p>
     <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
     </span>
@@ -57,9 +59,16 @@
     </strong>
     <br>
     <br>
-    <p class="govuk-body">@messages(s"dashboard.available.$serviceId.p1")</p>
-    <hr aria-hidden="true" class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+    <p class="govuk-body">
+    <a class="govuk-link" id='refresh-link' href=@routes.DashboardController.show>@messages(s"dashboard.available.$serviceId.link.p1")</a> @messages(s"dashboard.available.$serviceId.p1")
+    </p>
+    <p class="govuk-heading-m">@Html(messages("dashboard.h3"))</p>
     <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p2.link", s"dashboard.available.$serviceId.p2", "available_p2_link")</p>
+    <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
+    <p class="govuk-body">
+        <a class="govuk-link" id='track-link' href=@routes.DashboardController.show>@messages(s"dashboard.available.$serviceId.link.p3")</a>
+    </p>
+
 }
 
 @unavailableContent = {

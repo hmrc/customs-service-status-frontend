@@ -17,8 +17,8 @@
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
-import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{serviceStatuses, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{ServiceStatuses, UnplannedOutageData}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 
@@ -41,6 +41,19 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
       (mockRequestHolder.execute(_: HttpReads[ServiceStatuses], _: ExecutionContext)).expects(*, *).returns(Future.successful(serviceStatuses))
 
       connector.getStatus().futureValue shouldBe serviceStatuses
+    }
+  }
+
+  "getList" should {
+    "return UnplannedOutageData as expected" in {
+
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
+      (mockRequestHolder
+        .execute(_: HttpReads[List[UnplannedOutageData]], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future.successful(validUnplannedOutageData))
+
+      connector.getList().futureValue shouldBe validUnplannedOutageData
     }
   }
 }

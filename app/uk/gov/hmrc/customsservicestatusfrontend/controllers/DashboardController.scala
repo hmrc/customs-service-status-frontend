@@ -18,7 +18,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
-import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
+import uk.gov.hmrc.customsservicestatusfrontend.services.{StatusService, UnplannedOutageService}
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 
 import java.time.Instant
@@ -29,12 +29,16 @@ import scala.concurrent.ExecutionContext
 class DashboardController @Inject() (
   mcc:           MessagesControllerComponents,
   dashboardPage: DashboardPage,
-  statusService: StatusService
+  statusService: StatusService,
+  outageService: UnplannedOutageService
 )(implicit ec: ExecutionContext)
     extends BaseFrontendController(mcc) {
 
   val show: Action[AnyContent] = Action.async { implicit request =>
-    statusService.getStatus().map { statuses =>
+    for {
+      statuses            <- statusService.getStatus()
+      unplannedOutageData <- outageService.getList()
+    } yield {
       val uiState =
         if (statuses.services.forall(_.state.contains(AVAILABLE)))
           AVAILABLE
@@ -45,7 +49,7 @@ class DashboardController @Inject() (
 
       val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
 
-      Ok(dashboardPage(uiState, stateChangedAt, "haulier")) // The hard coded haulier will be fixed in the forthcoming ticket.
+      Ok(dashboardPage(uiState, stateChangedAt, "haulier", unplannedOutageData)) // The hard coded haulier will be fixed in the forthcoming ticket.
     }
   }
 }

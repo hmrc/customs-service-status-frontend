@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.controllers.test
 
-import com.google.inject._
+import com.google.inject.*
 import play.api.Logging
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
+import uk.gov.hmrc.customsservicestatusfrontend.services.UnplannedOutageService
 import uk.gov.hmrc.customsservicestatusfrontend.services.test.TestService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -30,7 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class TestController @Inject() (
   dashboardPage: DashboardPage,
-  testService:   TestService
+  testService:   TestService,
+  outageService: UnplannedOutageService
 )(implicit val ec: ExecutionContext, mcc: MessagesControllerComponents)
     extends FrontendController(mcc)
     with Logging {
@@ -45,14 +47,20 @@ class TestController @Inject() (
     }
 
   val showAvailable: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier")))
+    outageService.getList().map { unplannedOutageData =>
+      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", unplannedOutageData))
+    }
   }
 
   val showUnavailable: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier")))
+    outageService.getList().map { unplannedOutageData =>
+      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", unplannedOutageData))
+    }
   }
 
   val showUnknown: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier")))
+    outageService.getList().map { unplannedOutageData =>
+      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", unplannedOutageData))
+    }
   }
 }
