@@ -16,18 +16,17 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.models
 
-import play.api.libs.json.{Format, JsResult, JsString, JsValue, Json, OFormat}
+import play.api.libs.json.{JsResult, JsValue, Json, OFormat}
 import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{InternalReference, Preview}
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import java.time.Instant
 
-case class UnplannedOutageData (
-                                 internalReference: InternalReference,
-                                 preview:           Preview,
-                                 lastUpdated:       Instant,
-                                 notesForClsUsers:  Option[String]
-                               )
+case class UnplannedOutageData(
+  internalReference: InternalReference,
+  preview:           Preview,
+  lastUpdated:       Instant,
+  notesForClsUsers:  Option[String]
+)
 
 object UnplannedOutageData {
   implicit val format: OFormat[UnplannedOutageData] = Json.format[UnplannedOutageData]

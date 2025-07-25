@@ -16,13 +16,14 @@ manage_dashboard.card.planned.paragraph=Planned service interruptions such as sc
 
 dashboard.haulier.h1=Service availability for GVMS
 dashboard.h2=Live service status
-dashboard.available.haulier.link.p1=Refresh this page
+dashboard.available.haulier.p1.link=Refresh this page
 dashboard.available.haulier.p1=to check for changes.
 dashboard.h3=Planned work
 dashboard.available.haulier.p2=Find out when future outages are happening
 dashboard.available.haulier.p2.link=https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues
 dashboard.h4=Other HMRC services
-dashboard.available.haulier.link.p3=Track availability for other HMRC services
+dashboard.available.haulier.p3=Track availability for other HMRC services
+dashboard.available.haulier.p3.link=https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues
 
 dashboard.unavailable.inset.p1=Known issues since: {0} on {1}.
 dashboard.unavailable.inset.p2=We are currently investigating.

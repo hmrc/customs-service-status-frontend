@@ -19,7 +19,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.service
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{serviceStatuses, validUnplannedOutageData}
-import uk.gov.hmrc.customsservicestatusfrontend.services.{UnplannedOutageService, StatusService}
+import uk.gov.hmrc.customsservicestatusfrontend.services.{StatusService, UnplannedOutageService}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
@@ -30,14 +30,14 @@ class UnplannedOutageServiceSpec extends BaseSpec {
 
   val service = new UnplannedOutageService(mockConnector)
 
-  "getList" should {
+  "getLatest" should {
     "return response as expected" in {
       (mockConnector
-        .getList()(_: HeaderCarrier))
+        .getLatest()(_: HeaderCarrier))
         .expects(*)
         .returns(Future.successful(validUnplannedOutageData))
 
-      service.getList().futureValue shouldBe validUnplannedOutageData
+      service.getLatest().futureValue shouldBe validUnplannedOutageData
     }
   }
 }

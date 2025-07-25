@@ -49,11 +49,11 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
       (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
       (mockRequestHolder
-        .execute(_: HttpReads[List[UnplannedOutageData]], _: ExecutionContext))
+        .execute(_: HttpReads[UnplannedOutageData], _: ExecutionContext))
         .expects(*, *)
         .returns(Future.successful(validUnplannedOutageData))
 
-      connector.getList().futureValue shouldBe validUnplannedOutageData
+      connector.getLatest().futureValue shouldBe validUnplannedOutageData
     }
   }
 }

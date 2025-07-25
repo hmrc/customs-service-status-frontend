@@ -37,7 +37,7 @@ class DashboardController @Inject() (
   val show: Action[AnyContent] = Action.async { implicit request =>
     for {
       statuses            <- statusService.getStatus()
-      unplannedOutageData <- outageService.getList()
+      unplannedOutageData <- outageService.getLatest()
     } yield {
       val uiState =
         if (statuses.services.forall(_.state.contains(AVAILABLE)))

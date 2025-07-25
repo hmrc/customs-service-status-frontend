@@ -25,8 +25,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
 @Singleton
-class UnplannedOutageService @Inject()(customsServiceStatusConnector: CustomsServiceStatusConnector) extends Logging {
+class UnplannedOutageService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) extends Logging {
 
-  def getList()(implicit hc: HeaderCarrier): Future[List[UnplannedOutageData]] =
-    customsServiceStatusConnector.getList()
+  def getLatest()(implicit hc: HeaderCarrier): Future[UnplannedOutageData] =
+    customsServiceStatusConnector.getLatest()
 }

@@ -21,6 +21,7 @@ import play.api.http.Status
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{InternalReference, Preview}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{StatusService, UnplannedOutageService}
@@ -28,6 +29,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.Instant
 import scala.concurrent.Future
 
 class DashboardControllerSpec extends ControllerBaseSpec {
@@ -52,9 +54,14 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .returns(Future.successful(serviceStatuses))
 
       (mockOutageService
-        .getList()(_: HeaderCarrier))
+        .getLatest()(_: HeaderCarrier))
         .expects(*)
-        .returns(Future.successful(List.empty))
+        .returns(
+          Future.successful(
+            validUnplannedOutageData
+              .copy(internalReference = InternalReference(""), preview = Preview(""), lastUpdated = Instant.now, notesForClsUsers = None)
+          )
+        )
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -81,7 +88,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .returns(Future.successful(serviceStatuses))
 
       (mockOutageService
-        .getList()(_: HeaderCarrier))
+        .getLatest()(_: HeaderCarrier))
         .expects(*)
         .returns(Future.successful(validUnplannedOutageData))
 
@@ -114,7 +121,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .returns(Future.successful(serviceStatuses))
 
       (mockOutageService
-        .getList()(_: HeaderCarrier))
+        .getLatest()(_: HeaderCarrier))
         .expects(*)
         .returns(Future.successful(validUnplannedOutageData))
 
@@ -155,7 +162,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .returns(Future.successful(serviceStatuses))
 
       (mockOutageService
-        .getList()(_: HeaderCarrier))
+        .getLatest()(_: HeaderCarrier))
         .expects(*)
         .returns(Future.successful(validUnplannedOutageData))
 

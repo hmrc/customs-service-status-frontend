@@ -30,6 +30,6 @@ object TestData {
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
-  val validUnplannedOutageData: List[UnplannedOutageData] =
-    List(UnplannedOutageData(InternalReference("Test reference"), Preview("Test details"), Instant.now(), None))
+  val validUnplannedOutageData: UnplannedOutageData =
+    UnplannedOutageData(InternalReference("Test reference"), Preview("Test details"), Instant.now(), None)
 }

@@ -27,7 +27,7 @@
 
 @this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
 
-@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: List[UnplannedOutageData])(implicit request: RequestHeader, messages: Messages)
+@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: UnplannedOutageData)(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -60,14 +60,16 @@
     <br>
     <br>
     <p class="govuk-body">
-    <a class="govuk-link" id='refresh-link' href=@routes.DashboardController.show>@messages(s"dashboard.available.$serviceId.link.p1")</a> @messages(s"dashboard.available.$serviceId.p1")
+        <a class="govuk-link" id='refresh-link' href=@routes.DashboardController.show>@messages(s"dashboard.available.$serviceId.p1.link")</a> @messages(s"dashboard.available.$serviceId.p1")
     </p>
+
+
+
     <p class="govuk-heading-m">@Html(messages("dashboard.h3"))</p>
     <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p2.link", s"dashboard.available.$serviceId.p2", "available_p2_link")</p>
+
     <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
-    <p class="govuk-body">
-        <a class="govuk-link" id='track-link' href=@routes.DashboardController.show>@messages(s"dashboard.available.$serviceId.link.p3")</a>
-    </p>
+    <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p3.link", s"dashboard.available.$serviceId.p3", "available_p3_link")</p>
 
 }
 
