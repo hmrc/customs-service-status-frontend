@@ -18,6 +18,7 @@ dashboard.haulier.h1=Service availability for GVMS
 dashboard.h2=Live service status
 dashboard.available.haulier.p1.link=Refresh this page
 dashboard.available.haulier.p1=to check for changes.
+dashboard.available.inset.p1 = Update at {0} on {1}
 dashboard.h3=Planned work
 dashboard.available.haulier.p2=Find out when future outages are happening
 dashboard.available.haulier.p2.link=https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues

@@ -20,8 +20,7 @@ import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses, validUnplannedOutageData}
-import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{InternalReference, Preview}
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses, validOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{StatusService, UnplannedOutageService}
@@ -29,7 +28,6 @@ import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.http.HeaderCarrier
 
-import java.time.Instant
 import scala.concurrent.Future
 
 class DashboardControllerSpec extends ControllerBaseSpec {
@@ -57,10 +55,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .getLatest()(_: HeaderCarrier))
         .expects(*)
         .returns(
-          Future.successful(
-            validUnplannedOutageData
-              .copy(internalReference = InternalReference(""), preview = Preview(""), lastUpdated = Instant.now, notesForClsUsers = None)
-          )
+          Future.successful(None)
         )
 
       val result = controller.show(fakeRequest)
@@ -90,7 +85,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       (mockOutageService
         .getLatest()(_: HeaderCarrier))
         .expects(*)
-        .returns(Future.successful(validUnplannedOutageData))
+        .returns(Future.successful(Some(validOutageData)))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -103,11 +98,25 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
       doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
 
+      doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
+        s"Update at ${Formatters.instantFormatHours(validOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validOutageData.publishedDateTime)}"
+      )
+
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
-      doc.getElementsByClass("govuk-body").text()      should include("Find out when future outages are happening")
+      doc
+        .getElementById("available_p2_link")
+        .attr("href")
+        .contains(
+          "https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues"
+        )
+      doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-      doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+      doc
+        .getElementById("available_p3_link")
+        .attr("href")
+        .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
+      doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
 
     }
 
@@ -123,7 +132,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       (mockOutageService
         .getLatest()(_: HeaderCarrier))
         .expects(*)
-        .returns(Future.successful(validUnplannedOutageData))
+        .returns(Future.successful(Some(validOutageData)))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -164,7 +173,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       (mockOutageService
         .getLatest()(_: HeaderCarrier))
         .expects(*)
-        .returns(Future.successful(validUnplannedOutageData))
+        .returns(Future.successful(Some(validOutageData)))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK

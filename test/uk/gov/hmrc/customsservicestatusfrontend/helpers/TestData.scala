@@ -16,11 +16,13 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{InternalReference, Preview}
+import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{Details, InternalReference}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
-import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses, UnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, ServiceStatuses}
 
 import java.time.Instant
+import java.util.UUID
 
 object TestData {
 
@@ -30,6 +32,14 @@ object TestData {
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
-  val validUnplannedOutageData: UnplannedOutageData =
-    UnplannedOutageData(InternalReference("Test reference"), Preview("Test details"), Instant.now(), None)
+  val validOutageData: OutageData = OutageData(
+    id = UUID.randomUUID(),
+    outageType = Unplanned,
+    internalReference = InternalReference("Test reference"),
+    startDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
+    endDateTime = None,
+    details = Details("Test details"),
+    publishedDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
+    clsNotes = Some("Notes for CLS users")
+  )
 }

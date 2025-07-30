@@ -49,7 +49,9 @@ class DashboardController @Inject() (
 
       val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
 
-      Ok(dashboardPage(uiState, stateChangedAt, "haulier", unplannedOutageData)) // The hard coded haulier will be fixed in the forthcoming ticket.
+      Ok(
+        dashboardPage(uiState, stateChangedAt, "haulier", unplannedOutageData)
+      ) // The hard coded haulier will be fixed in the forthcoming ticket.
     }
   }
 }

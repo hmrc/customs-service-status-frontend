@@ -16,11 +16,13 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
+import play.api.http.Status
+import play.api.libs.json.Json
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{serviceStatuses, validUnplannedOutageData}
-import uk.gov.hmrc.customsservicestatusfrontend.models.{ServiceStatuses, UnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{serviceStatuses, validOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, UpstreamErrorResponse}
 
 import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,16 +46,43 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
     }
   }
 
-  "getList" should {
-    "return UnplannedOutageData as expected" in {
+  "getLatest" should {
+    "return unplanned OutageData as expected" in {
+      val successResponse = HttpResponse(status = Status.OK, json = Json.toJson(validOutageData), headers = Map.empty)
 
       (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
       (mockRequestHolder
-        .execute(_: HttpReads[UnplannedOutageData], _: ExecutionContext))
+        .execute(_: HttpReads[HttpResponse], _: ExecutionContext))
         .expects(*, *)
-        .returns(Future.successful(validUnplannedOutageData))
+        .returns(Future.successful(successResponse))
 
-      connector.getLatest().futureValue shouldBe validUnplannedOutageData
+      connector.getLatest().futureValue shouldBe Some(validOutageData)
+    }
+
+    "return 404 when there is no unplanned OutageData" in {
+      val notFoundResponse = HttpResponse(status = Status.NOT_FOUND)
+
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
+      (mockRequestHolder
+        .execute(_: HttpReads[HttpResponse], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future.successful(notFoundResponse))
+
+      connector.getLatest().futureValue shouldBe None
+    }
+
+    "return errors when there is an exception" in {
+      val errorResponse = HttpResponse(status = Status.BAD_REQUEST)
+
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
+      (mockRequestHolder
+        .execute(_: HttpReads[HttpResponse], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future.successful(errorResponse))
+
+      intercept[Exception](
+        connector.getLatest().futureValue
+      )
     }
   }
 }
