@@ -28,7 +28,7 @@
 
 @this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
 
-@(state: State, stateChangedAt: Instant, serviceId: String, outageData: Option[OutageData])(implicit request: RequestHeader, messages: Messages)
+@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedOutageData: Option[OutageData])(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -64,14 +64,14 @@
         <a class="govuk-link" id='refresh-link' href=@routes.DashboardController.show>@messages(s"dashboard.available.$serviceId.p1.link")</a> @messages(s"dashboard.available.$serviceId.p1")
     </p>
 
-    @if(outageData.isDefined) {
+    @if(unplannedOutageData.isDefined) {
     <ol class="hmrc-timeline">
         <li class="hmrc-timeline__event">
             <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
-                @Html(messages("dashboard.available.inset.p1", s"<b>${Formatters.instantFormatHours(outageData.get.publishedDateTime)}</b>", s"<b>${Formatters.instantFormatDate(outageData.get.publishedDateTime)}</b>"))
+                @Html(messages("dashboard.available.inset.p1", s"<b>${Formatters.instantFormatHours(unplannedOutageData.get.publishedDateTime)}</b>", s"<b>${Formatters.instantFormatDate(unplannedOutageData.get.publishedDateTime)}</b>"))
             </h2>
             <div class="hmrc-timeline__event-content">
-                    @outageData.get.details match {
+                    @unplannedOutageData.get.details match {
                         case DetailType.Details(html) => {@Html(html)}
                         }
             </div>

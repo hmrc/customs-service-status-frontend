@@ -22,8 +22,8 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses, validOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
-import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses}
-import uk.gov.hmrc.customsservicestatusfrontend.services.{StatusService, UnplannedOutageService}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageType, ServiceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, StatusService}
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.http.HeaderCarrier
@@ -35,7 +35,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
   private val fakeRequest = FakeRequest("GET", "/service-availability")
   private val dashboardPage: DashboardPage = app.injector.instanceOf[DashboardPage]
   private val mockService       = mock[StatusService]
-  private val mockOutageService = mock[UnplannedOutageService]
+  private val mockOutageService = mock[OutageService]
 
   private val controller = new DashboardController(
     stubMessagesControllerComponents(),
@@ -52,11 +52,12 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .returns(Future.successful(serviceStatuses))
 
       (mockOutageService
-        .getLatest()(_: HeaderCarrier))
-        .expects(*)
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(*, *)
         .returns(
           Future.successful(None)
         )
+        .twice()
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -83,9 +84,10 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .returns(Future.successful(serviceStatuses))
 
       (mockOutageService
-        .getLatest()(_: HeaderCarrier))
-        .expects(*)
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(*, *)
         .returns(Future.successful(Some(validOutageData)))
+        .twice()
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -130,9 +132,10 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .returns(Future.successful(serviceStatuses))
 
       (mockOutageService
-        .getLatest()(_: HeaderCarrier))
-        .expects(*)
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(*, *)
         .returns(Future.successful(Some(validOutageData)))
+        .twice()
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -171,9 +174,10 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         .returns(Future.successful(serviceStatuses))
 
       (mockOutageService
-        .getLatest()(_: HeaderCarrier))
-        .expects(*)
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(*, *)
         .returns(Future.successful(Some(validOutageData)))
+        .twice()
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK

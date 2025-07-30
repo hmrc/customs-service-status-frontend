@@ -42,4 +42,3 @@ object OutageType {
     override def writes(o: OutageType): JsValue = JsString(o.toString)
   }
 }
-

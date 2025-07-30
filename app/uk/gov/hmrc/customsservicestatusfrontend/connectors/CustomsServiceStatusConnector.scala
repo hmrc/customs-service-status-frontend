@@ -18,10 +18,10 @@ package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
 import play.api.Logging
 import play.api.http.Status.{NOT_FOUND, OK}
-import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
-import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
+import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, OutageType, ServiceStatuses}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
 
 import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,16 +39,8 @@ class CustomsServiceStatusConnector @Inject() (
       .get(url"$baseUrl/services")
       .execute
 
-  def getLatest()(implicit headerCarrier: HeaderCarrier): Future[Option[OutageData]] =
+  def getLatest(outageType: OutageType)(implicit headerCarrier: HeaderCarrier): Future[Option[OutageData]] =
     httpClient
-      .get(url"$baseUrl/outages/latest")
-      .execute[HttpResponse]
-      .map(response =>
-        response.status match {
-          case OK        => response.json.asOpt[OutageData]
-          case NOT_FOUND => None
-          case status    => throw new Exception(s"Unexpected status: $status")
-        }
-      )
-
+      .get(url"$baseUrl/outages/latest?outageType=$outageType")
+      .execute[Option[OutageData]]
 }

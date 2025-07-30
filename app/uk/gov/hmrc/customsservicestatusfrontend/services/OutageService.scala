@@ -19,14 +19,14 @@ package uk.gov.hmrc.customsservicestatusfrontend.services
 import com.google.inject.{Inject, Singleton}
 import play.api.Logging
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
-import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
+import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, OutageType}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
 @Singleton
-class UnplannedOutageService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) extends Logging {
+class OutageService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) extends Logging {
 
-  def getLatest()(implicit hc: HeaderCarrier): Future[Option[OutageData]] =
-    customsServiceStatusConnector.getLatest()
+  def getLatest(outageType: OutageType)(implicit hc: HeaderCarrier): Future[Option[OutageData]] =
+    customsServiceStatusConnector.getLatest(outageType)
 }
