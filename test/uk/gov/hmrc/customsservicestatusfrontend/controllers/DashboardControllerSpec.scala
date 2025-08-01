@@ -17,10 +17,13 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import org.jsoup.Jsoup
+import org.scalamock.matchers.MatchAny
+import org.mockito.ArgumentMatchers.{any, eq as mEq}
 import play.api.http.Status
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses, validOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses, validPlannedOutageData, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Planned
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageType, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, StatusService}
@@ -45,7 +48,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
   )
 
   "GET /service-availability" should {
-    "show dashboard content as expected when there are no issues or planned work and no CLS updates posted" in {
+    "show dashboard content as expected when there are no issues, no planned work and no CLS updates posted" in {
       (mockService
         .getStatus()(_: HeaderCarrier))
         .expects(*)
@@ -63,10 +66,10 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       status(result) shouldBe Status.OK
 
       val doc = Jsoup.parse(contentAsString(result))
-      doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-      doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
-
+      doc.getElementsByClass("govuk-heading-l").text()  shouldBe "Service availability for GVMS"
+      doc.getElementsByClass("govuk-heading-m").text()    should include("Live service status")
       doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
+
       doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
       doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
 
@@ -77,7 +80,8 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
 
     }
-    "show dashboard content as expected when there are no issues or planned work and there is a CLS update" in {
+
+    "show dashboard content as expected when there are no issues, no planned work and there is a CLS update" in {
       (mockService
         .getStatus()(_: HeaderCarrier))
         .expects(*)
@@ -85,9 +89,13 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
       (mockOutageService
         .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(*, *)
-        .returns(Future.successful(Some(validOutageData)))
-        .twice()
+        .expects(OutageType.Planned, *)
+        .returns(Future.successful(None))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(OutageType.Unplanned, *)
+        .returns(Future.successful(Some(validUnplannedOutageData)))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -101,7 +109,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
 
       doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
-        s"Update at ${Formatters.instantFormatHours(validOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validOutageData.publishedDateTime)}"
+        s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
       )
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
@@ -122,7 +130,121 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
     }
 
-    "show dashboard content as expected when there are issues" in {
+    "show dashboard content as expected when there are no issues, there is planned work and there is a CLS update" in {
+      (mockService
+        .getStatus()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(serviceStatuses))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(OutageType.Planned, *)
+        .returns(Future.successful(Some(validPlannedOutageData)))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(OutageType.Unplanned, *)
+        .returns(Future.successful(Some(validUnplannedOutageData)))
+
+      val result = controller.show(fakeRequest)
+      status(result) shouldBe Status.OK
+
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
+      doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
+
+      doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
+      doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+      doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
+
+      doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
+        s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
+      )
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
+
+      doc.getElementsByClass("govuk-body").text() should include(
+        s"From: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+      )
+      doc.getElementsByClass("govuk-body").text() should include(
+        s"To: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+      )
+      doc.getElementsByClass("govuk-body").text() should include("Details:")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
+      doc
+        .getElementById("available_p2_link")
+        .attr("href")
+        .contains(
+          "https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues"
+        )
+      doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+      doc
+        .getElementById("available_p3_link")
+        .attr("href")
+        .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
+      doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
+
+    }
+
+    "show dashboard content as expected when there are no issues, there is planned work and no CLS update" in {
+      (mockService
+        .getStatus()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(serviceStatuses))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(OutageType.Planned, *)
+        .returns(Future.successful(Some(validPlannedOutageData)))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(OutageType.Unplanned, *)
+        .returns(Future.successful(None))
+
+      val result = controller.show(fakeRequest)
+      status(result) shouldBe Status.OK
+
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
+      doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
+
+      doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
+      doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+      doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
+
+      doc.getElementsByClass("govuk-body").text() should include(
+        s"From: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+      )
+      doc.getElementsByClass("govuk-body").text() should include(
+        s"To: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+      )
+      doc.getElementsByClass("govuk-body").text() should include("Details:")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
+      doc
+        .getElementById("available_p2_link")
+        .attr("href")
+        .contains(
+          "https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues"
+        )
+      doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+      doc
+        .getElementById("available_p3_link")
+        .attr("href")
+        .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
+      doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
+
+    }
+
+    "show dashboard content as expected when there are issues, but no planned work and no CLS updates posted" in {
       val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
       val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
 
@@ -134,7 +256,9 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       (mockOutageService
         .getLatest(_: OutageType)(_: HeaderCarrier))
         .expects(*, *)
-        .returns(Future.successful(Some(validOutageData)))
+        .returns(
+          Future.successful(None)
+        )
         .twice()
 
       val result = controller.show(fakeRequest)
@@ -142,27 +266,132 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Service availability for GVMS"
-      doc.getElementsByClass("govuk-tag--orange").text() shouldBe "Known issues"
+      doc.getElementsByClass("govuk-heading-m").text()     should include("Live service status")
+      doc.getElementsByClass("govuk-tag--orange").text() shouldBe "Issue detected"
 
-      val body = doc.getElementsByClass("govuk-body").text()
-      // body should include(s"Last updated: ${Formatters.instantFormatHours(now)}")
-      body should include(s"Known issues since: ${Formatters.instantFormatHours(now)} on ${Formatters.instantFormatDate(now)}")
-      body should include("We are currently investigating.")
+      doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+      doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
 
-      doc.getElementsByClass("govuk-heading-m").text      should include("Issues with the service")
-      body                                                should include("You may not be able to:")
-      doc.getElementsByClass("govuk-list--bullet").text() should include("create a Goods Movement Reference (GMR) manage your GMRs")
-      doc.getElementsByClass("govuk-list--bullet").text() should include("manage your GMRs")
-
-      doc.getElementsByClass("govuk-heading-m").text() should include("What you can do next")
-      body                                             should include("Do not travel to the border if you do not have a valid GMR.")
-      body should include("This page does not currently show information about action plans. You can find out:")
-
-      doc.getElementsByClass("govuk-list--bullet").text() should include(
-        "if HMRC has published an action plan to help keep your goods moving if there is any planned downtime for GVMS"
+      doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
+        s"Issue detected at ${Formatters.instantFormatHours(now)} on ${Formatters.instantFormatDate(now)}"
       )
-      doc.getElementsByClass("govuk-list--bullet").text() should include("if there is any planned downtime for GVMS")
-      body                                                should include("By going to the GVMS service information page")
+
+      val timelineText = doc.getElementsByClass("hmrc-timeline__event-content")
+      timelineText.size shouldBe 2
+
+      timelineText.get(0).text() should include(
+        "You may not be able to create a Goods Movement Reference (GMR) or manage your GMRs."
+      )
+      timelineText.get(1).text() should include(
+        "Do not travel to the border without a valid GMR. We’ll post any further updates here."
+      )
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
+      doc.getElementsByClass("govuk-body").text()      should include("Find out when future outages are happening")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+      doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+
+    }
+
+    "show dashboard content as expected when there are issues, no planned work and there is a CLS update" in {
+      val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
+      val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
+
+      (mockService
+        .getStatus()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(serviceStatuses))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(OutageType.Planned, *)
+        .returns(Future.successful(None))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(OutageType.Unplanned, *)
+        .returns(Future.successful(Some(validUnplannedOutageData)))
+
+      val result = controller.show(fakeRequest)
+      status(result) shouldBe Status.OK
+
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Service availability for GVMS"
+      doc.getElementsByClass("govuk-heading-m").text()     should include("Live service status")
+      doc.getElementsByClass("govuk-tag--orange").text() shouldBe "Issue detected"
+
+      doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+      doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
+
+      doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
+        s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
+      )
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
+      doc.getElementsByClass("govuk-body").text()      should include("Find out when future outages are happening")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+      doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+
+    }
+
+    "show dashboard content as expected when there are issues, there is planned work and there is a CLS update" in {
+      val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
+      val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
+
+      (mockService
+        .getStatus()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(serviceStatuses))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(OutageType.Planned, *)
+        .returns(Future.successful(Some(validPlannedOutageData)))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(OutageType.Unplanned, *)
+        .returns(Future.successful(Some(validUnplannedOutageData)))
+
+      val result = controller.show(fakeRequest)
+      status(result) shouldBe Status.OK
+
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Service availability for GVMS"
+      doc.getElementsByClass("govuk-heading-m").text()     should include("Live service status")
+      doc.getElementsByClass("govuk-tag--orange").text() shouldBe "Issue detected"
+
+      doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+      doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
+
+      doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
+        s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
+      )
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
+
+      doc.getElementsByClass("govuk-body").text() should include(
+        s"From: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+      )
+      doc.getElementsByClass("govuk-body").text() should include(
+        s"To: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+      )
+      doc.getElementsByClass("govuk-body").text() should include("Details:")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
+      doc
+        .getElementById("unavailable_p2_link")
+        .attr("href")
+        .contains(
+          "https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues"
+        )
+      doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
+
+      doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+      doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+
     }
 
     "show dashboard content as expected when status is unknown" in {
@@ -176,8 +405,12 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       (mockOutageService
         .getLatest(_: OutageType)(_: HeaderCarrier))
         .expects(*, *)
-        .returns(Future.successful(Some(validOutageData)))
-        .twice()
+        .returns(Future.successful(Some(validPlannedOutageData)))
+
+      (mockOutageService
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(*, *)
+        .returns(Future.successful(Some(validUnplannedOutageData)))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK

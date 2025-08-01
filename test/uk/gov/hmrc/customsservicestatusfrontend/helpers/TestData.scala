@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
 import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{Details, InternalReference}
-import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, ServiceStatuses}
 
@@ -32,9 +32,20 @@ object TestData {
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
-  val validOutageData: OutageData = OutageData(
+  val validUnplannedOutageData: OutageData = OutageData(
     id = UUID.randomUUID(),
     outageType = Unplanned,
+    internalReference = InternalReference("Test reference"),
+    startDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
+    endDateTime = None,
+    details = Details("Test details"),
+    publishedDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
+    clsNotes = Some("Notes for CLS users")
+  )
+
+  val validPlannedOutageData: OutageData = OutageData(
+    id = UUID.randomUUID(),
+    outageType = Planned,
     internalReference = InternalReference("Test reference"),
     startDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
     endDateTime = None,

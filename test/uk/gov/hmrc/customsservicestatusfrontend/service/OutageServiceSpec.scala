@@ -18,7 +18,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.service
 
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.validOutageData
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.validUnplannedOutageData
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService
@@ -37,9 +37,9 @@ class OutageServiceSpec extends BaseSpec {
       (mockConnector
         .getLatest(_: OutageType)(_: HeaderCarrier))
         .expects(*, *)
-        .returns(Future.successful(Some(validOutageData)))
+        .returns(Future.successful(Some(validUnplannedOutageData)))
 
-      service.getLatest(Unplanned).futureValue shouldBe Some(validOutageData)
+      service.getLatest(Unplanned).futureValue shouldBe Some(validUnplannedOutageData)
     }
   }
 }

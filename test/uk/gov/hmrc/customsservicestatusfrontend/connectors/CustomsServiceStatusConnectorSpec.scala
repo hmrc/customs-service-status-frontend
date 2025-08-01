@@ -21,7 +21,7 @@ import org.mockito.Mockito.verify
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{serviceStatuses, validOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{serviceStatuses, validUnplannedOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
@@ -55,9 +55,9 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
       (mockRequestHolder
         .execute(_: HttpReads[Option[OutageData]], _: ExecutionContext))
         .expects(*, *)
-        .returns(Future.successful(Some(validOutageData)))
+        .returns(Future.successful(Some(validUnplannedOutageData)))
 
-      connector.getLatest(Unplanned).futureValue shouldBe Some(validOutageData)
+      connector.getLatest(Unplanned).futureValue shouldBe Some(validUnplannedOutageData)
 
     }
 
@@ -66,9 +66,9 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
       (mockRequestHolder
         .execute(_: HttpReads[Option[OutageData]], _: ExecutionContext))
         .expects(*, *)
-        .returns(Future.successful(Some(validOutageData)))
+        .returns(Future.successful(Some(validUnplannedOutageData)))
 
-      connector.getLatest(Planned).futureValue shouldBe Some(validOutageData)
+      connector.getLatest(Planned).futureValue shouldBe Some(validUnplannedOutageData)
     }
 
     "return 404 when there is no unplanned OutageData" in {
