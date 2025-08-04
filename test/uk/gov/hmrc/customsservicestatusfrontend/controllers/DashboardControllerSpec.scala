@@ -17,8 +17,6 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import org.jsoup.Jsoup
-import org.scalamock.matchers.MatchAny
-import org.mockito.ArgumentMatchers.{any, eq as mEq}
 import play.api.http.Status
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
@@ -324,8 +322,15 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
       doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
 
-      doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
+      val timelineHeaders = doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s")
+      timelineHeaders.size shouldBe 2
+
+      timelineHeaders.get(0).text() should include(
         s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
+      )
+
+      timelineHeaders.get(1).text() should include(
+        s"Issue detected at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
       )
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
@@ -366,8 +371,15 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
       doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
 
-      doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
+      val timelineHeaders = doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s")
+      timelineHeaders.size shouldBe 2
+
+      timelineHeaders.get(0).text() should include(
         s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
+      )
+
+      timelineHeaders.get(1).text() should include(
+        s"Issue detected at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
       )
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")

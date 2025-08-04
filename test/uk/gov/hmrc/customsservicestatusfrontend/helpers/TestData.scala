@@ -48,7 +48,7 @@ object TestData {
     outageType = Planned,
     internalReference = InternalReference("Test reference"),
     startDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
-    endDateTime = None,
+    endDateTime = Some(Instant.parse("2025-01-01T00:00:00.000Z")),
     details = Details("Test details"),
     publishedDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
     clsNotes = Some("Notes for CLS users")

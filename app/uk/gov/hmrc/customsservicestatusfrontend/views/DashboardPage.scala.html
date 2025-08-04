@@ -80,10 +80,10 @@
     @if(plannedOutageData.isDefined) {
         <p class="govuk-heading-m">@Html(messages("dashboard.h5"))</p>
         <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.available.planned.p2") + "</b>" + " " + Messages(s"dashboard.available.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.publishedDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.publishedDateTime)}"))
+            @Html("<b>" + Messages(s"dashboard.available.planned.p2") + "</b>" + " " + Messages(s"dashboard.available.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.startDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.startDateTime)}"))
         </p>
         <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.publishedDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.publishedDateTime)}"))
+            @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.endDateTime.get)}"))
         </p>
         <p class="govuk-body">
             @plannedOutageData.get.details match {
@@ -132,12 +132,17 @@
                     }
                 </div>
             </li>
+            <li class="hmrc-timeline__event">
+                <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
+                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(unplannedOutageData.get.publishedDateTime)}</b>", s"<b>${Formatters.instantFormatDate(unplannedOutageData.get.publishedDateTime)}</b>"))
+                </h2>
+            </li>
         </ol>
     }else{
         <ol class="hmrc-timeline">
             <li class="hmrc-timeline__event">
                 <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
-                    @Html(messages("dashboard.unavailable.default.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>", s"<b>${Formatters.instantFormatDate(Instant.now)}</b>"))
+                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>", s"<b>${Formatters.instantFormatDate(Instant.now)}</b>"))
                 </h2>
                 <div class="hmrc-timeline__event-content">
                     <p class="govuk-body">
@@ -156,10 +161,10 @@
     @if(plannedOutageData.isDefined) {
         <p class="govuk-heading-m">@Html(messages("dashboard.h5"))</p>
         <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.unavailable.planned.p2") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.publishedDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.publishedDateTime)}"))
+            @Html("<b>" + Messages(s"dashboard.unavailable.planned.p2") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.startDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.startDateTime)}"))
         </p>
         <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.unavailable.planned.p3") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.publishedDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.publishedDateTime)}"))
+            @Html("<b>" + Messages(s"dashboard.unavailable.planned.p3") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.endDateTime.get)}"))
         </p>
         <p class="govuk-body">
             @plannedOutageData.get.details match {

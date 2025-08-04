@@ -21,16 +21,15 @@ import uk.gov.hmrc.customsservicestatusfrontend.controllers.helpers.BaseISpec
 
 class DashboardControllerISpec extends BaseISpec with MockitoSugar {
 
-
   val controller: DashboardController = app.injector.instanceOf[DashboardController]
 
   "show" should {
     "return the correct status with OutageData for the Dashboard page" in {
       val result = controller.show()(fakeRequest(routes.DashboardController.show))
 
-      status(result) shouldBe OK
+      status(result)      shouldBe OK
       contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
+      charset(result)     shouldBe Some("utf-8")
     }
   }
 }

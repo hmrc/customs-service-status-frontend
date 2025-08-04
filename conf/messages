@@ -23,7 +23,7 @@ dashboard.h6=Planned work happening later
 
 dashboard.available.haulier.p1.link=Refresh this page
 dashboard.available.haulier.p1=to check for changes.
-dashboard.available.unplanned.p1 = Update at {0} on {1}
+dashboard.available.unplanned.p1= Update at {0} on {1}
 dashboard.available.haulier.p2=Find out when future outages are happening
 dashboard.available.haulier.p2.link=https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues
 dashboard.available.planned.p2=From:
@@ -37,7 +37,7 @@ dashboard.available.haulier.p3.link=https://www.gov.uk/government/collections/hm
 
 dashboard.unavailable.haulier.p1.link=Refresh this page
 dashboard.unavailable.haulier.p1=to check for changes.
-dashboard.unavailable.default.p1=Issue detected at {0} on {1}.
+dashboard.unavailable.issues_with_the_service.h1=Issue detected at {0} on {1}
 dashboard.unavailable.unplanned.p1=Update at {0} on {1}.
 dashboard.unavailable.issues_with_the_service.p1=You may not be able to create a Goods Movement Reference (GMR) or manage your GMRs.
 dashboard.unavailable.issues_with_the_service.p2=Do not travel to the border without a valid GMR. We’ll post any further updates here.
