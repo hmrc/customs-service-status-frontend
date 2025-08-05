@@ -18,7 +18,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.service
 
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.serviceStatuses
 import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.http.HeaderCarrier
 

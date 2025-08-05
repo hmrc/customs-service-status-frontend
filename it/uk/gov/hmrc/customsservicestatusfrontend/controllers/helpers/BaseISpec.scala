@@ -59,7 +59,9 @@ abstract class BaseISpec
     with HttpVerbs
     with ResultExtractors
     with WireMockHelper
-    with AdditionalAppConfig {
+    with AdditionalAppConfig
+    with WireMockSupport
+    with WireMockConfig {
 
   implicit lazy val system:       ActorSystem      = ActorSystem()
   implicit lazy val materializer: Materializer     = NoMaterializer
@@ -77,7 +79,6 @@ abstract class BaseISpec
 
   def fakeRequest(call: Call): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(call)
-      .withSession(SessionKeys.authToken -> "Bearer testToken", SessionKeys.sessionId -> "sessionId")
 
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()

@@ -17,7 +17,10 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.json.Json
 import uk.gov.hmrc.customsservicestatusfrontend.controllers.helpers.BaseISpec
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.{serviceStatuses, validPlannedOutageData, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 
 class DashboardControllerISpec extends BaseISpec with MockitoSugar {
 
@@ -25,6 +28,10 @@ class DashboardControllerISpec extends BaseISpec with MockitoSugar {
 
   "show" should {
     "return the correct status with OutageData for the Dashboard page" in {
+      stubGet("/customs-service-status/services", Json.stringify(Json.toJson(serviceStatuses)))
+      stubGet("/customs-service-status/outages/latest?outageType=Planned", Json.stringify(Json.toJson(validPlannedOutageData)))
+      stubGet("/customs-service-status/outages/latest?outageType=Unplanned", Json.stringify(Json.toJson(validUnplannedOutageData)))
+
       val result = controller.show()(fakeRequest(routes.DashboardController.show))
 
       status(result)      shouldBe OK

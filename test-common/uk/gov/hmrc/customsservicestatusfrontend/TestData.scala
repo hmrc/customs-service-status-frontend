@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.helpers
+package uk.gov.hmrc.customsservicestatusfrontend
 
 import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{Details, InternalReference}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}

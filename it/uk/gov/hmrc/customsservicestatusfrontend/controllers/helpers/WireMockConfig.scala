@@ -21,8 +21,7 @@ trait WireMockConfig {
 
   additionalAppConfig ++=
     setWireMockPort(
-      "customs-service-status",
-      "auth"
+      "customs-service-status"
     )
 
   private def setWireMockPort(services: String*): Map[String, Any] =

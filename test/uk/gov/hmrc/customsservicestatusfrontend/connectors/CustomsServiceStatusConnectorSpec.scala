@@ -21,7 +21,7 @@ import org.mockito.Mockito.verify
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{serviceStatuses, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.{serviceStatuses, validUnplannedOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}

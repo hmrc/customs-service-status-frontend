@@ -18,7 +18,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.service
 
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.validUnplannedOutageData
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.validUnplannedOutageData
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService

@@ -16,8 +16,14 @@ lazy val microservice = Project(appName, file("."))
     pipelineStages := Seq(gzip)
   )
   .configs(IntegrationTest)
-  .settings(integrationTestSettings(): _*)
-  .settings(CodeCoverageSettings.settings: _*)
+  .settings(integrationTestSettings() *)
+  .settings(
+    Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
+    IntegrationTest / unmanagedSourceDirectories :=
+      (IntegrationTest / baseDirectory)(base => Seq(base / "it", base / "test-common")).value,
+    Test / unmanagedSourceDirectories := (Test / baseDirectory)(base => Seq(base / "test", base / "test-common")).value
+  )
+  .settings(CodeCoverageSettings.settings *)
   .settings( //fix scaladoc generation in jenkins
     scalacOptions += "-language:postfixOps",
     scalacOptions += "-no-indent"
