@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.helpers
+package uk.gov.hmrc.customsservicestatusfrontend.controllers.helpers
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
-import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses}
+import scala.collection.mutable
 
-import java.time.Instant
-
-object TestData {
-
-  val now: Instant = Instant.now()
-
-  val serviceStatus: CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(AVAILABLE), Some(now), Some(now))
-
-  val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
+trait AdditionalAppConfig {
+  val additionalAppConfig: mutable.Map[String, Any] = mutable.Map.empty
 }

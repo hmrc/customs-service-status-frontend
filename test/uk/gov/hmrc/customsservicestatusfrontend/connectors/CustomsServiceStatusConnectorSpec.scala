@@ -16,11 +16,16 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.verify
+import play.api.http.Status
+import play.api.libs.json.Json
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
-import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.{serviceStatuses, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, UpstreamErrorResponse}
 
 import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,6 +46,63 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
       (mockRequestHolder.execute(_: HttpReads[ServiceStatuses], _: ExecutionContext)).expects(*, *).returns(Future.successful(serviceStatuses))
 
       connector.getStatus().futureValue shouldBe serviceStatuses
+    }
+  }
+
+  "getLatest" should {
+    "return unplanned OutageData as expected" in {
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
+      (mockRequestHolder
+        .execute(_: HttpReads[Option[OutageData]], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future.successful(Some(validUnplannedOutageData)))
+
+      connector.getLatest(Unplanned).futureValue shouldBe Some(validUnplannedOutageData)
+
+    }
+
+    "return planned OutageData as expected" in {
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
+      (mockRequestHolder
+        .execute(_: HttpReads[Option[OutageData]], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future.successful(Some(validUnplannedOutageData)))
+
+      connector.getLatest(Planned).futureValue shouldBe Some(validUnplannedOutageData)
+    }
+
+    "return 404 when there is no unplanned OutageData" in {
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
+      (mockRequestHolder
+        .execute(_: HttpReads[Option[OutageData]], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future.successful(None))
+
+      connector.getLatest(Unplanned).futureValue shouldBe None
+    }
+
+    "return 404 when there is no planned OutageData" in {
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
+      (mockRequestHolder
+        .execute(_: HttpReads[Option[OutageData]], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future.successful(None))
+
+      connector.getLatest(Planned).futureValue shouldBe None
+    }
+
+    "return errors when there is an exception" in {
+      val errorResponse = HttpResponse(status = Status.BAD_REQUEST)
+
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
+      (mockRequestHolder
+        .execute(_: HttpReads[HttpResponse], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future.successful(errorResponse))
+
+      intercept[Exception](
+        connector.getLatest(Unplanned).futureValue
+      )
     }
   }
 }

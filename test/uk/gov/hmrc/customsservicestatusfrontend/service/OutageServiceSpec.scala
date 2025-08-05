@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,28 @@ package uk.gov.hmrc.customsservicestatusfrontend.service
 
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.TestData.serviceStatuses
-import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.validUnplannedOutageData
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
+import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class StatusServiceSpec extends BaseSpec {
+class OutageServiceSpec extends BaseSpec {
 
   val mockConnector: CustomsServiceStatusConnector = mock[CustomsServiceStatusConnector]
 
-  val service = new StatusService(mockConnector)
+  val service = new OutageService(mockConnector)
 
-  "getStatus" should {
+  "getLatest" should {
     "return response as expected" in {
       (mockConnector
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+        .getLatest(_: OutageType)(_: HeaderCarrier))
+        .expects(*, *)
+        .returns(Future.successful(Some(validUnplannedOutageData)))
 
-      service.getStatus().futureValue shouldBe serviceStatuses
+      service.getLatest(Unplanned).futureValue shouldBe Some(validUnplannedOutageData)
     }
   }
 }
