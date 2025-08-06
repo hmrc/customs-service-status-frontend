@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.config
+package uk.gov.hmrc.customsservicestatusfrontend.services
+
+import play.api.Logging
+import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
+import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import scala.concurrent.Future
 
 @Singleton
-class AppConfig @Inject() (val config: Configuration) {
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+class PlannedWorkService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) extends Logging {
+
+  def getPlannedWorkService()(implicit hc: HeaderCarrier): Future[List[PlannedWork]] = customsServiceStatusConnector.getPlannedWork()
 
 }

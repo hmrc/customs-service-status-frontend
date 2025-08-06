@@ -16,19 +16,20 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
+import org.mockito.Mockito.*
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
-import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{fakePlannedWorks, serviceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{PlannedWork, ServiceStatuses}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
+import uk.gov.hmrc.http.*
 
 import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
-  val mockHttpClient:    HttpClientV2   = mock[HttpClientV2]
-  val mockRequestHolder: RequestBuilder = mock[RequestBuilder]
+  val mockHttpClient:     HttpClientV2   = mock[HttpClientV2]
+  val mockRequestBuilder: RequestBuilder = mock[RequestBuilder]
 
   val url = "http://localhost:8991/customs-service-status"
 
@@ -37,10 +38,26 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
   "getStatus" should {
     "return response as expected" in {
 
-      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestHolder)
-      (mockRequestHolder.execute(_: HttpReads[ServiceStatuses], _: ExecutionContext)).expects(*, *).returns(Future.successful(serviceStatuses))
+      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestBuilder)
+      (mockRequestBuilder.execute(_: HttpReads[ServiceStatuses], _: ExecutionContext)).expects(*, ec).returns(Future.successful(serviceStatuses))
 
       connector.getStatus().futureValue shouldBe serviceStatuses
+    }
+  }
+
+  "getPlannedWork" should {
+    "return planned work" in {
+      (mockHttpClient
+        .get(_: URL)(_: HeaderCarrier))
+        .expects(*, *)
+        .returns(mockRequestBuilder)
+
+      (mockRequestBuilder
+        .execute(_: HttpReads[List[PlannedWork]], _: ExecutionContext))
+        .expects(*, *)
+        .returns(Future(fakePlannedWorks))
+
+      connector.getPlannedWork().futureValue shouldBe fakePlannedWorks
     }
   }
 }

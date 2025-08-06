@@ -30,7 +30,7 @@ import play.api.http.{HeaderNames, Status}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits, ResultExtractors}
 import uk.gov.hmrc.customsservicestatusfrontend.config.AppConfig
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.{Layout, govukLayoutFullWidth}
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.govukLayoutFullWidth
 import uk.gov.hmrc.govukfrontend.views.html.components.{FixedWidthPageLayout, GovukBackLink, GovukButton, GovukExitThisPage, GovukFooter, GovukHeader, GovukLayout, GovukPhaseBanner, GovukSkipLink, GovukTag, GovukTemplate, TwoThirdsMainContent}
 import uk.gov.hmrc.govukfrontend.views.html.helpers.GovukLogo
 import uk.gov.hmrc.hmrcfrontend.config.{AccessibilityStatementConfig, AssetsConfig, ContactFrontendConfig, LanguageConfig, RebrandConfig, TrackingConsentConfig, TudorCrownConfig}
@@ -38,6 +38,7 @@ import uk.gov.hmrc.hmrcfrontend.views.config.{HmrcFooterItems, StandardBetaBanne
 import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcBanner, HmrcFooter, HmrcHeader, HmrcLanguageSelect, HmrcReportTechnicalIssue, HmrcUserResearchBanner}
 import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcHead, HmrcLanguageSelectHelper, HmrcReportTechnicalIssueHelper, HmrcScripts, HmrcStandardFooter, HmrcStandardHeader, HmrcStandardPage, HmrcTrackingConsentSnippet}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.ExecutionContext
 
@@ -67,6 +68,7 @@ trait BaseSpec
   val assetsConfig = new AssetsConfig()
 
   def configuration: Configuration = Configuration(ConfigFactory.parseResources("application.conf"))
+  def servicesConfig = new ServicesConfig(configuration)
 
   implicit def applicationConfig: AppConfig = new AppConfig(configuration)
 
@@ -79,8 +81,6 @@ trait BaseSpec
       .build()
 
   val govukLogo = new GovukLogo
-
-  val govukLayoutFullWidth = new govukLayoutFullWidth()
 
   val govukLayout = new GovukLayout(
     govukTemplate = new GovukTemplate(
@@ -136,9 +136,8 @@ trait BaseSpec
   val standardBetaBanner             = new StandardBetaBanner
   val hmrcReportTechnicalIssueHelper = new HmrcReportTechnicalIssueHelper(HmrcReportTechnicalIssue(), cfConfig)
 
-  val layout = new Layout(
+  val layout = new govukLayoutFullWidth(
     appConfig = applicationConfig,
-    govukLayout = govukLayoutFullWidth,
     hmrcStandardPage = hmrcStandardPage,
     standardBetaBanner = standardBetaBanner,
     hmrcReportTechnicalIssueHelper = hmrcReportTechnicalIssueHelper

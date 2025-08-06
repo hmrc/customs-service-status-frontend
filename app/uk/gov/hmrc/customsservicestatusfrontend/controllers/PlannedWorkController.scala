@@ -16,15 +16,21 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
-import jakarta.inject.Inject
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
 
-class PlannedWorkController @Inject() (
-  mcc: MessagesControllerComponents
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.ExecutionContext
+
+@Singleton
+class PlannedWorkController @Inject() (mcc: MessagesControllerComponents, plannedWorkView: PlannedWorkPage, plannedWorkService: PlannedWorkService)(
+  implicit ec: ExecutionContext
 ) extends BaseFrontendController(mcc) {
 
-  val show: Action[AnyContent] = Action { implicit request =>
-    Ok
+  def show: Action[AnyContent] = Action.async { implicit request =>
+    plannedWorkService.getPlannedWorkService().map { plannedWorks =>
+      Ok(plannedWorkView(plannedWorks))
+    }
   }
-
 }
