@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
-import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
+import play.api.Logging
+import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, OutageType, ServiceStatuses}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
 
 import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,7 +28,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class CustomsServiceStatusConnector @Inject() (
   httpClient:                                                    HttpClientV2,
   @Named("customsServiceStatusUrl") customsServiceStatusBaseUrl: String
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   private val baseUrl = s"$customsServiceStatusBaseUrl/customs-service-status"
 
@@ -35,4 +37,9 @@ class CustomsServiceStatusConnector @Inject() (
     httpClient
       .get(url"$baseUrl/services")
       .execute
+
+  def getLatest(outageType: OutageType)(implicit headerCarrier: HeaderCarrier): Future[Option[OutageData]] =
+    httpClient
+      .get(url"$baseUrl/outages/latest?outageType=$outageType")
+      .execute[Option[OutageData]]
 }
