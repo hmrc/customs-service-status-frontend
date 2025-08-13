@@ -26,26 +26,26 @@
  @plannedWorks.map { plannedWork =>
   <tr class="govuk-table__row">
    <td class="govuk-table__cell">
-     <div><strong>@messages("planned_work.from")</strong> @Formatters.instantFormatDate(plannedWork.dateFrom) @messages("planned_work.at") @Formatters.instantFormatHours(plannedWork.dateFrom)</div>
+     <div><strong>@messages("planned_work.from")</strong> @Formatters.instantFormatDate(plannedWork.startDateTime) @messages("planned_work.at") @Formatters.instantFormatHours(plannedWork.startDateTime)</div>
      <br>
-     <div><strong>@messages("planned_work.to")</strong> @Formatters.instantFormatDate(plannedWork.dateTo) @messages("planned_work.at") @Formatters.instantFormatHours(plannedWork.dateTo)</div>
+     <div><strong>@messages("planned_work.to")</strong> @Formatters.instantFormatDate(plannedWork.endDateTime.get) @messages("planned_work.at") @Formatters.instantFormatHours(plannedWork.endDateTime.get)</div>
      <br>
-     <div><strong>@messages("planned_work.details")</strong> @plannedWork.details <br></div>
+     <div><strong>@messages("planned_work.details")</strong> @Html(plannedWork.commsText.html) </div>
    </td>
   </tr>
  }
 }
 
 @layout(pageTitle = Some(messages("planned_work.title"))) {
-   <h1 class="govuk-heading-l">@messages("planned_work.title")</h1>
+    <h1 class="govuk-heading-l">@messages("planned_work.title")</h1>
 
-   <table class="govuk-table">
-     <tbody class="govuk-table__body">
-       @renderPlannedWorks(plannedWorks)
-     </tbody>
-   </table>
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+        @renderPlannedWorks(plannedWorks)
+        </tbody>
+    </table>
 
-   <p class="govuk-body">
-     <a id="plannedPage-link" href="@routes.ManageDashboardController.show.url" class="govuk-link">@messages("planned_work.service_availability_status_link")</a>
-   </p>
+    <p class="govuk-body">
+        <a id="plannedPage-link" href="@routes.ManageDashboardController.show.url" class="govuk-link">@messages("planned_work.service_availability_status_link")</a>
+    </p>
 }

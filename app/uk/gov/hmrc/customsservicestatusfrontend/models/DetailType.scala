@@ -17,22 +17,18 @@
 package uk.gov.hmrc.customsservicestatusfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.*
 
-import java.time.Instant
-import java.util.UUID
+sealed trait DetailType
 
-case class OutageData(
-  id:                UUID,
-  outageType:        OutageType,
-  internalReference: InternalReference,
-  startDateTime:     Instant,
-  endDateTime:       Option[Instant] = None,
-  commsText:         CommsText,
-  publishedDateTime: Instant,
-  clsNotes:          Option[String] = None
-)
+object DetailType {
+  final case class InternalReference(text: String) extends DetailType
+  final case class CommsText(html: String) extends DetailType
 
-object OutageData {
-  implicit val format: OFormat[OutageData] = Json.format[OutageData]
+  object InternalReference {
+    implicit val format: OFormat[InternalReference] = Json.format[InternalReference]
+  }
+
+  object CommsText {
+    implicit val format: OFormat[CommsText] = Json.format[CommsText]
+  }
 }

@@ -16,23 +16,29 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.models
 
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.*
+import play.api.libs.json.*
 
-import java.time.Instant
-import java.util.UUID
+enum OutageType {
+  case Unplanned
+  case Planned
 
-case class OutageData(
-  id:                UUID,
-  outageType:        OutageType,
-  internalReference: InternalReference,
-  startDateTime:     Instant,
-  endDateTime:       Option[Instant] = None,
-  commsText:         CommsText,
-  publishedDateTime: Instant,
-  clsNotes:          Option[String] = None
-)
+  val value: String = toString
 
-object OutageData {
-  implicit val format: OFormat[OutageData] = Json.format[OutageData]
+}
+
+object OutageType {
+
+  def apply(value: String): Option[OutageType] =
+    values.find(_.value == value)
+
+  def unapply(outageType: OutageType): String =
+    outageType.value
+
+  implicit val outageTypeFormat: Format[OutageType] = new Format[OutageType] {
+    override def reads(json: JsValue): JsResult[OutageType] =
+      try json.validate[String] map OutageType.valueOf
+      catch case e: IllegalArgumentException => JsError("Invalid OutageType")
+
+    override def writes(o: OutageType): JsValue = JsString(o.toString)
+  }
 }
