@@ -38,6 +38,11 @@
 
 @layout(pageTitle = Some(messages("planned_work.title"))) {
     <h1 class="govuk-heading-l">@messages("planned_work.title")</h1>
+    <h2 class="govuk-heading-m">
+        @if(plannedWorks.isEmpty) {
+            @messages("planned_work.no_work_planned")
+        }
+    </h2>
 
     <table class="govuk-table">
         <tbody class="govuk-table__body">

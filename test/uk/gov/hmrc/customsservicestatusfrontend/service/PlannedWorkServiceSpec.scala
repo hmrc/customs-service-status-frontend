@@ -20,7 +20,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusC
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.fakePlannedWorks
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.fakePlannedWork
 
 import scala.concurrent.Future
 
@@ -34,9 +34,9 @@ class PlannedWorkServiceSpec extends BaseSpec {
       (mockConnector
         .getPlannedWork()(_: HeaderCarrier))
         .expects(*)
-        .returns(Future.successful(fakePlannedWorks))
+        .returns(Future.successful(List(fakePlannedWork)))
 
-      service.getPlannedWorkService().futureValue shouldBe fakePlannedWorks
+      service.getPlannedWorkService().futureValue shouldBe List(fakePlannedWork)
     }
   }
 

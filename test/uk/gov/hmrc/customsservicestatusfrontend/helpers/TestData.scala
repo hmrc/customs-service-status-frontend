@@ -16,10 +16,14 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
+import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{CommsText, InternalReference}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
-import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, ServiceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
 
 import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.util.UUID
 
 object TestData {
 
@@ -29,7 +33,19 @@ object TestData {
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
-  val fakePlannedWorks: List[OutageData] = List(
-    OutageData(Instant.parse("2025-02-04T01:19:31.154Z"), Instant.parse("2025-02-05T01:19:31.154Z"), "details")
-  )
+  val fakeDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")
+
+  def fakeOutageData(outageType: OutageType, endDateTime: Option[Instant]): OutageData =
+    OutageData(
+      id = UUID.randomUUID(),
+      outageType = outageType,
+      internalReference = InternalReference("Test reference"),
+      startDateTime = fakeDate,
+      endDateTime = endDateTime,
+      commsText = CommsText("Test details"),
+      publishedDateTime = fakeDate,
+      clsNotes = Some("Notes")
+    )
+
+  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(1, ChronoUnit.DAYS)))
 }
