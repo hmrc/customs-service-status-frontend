@@ -20,8 +20,8 @@ import play.api.libs.json.{Json, OFormat}
 
 import java.time.Instant
 
-case class PlannedWork(dateFrom: Instant, dateTo: Instant, details: String)
+case class OutageData(dateFrom: Instant, dateTo: Instant, details: String)
 
-object PlannedWork {
-  implicit val format: OFormat[PlannedWork] = Json.format[PlannedWork]
+object OutageData {
+  implicit val format: OFormat[OutageData] = Json.format[OutageData]
 }

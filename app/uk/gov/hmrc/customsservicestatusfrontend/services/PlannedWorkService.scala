@@ -18,7 +18,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.services
 
 import play.api.Logging
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
-import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
@@ -27,6 +27,6 @@ import scala.concurrent.Future
 @Singleton
 class PlannedWorkService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) extends Logging {
 
-  def getPlannedWorkService()(implicit hc: HeaderCarrier): Future[List[PlannedWork]] = customsServiceStatusConnector.getPlannedWork()
+  def getPlannedWorkService()(implicit hc: HeaderCarrier): Future[List[OutageData]] = customsServiceStatusConnector.getPlannedWork()
 
 }

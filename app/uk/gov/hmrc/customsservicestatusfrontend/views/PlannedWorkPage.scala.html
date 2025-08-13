@@ -15,14 +15,14 @@
  *@
 
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
-@import uk.gov.hmrc.customsservicestatusfrontend.models.PlannedWork
+@import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 
 @this(layout: govukLayoutTwoThirds)
 
-@(plannedWorks: List[PlannedWork])(implicit request: RequestHeader, messages: Messages)
+@(plannedWorks: List[OutageData])(implicit request: RequestHeader, messages: Messages)
 
-@renderPlannedWorks(plannedWorks: List[PlannedWork]) = {
+@renderPlannedWorks(plannedWorks: List[OutageData]) = {
  @plannedWorks.map { plannedWork =>
   <tr class="govuk-table__row">
    <td class="govuk-table__cell">

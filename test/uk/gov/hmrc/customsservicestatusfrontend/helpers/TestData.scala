@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
-import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, PlannedWork, ServiceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, ServiceStatuses}
 
 import java.time.Instant
 
@@ -29,7 +29,7 @@ object TestData {
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
-  val fakePlannedWorks: List[PlannedWork] = List(
-    PlannedWork(Instant.parse("2025-02-04T01:19:31.154Z"), Instant.parse("2025-02-05T01:19:31.154Z"), "details")
+  val fakePlannedWorks: List[OutageData] = List(
+    OutageData(Instant.parse("2025-02-04T01:19:31.154Z"), Instant.parse("2025-02-05T01:19:31.154Z"), "details")
   )
 }
