@@ -24,6 +24,7 @@ import org.scalatest.*
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.{Application, Configuration}
 import play.api.http.{HeaderNames, Status}
@@ -55,6 +56,7 @@ trait BaseSpec
     with Status
     with HeaderNames
     with ResultExtractors
+    with MockitoSugar
     with GuiceOneAppPerSuite
     with StubMessageControllerComponents
     with MockFactory {
