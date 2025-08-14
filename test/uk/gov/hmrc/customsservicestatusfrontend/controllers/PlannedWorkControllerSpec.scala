@@ -68,7 +68,18 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
 
     }
 
-    "redirect to the planned work view and display a message when the database is empty" in {}
+    "redirect to the planned work view and display a message when the database is empty" in {
+      (mockService
+        .getPlannedWorkService()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(List()))
+
+      val view = controller.show(fakeRequest)
+      val doc  = Jsoup.parse(contentAsString(view))
+      status(view) shouldBe OK
+
+      doc.getElementById("no-work-planned").text() shouldBe "No maintenance work is planned at the moment"
+    }
   }
 
 }
