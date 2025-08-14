@@ -25,8 +25,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class PlannedWorkService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) extends Logging {
+class PlannedWorkService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) {
 
-  def getPlannedWorkService()(implicit hc: HeaderCarrier): Future[List[OutageData]] = customsServiceStatusConnector.getPlannedWork()
+  def getAllPlannedWork()(implicit hc: HeaderCarrier): Future[List[OutageData]] = customsServiceStatusConnector.getPlannedWork()
 
 }

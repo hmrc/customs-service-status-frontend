@@ -56,7 +56,6 @@ trait BaseSpec
     with Status
     with HeaderNames
     with ResultExtractors
-    with MockitoSugar
     with GuiceOneAppPerSuite
     with StubMessageControllerComponents
     with MockFactory {

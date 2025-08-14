@@ -29,14 +29,14 @@ class PlannedWorkServiceSpec extends BaseSpec {
   val mockConnector: CustomsServiceStatusConnector = mock[CustomsServiceStatusConnector]
   val service = new PlannedWorkService(mockConnector)
 
-  "getPlannedWorkService" should {
+  "getAllPlannedWork" should {
     "return planned work as expected" in {
       (mockConnector
         .getPlannedWork()(_: HeaderCarrier))
         .expects(*)
         .returns(Future.successful(List(fakePlannedWork)))
 
-      service.getPlannedWorkService().futureValue shouldBe List(fakePlannedWork)
+      service.getAllPlannedWork().futureValue shouldBe List(fakePlannedWork)
     }
   }
 

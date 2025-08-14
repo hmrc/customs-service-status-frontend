@@ -41,7 +41,7 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
   "GET /service-availability/planned-work" should {
     "redirect to the planned work view and load planned works when the database is not empty" in {
       (mockService
-        .getPlannedWorkService()(_: HeaderCarrier))
+        .getAllPlannedWork()(_: HeaderCarrier))
         .expects(*)
         .returns(Future.successful(List(fakePlannedWork)))
 
@@ -70,7 +70,7 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
 
     "redirect to the planned work view and display a message when the database is empty" in {
       (mockService
-        .getPlannedWorkService()(_: HeaderCarrier))
+        .getAllPlannedWork()(_: HeaderCarrier))
         .expects(*)
         .returns(Future.successful(List()))
 
