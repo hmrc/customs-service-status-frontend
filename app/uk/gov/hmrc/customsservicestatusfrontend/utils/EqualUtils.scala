@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.config
+package uk.gov.hmrc.customsservicestatusfrontend.utils
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+object EqualUtils {
+  implicit final class AnyOps[A](self: A) {
+    def ===(other: A): Boolean = self == other
 
-@Singleton
-class AppConfig @Inject() (val config: Configuration) {
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-
+    def =!=(other: A): Boolean = self != other
+  }
 }

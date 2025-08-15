@@ -22,7 +22,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardPage
 
-class ManageDashboardControllerSpec extends ControllerBaseSpec with MockitoSugar {
+class ManageDashboardControllerSpec extends ControllerBaseSpec {
 
   val view = new ManageDashboardPage(
     layout = layout

@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.config
+package uk.gov.hmrc.customsservicestatusfrontend.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import play.api.libs.json.{Json, OFormat}
 
-@Singleton
-class AppConfig @Inject() (val config: Configuration) {
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+sealed trait DetailType
 
+object DetailType {
+  final case class InternalReference(text: String) extends DetailType
+  final case class CommsText(html: String) extends DetailType
+
+  object InternalReference {
+    implicit val format: OFormat[InternalReference] = Json.format[InternalReference]
+  }
+
+  object CommsText {
+    implicit val format: OFormat[CommsText] = Json.format[CommsText]
+  }
 }

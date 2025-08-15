@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.config
+package uk.gov.hmrc.customsservicestatusfrontend.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.*
 
-@Singleton
-class AppConfig @Inject() (val config: Configuration) {
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+import java.time.Instant
+import java.util.UUID
 
+case class OutageData(
+  id:                UUID,
+  outageType:        OutageType,
+  internalReference: InternalReference,
+  startDateTime:     Instant,
+  endDateTime:       Option[Instant] = None,
+  commsText:         CommsText,
+  publishedDateTime: Instant,
+  clsNotes:          Option[String] = None
+)
+
+object OutageData {
+  implicit val format: OFormat[OutageData] = Json.format[OutageData]
 }

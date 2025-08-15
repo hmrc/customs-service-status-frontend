@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.config
+package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import org.mockito.Mockito
+import org.scalatest.BeforeAndAfterEach
+import org.scalatestplus.mockito.MockitoSugar
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 
-@Singleton
-class AppConfig @Inject() (val config: Configuration) {
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+trait AllMocks extends MockitoSugar { me: BeforeAndAfterEach =>
 
+  val mockHttpClient:     HttpClientV2   = mock[HttpClientV2]
+  val mockRequestBuilder: RequestBuilder = mock[RequestBuilder]
+
+  override protected def beforeEach(): Unit =
+    Seq[Any](
+      mockHttpClient,
+      mockRequestBuilder
+    ).foreach(Mockito.reset(_))
 }

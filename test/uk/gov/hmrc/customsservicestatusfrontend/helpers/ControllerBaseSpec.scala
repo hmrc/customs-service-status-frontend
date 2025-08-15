@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
 import play.api.http.{HttpProtocol, MimeTypes}
-import play.api.test._
+import play.api.test.*
 
 trait ControllerBaseSpec
     extends BaseSpec
