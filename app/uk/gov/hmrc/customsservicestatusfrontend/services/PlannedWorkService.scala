@@ -27,6 +27,6 @@ import scala.concurrent.Future
 @Singleton
 class PlannedWorkService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) {
 
-  def getAllPlannedWork()(implicit hc: HeaderCarrier): Future[List[OutageData]] = customsServiceStatusConnector.getPlannedWork()
+  def getAllPlannedWorks()(implicit hc: HeaderCarrier): Future[List[OutageData]] = customsServiceStatusConnector.getAllPlannedWorks()
 
 }

@@ -21,6 +21,8 @@ import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.fakePlannedWork
+import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.any
 
 import scala.concurrent.Future
 
@@ -31,12 +33,13 @@ class PlannedWorkServiceSpec extends BaseSpec {
 
   "getAllPlannedWork" should {
     "return planned work as expected" in {
-      (mockConnector
-        .getPlannedWork()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(List(fakePlannedWork)))
+      when(
+        mockConnector
+          .getAllPlannedWorks()(any())
+      )
+        .thenReturn(Future.successful(List(fakePlannedWork)))
 
-      service.getAllPlannedWork().futureValue shouldBe List(fakePlannedWork)
+      service.getAllPlannedWorks().futureValue shouldBe List(fakePlannedWork)
     }
   }
 

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import play.api.http.Status
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
@@ -27,13 +28,14 @@ import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.http.HeaderCarrier
+import org.mockito.Mockito.*
 
 import scala.concurrent.Future
 
 class DashboardControllerSpec extends ControllerBaseSpec {
 
   private val fakeRequest = FakeRequest("GET", "/service-availability")
-  private val dashboardPage: DashboardPage = app.injector.instanceOf[DashboardPage]
+  private val dashboardPage: DashboardPage = new DashboardPage(layout, govukInsetText)
   private val mockService = mock[StatusService]
 
   private val controller = new DashboardController(
@@ -44,10 +46,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
   "GET /service-availability" should {
     "show dashboard content as expected when there are no issues" in {
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -65,10 +64,11 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
       val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
 
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(
+        mockService
+          .getStatus()(any())
+      )
+        .thenReturn(Future.successful(serviceStatuses))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -101,10 +101,11 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     "show dashboard content as expected when status is unknown" in {
       val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNKNOWN), Some(now), Some(now))
       val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(
+        mockService
+          .getStatus()(any())
+      )
+        .thenReturn(Future.successful(serviceStatuses))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK

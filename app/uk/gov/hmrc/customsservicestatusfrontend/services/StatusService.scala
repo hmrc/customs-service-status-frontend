@@ -25,7 +25,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
 @Singleton
-class StatusService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) extends Logging {
+class StatusService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) {
 
   def getStatus()(implicit hc: HeaderCarrier): Future[ServiceStatuses] =
     customsServiceStatusConnector.getStatus()

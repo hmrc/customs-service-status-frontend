@@ -17,21 +17,24 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.*
 import play.api.test.FakeRequest
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.fakePlannedWork
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.{ControllerBaseSpec, TestData}
+import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
 class PlannedWorkControllerSpec extends ControllerBaseSpec {
 
   private val fakeRequest = FakeRequest("GET", "/service-availability/planned-work")
-  private val mockService:     PlannedWorkService = mock[PlannedWorkService]
-  private val plannedWorkPage: PlannedWorkPage    = app.injector.instanceOf[PlannedWorkPage]
+  private val mockService: PlannedWorkService = mock[PlannedWorkService]
+
+  private val plannedWorkPage = new PlannedWorkPage(govukLayoutTwoThirds)
+
   private val controller: PlannedWorkController = new PlannedWorkController(
     stubMessagesControllerComponents(),
     plannedWorkPage,
@@ -40,14 +43,14 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
 
   "GET /service-availability/planned-work" should {
     "redirect to the planned work view and load planned works when the database is not empty" in {
-      (mockService
-        .getAllPlannedWork()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(List(fakePlannedWork)))
+      when(
+        mockService
+          .getAllPlannedWorks()(any())
+      )
+        .thenReturn(Future.successful(List(fakePlannedWork)))
 
       val view = controller.show(fakeRequest)
       val doc  = Jsoup.parse(contentAsString(view))
-      status(view) shouldBe OK
 
       val expectedDateFrom: String =
         s"${Formatters.instantFormatDate(fakePlannedWork.startDateTime)} at ${Formatters.instantFormatHours(fakePlannedWork.startDateTime)}"
@@ -56,6 +59,7 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
       val expectedDetails: String = fakePlannedWork.commsText.html
       val link:            String = doc.getElementById("plannedPage-link").attr("href")
 
+      status(view)                                     shouldBe OK
       doc.getElementsByClass("govuk-heading-l").text() shouldBe "Planned work that will affect GVMS"
       doc.getElementsByClass("govuk-body").text()      shouldBe "Return to Check GVMS availability page"
       doc.getElementsByTag("strong").text()              should include("From:")
@@ -69,15 +73,16 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
     }
 
     "redirect to the planned work view and display a message when the database is empty" in {
-      (mockService
-        .getAllPlannedWork()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(List()))
+      when(
+        mockService
+          .getAllPlannedWorks()(any())
+      )
+        .thenReturn(Future.successful(List()))
 
       val view = controller.show(fakeRequest)
       val doc  = Jsoup.parse(contentAsString(view))
-      status(view) shouldBe OK
 
+      status(view)                                 shouldBe OK
       doc.getElementById("no-work-planned").text() shouldBe "No maintenance work is planned at the moment"
     }
   }

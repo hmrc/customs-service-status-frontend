@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.service
 
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.*
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.serviceStatuses
 import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
@@ -32,10 +33,11 @@ class StatusServiceSpec extends BaseSpec {
 
   "getStatus" should {
     "return response as expected" in {
-      (mockConnector
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(
+        mockConnector
+          .getStatus()(any())
+      )
+        .thenReturn(Future.successful(serviceStatuses))
 
       service.getStatus().futureValue shouldBe serviceStatuses
     }

@@ -29,7 +29,7 @@ class PlannedWorkController @Inject() (mcc: MessagesControllerComponents, planne
 ) extends BaseFrontendController(mcc) {
 
   def show: Action[AnyContent] = Action.async { implicit request =>
-    plannedWorkService.getAllPlannedWork().map { plannedWorks =>
+    plannedWorkService.getAllPlannedWorks().map { plannedWorks =>
       Ok(plannedWorkView(plannedWorks))
     }
   }

@@ -19,7 +19,6 @@ package uk.gov.hmrc.customsservicestatusfrontend.helpers
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.Materializer
 import com.typesafe.config.{Config, ConfigFactory}
-import org.scalamock.scalatest.MockFactory
 import org.scalatest.*
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
@@ -31,8 +30,8 @@ import play.api.http.{HeaderNames, Status}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits, ResultExtractors}
 import uk.gov.hmrc.customsservicestatusfrontend.config.AppConfig
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.govukLayoutFullWidth
-import uk.gov.hmrc.govukfrontend.views.html.components.{FixedWidthPageLayout, GovukBackLink, GovukButton, GovukExitThisPage, GovukFooter, GovukHeader, GovukLayout, GovukPhaseBanner, GovukSkipLink, GovukTag, GovukTemplate, TwoThirdsMainContent}
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.{govukLayoutFullWidth, govukLayoutTwoThirds}
+import uk.gov.hmrc.govukfrontend.views.html.components.{FixedWidthPageLayout, GovukBackLink, GovukButton, GovukExitThisPage, GovukFooter, GovukHeader, GovukInsetText, GovukLayout, GovukPhaseBanner, GovukSkipLink, GovukTag, GovukTemplate, TwoThirdsMainContent}
 import uk.gov.hmrc.govukfrontend.views.html.helpers.GovukLogo
 import uk.gov.hmrc.hmrcfrontend.config.{AccessibilityStatementConfig, AssetsConfig, ContactFrontendConfig, LanguageConfig, RebrandConfig, TrackingConsentConfig, TudorCrownConfig}
 import uk.gov.hmrc.hmrcfrontend.views.config.{HmrcFooterItems, StandardBetaBanner}
@@ -54,11 +53,12 @@ trait BaseSpec
     with FutureAwaits
     with ScalaFutures
     with Status
+    with AllMocks
     with HeaderNames
     with ResultExtractors
+    with MockitoSugar
     with GuiceOneAppPerSuite
-    with StubMessageControllerComponents
-    with MockFactory {
+    with StubMessageControllerComponents {
 
   implicit lazy val ec:           ExecutionContext      = scala.concurrent.ExecutionContext.Implicits.global
   implicit lazy val hc:           HeaderCarrier         = HeaderCarrier()
@@ -103,6 +103,7 @@ trait BaseSpec
   val hmrcBanner             = new HmrcBanner(tudorCrownConfig)
   val hmrcUserResearchBanner = new HmrcUserResearchBanner
   val govukPhaseBanner       = new GovukPhaseBanner(govukTag)
+  val govukInsetText         = new GovukInsetText
   val hmrcHeader = new HmrcHeader(hmrcBanner, hmrcUserResearchBanner, govukPhaseBanner, tudorCrownConfig, RebrandConfig(configuration), govukLogo)
   val hmrcStandardHeader           = new HmrcStandardHeader(hmrcHeader)
   val govukFooter                  = new GovukFooter(RebrandConfig(configuration), govukLogo)
@@ -115,10 +116,11 @@ trait BaseSpec
   val hmrcHead                     = new HmrcHead(hmrcTrackingConsentSnippet, assetsConfig)
   val hmrcLanguageSelectHelper =
     new HmrcLanguageSelectHelper(hmrcLanguageSelect = new HmrcLanguageSelect, languageConfig = new LanguageConfig(applicationConfig.config))
-  val hmrcScripts          = new HmrcScripts(assetsConfig)
-  val govukBackLink        = new GovukBackLink
-  val govukExitThisPage    = new GovukExitThisPage(govukButton = new GovukButton)
-  val defaultMainContent   = new TwoThirdsMainContent
+  val hmrcScripts        = new HmrcScripts(assetsConfig)
+  val govukBackLink      = new GovukBackLink
+  val govukExitThisPage  = new GovukExitThisPage(govukButton = new GovukButton)
+  val defaultMainContent = new TwoThirdsMainContent
+
   val fixedWidthPageLayout = new FixedWidthPageLayout
 
   val hmrcStandardPage = new HmrcStandardPage(
@@ -137,11 +139,12 @@ trait BaseSpec
   val standardBetaBanner             = new StandardBetaBanner
   val hmrcReportTechnicalIssueHelper = new HmrcReportTechnicalIssueHelper(HmrcReportTechnicalIssue(), cfConfig)
 
+  val govukLayoutTwoThirds = new govukLayoutTwoThirds(applicationConfig, hmrcStandardPage, standardBetaBanner, hmrcReportTechnicalIssueHelper)
+
   val layout = new govukLayoutFullWidth(
     appConfig = applicationConfig,
     hmrcStandardPage = hmrcStandardPage,
     standardBetaBanner = standardBetaBanner,
     hmrcReportTechnicalIssueHelper = hmrcReportTechnicalIssueHelper
   )(cfConfig)
-
 }

@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 @import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
+@import java.time.Instant
 
 @this(layout: govukLayoutTwoThirds)
 
@@ -28,7 +29,7 @@
    <td class="govuk-table__cell">
      <div><strong>@messages("planned_work.from")</strong> @Formatters.instantFormatDate(plannedWork.startDateTime) @messages("planned_work.at") @Formatters.instantFormatHours(plannedWork.startDateTime)</div>
      <br>
-     <div><strong>@messages("planned_work.to")</strong> @Formatters.instantFormatDate(plannedWork.endDateTime.get) @messages("planned_work.at") @Formatters.instantFormatHours(plannedWork.endDateTime.get)</div>
+     <div><strong>@messages("planned_work.to")</strong> @plannedWork.endDateTime.fold("-")(Formatters.instantFormatDate) @messages("planned_work.at") @plannedWork.endDateTime.fold("-")(Formatters.instantFormatHours)</div>
      <br>
      <div><strong>@messages("planned_work.details")</strong> @Html(plannedWork.commsText.html) </div>
    </td>

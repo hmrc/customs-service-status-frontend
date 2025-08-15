@@ -16,19 +16,18 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
+import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{fakePlannedWork, serviceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
-import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import uk.gov.hmrc.http.*
+import org.mockito.Mockito.*
+import uk.gov.hmrc.http.client.RequestBuilder
 
 import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsServiceStatusConnectorSpec extends BaseSpec {
-
-  val mockHttpClient:     HttpClientV2   = mock[HttpClientV2]
-  val mockRequestBuilder: RequestBuilder = mock[RequestBuilder]
 
   val url = "http://localhost:8991/customs-service-status"
 
@@ -37,8 +36,8 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
   "getStatus" should {
     "return response as expected" in {
 
-      (mockHttpClient.get(_: URL)(_: HeaderCarrier)).expects(*, *).returns(mockRequestBuilder)
-      (mockRequestBuilder.execute(_: HttpReads[ServiceStatuses], _: ExecutionContext)).expects(*, ec).returns(Future.successful(serviceStatuses))
+      when(mockHttpClient.get(any())(any())).thenReturn(mockRequestBuilder)
+      when(mockRequestBuilder.execute(any(), any())).thenReturn(Future.successful(serviceStatuses))
 
       connector.getStatus().futureValue shouldBe serviceStatuses
     }
@@ -46,17 +45,19 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
   "getPlannedWork" should {
     "return planned work" in {
-      (mockHttpClient
-        .get(_: URL)(_: HeaderCarrier))
-        .expects(*, *)
-        .returns(mockRequestBuilder)
+      when(
+        mockHttpClient
+          .get(any())(any())
+      )
+        .thenReturn(mockRequestBuilder)
 
-      (mockRequestBuilder
-        .execute(_: HttpReads[List[OutageData]], _: ExecutionContext))
-        .expects(*, *)
-        .returns(Future(List(fakePlannedWork)))
+      when(
+        mockRequestBuilder
+          .execute(any(), any())
+      )
+        .thenReturn(Future(List(fakePlannedWork)))
 
-      connector.getPlannedWork().futureValue shouldBe List(fakePlannedWork)
+      connector.getAllPlannedWorks().futureValue shouldBe List(fakePlannedWork)
     }
   }
 }

@@ -20,6 +20,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{CommsText, In
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit

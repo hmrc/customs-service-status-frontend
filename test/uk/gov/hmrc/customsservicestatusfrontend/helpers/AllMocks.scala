@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,19 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
-import play.api.http.{HttpProtocol, MimeTypes}
-import play.api.test.*
+import org.mockito.Mockito
+import org.scalatest.BeforeAndAfterEach
+import org.scalatestplus.mockito.MockitoSugar
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 
-trait ControllerBaseSpec
-    extends BaseSpec
-    with MimeTypes
-    with HttpProtocol
-    with Writeables
-    with EssentialActionCaller
-    with RouteInvokers
-    with StubMessageControllerComponents {}
+trait AllMocks extends MockitoSugar { me: BeforeAndAfterEach =>
+
+  val mockHttpClient:     HttpClientV2   = mock[HttpClientV2]
+  val mockRequestBuilder: RequestBuilder = mock[RequestBuilder]
+
+  override protected def beforeEach(): Unit =
+    Seq[Any](
+      mockHttpClient,
+      mockRequestBuilder
+    ).foreach(Mockito.reset(_))
+}
