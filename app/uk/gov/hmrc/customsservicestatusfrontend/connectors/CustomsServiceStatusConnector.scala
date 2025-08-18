@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
-import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 
 import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
