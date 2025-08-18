@@ -49,6 +49,10 @@ object TestData {
       clsNotes = Some("Notes")
     )
 
-  val fakePlannedWork:  OutageData       = fakeOutageData(Planned, Some(Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(1, ChronoUnit.DAYS)))
-  val fakePlannedWorks: List[OutageData] = List(fakePlannedWork.copy(commsText = CommsText("Test one")), fakePlannedWork.copy(commsText = CommsText("Test two")), fakePlannedWork.copy(commsText = CommsText("Test three")))
+  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(1, ChronoUnit.DAYS)))
+  val fakePlannedWorks: List[OutageData] = List(
+    fakePlannedWork.copy(commsText = CommsText("Test one")),
+    fakePlannedWork.copy(commsText = CommsText("Test two")),
+    fakePlannedWork.copy(commsText = CommsText("Test three"))
+  )
 }
