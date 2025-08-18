@@ -23,7 +23,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside, Inspectors, LoneElement, OptionValues, Status as _, *}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside, Inspectors, LoneElement, OptionValues, Status as _}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.*
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -31,7 +31,6 @@ import play.api.mvc.*
 import play.api.test.*
 import play.api.test.Helpers.route
 import play.api.{Application, Mode}
-import uk.gov.hmrc.http.test.WireMockSupport
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,7 +39,6 @@ abstract class BaseISpec
     extends AnyWordSpec
     with GuiceOneAppPerSuite
     with BeforeAndAfterEach
-    with WireMockHelper
     with BeforeAndAfterAll
     with Matchers
     with Inspectors
@@ -59,8 +57,11 @@ abstract class BaseISpec
     with MimeTypes
     with HttpProtocol
     with HttpVerbs
+    with ResultExtractors
     with AdditionalAppConfig
-    with ResultExtractors {
+    with WireMockHelper
+    with WireMockSupport
+    with WireMockConfig {
 
   implicit lazy val system:       ActorSystem      = ActorSystem()
   implicit lazy val materializer: Materializer     = NoMaterializer

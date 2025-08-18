@@ -23,7 +23,7 @@ lazy val microservice = Project(appName, file("."))
       (IntegrationTest / baseDirectory)(base => Seq(base / "it", base / "test-common")).value,
     Test / unmanagedSourceDirectories := (Test / baseDirectory)(base => Seq(base / "test", base / "test-common")).value
   )
-  .settings(CodeCoverageSettings.settings: _*)
+  .settings(CodeCoverageSettings.settings *)
   .settings( //fix scaladoc generation in jenkins
     scalacOptions += "-language:postfixOps",
     scalacOptions += "-no-indent"

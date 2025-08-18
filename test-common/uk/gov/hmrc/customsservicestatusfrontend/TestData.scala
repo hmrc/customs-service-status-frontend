@@ -21,6 +21,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
+import uk.gov.hmrc.govukfrontend.views.viewmodels.details.Details
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -48,5 +49,6 @@ object TestData {
       clsNotes = Some("Notes")
     )
 
-  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(1, ChronoUnit.DAYS)))
+  val fakePlannedWork:  OutageData       = fakeOutageData(Planned, Some(Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(1, ChronoUnit.DAYS)))
+  val fakePlannedWorks: List[OutageData] = List(fakePlannedWork.copy(commsText = CommsText("Test one")), fakePlannedWork.copy(commsText = CommsText("Test two")), fakePlannedWork.copy(commsText = CommsText("Test three")))
 }
