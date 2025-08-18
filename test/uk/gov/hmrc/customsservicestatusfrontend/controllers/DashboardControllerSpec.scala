@@ -18,17 +18,16 @@ package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.*
 import play.api.http.Status
 import play.api.test.FakeRequest
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{now, serviceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
-import uk.gov.hmrc.http.HeaderCarrier
-import org.mockito.Mockito.*
 
 import scala.concurrent.Future
 

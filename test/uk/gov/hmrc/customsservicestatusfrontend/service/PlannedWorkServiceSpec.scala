@@ -20,7 +20,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusC
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.fakePlannedWork
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import org.mockito.Mockito.*
 import org.mockito.ArgumentMatchers.any
 

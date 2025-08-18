@@ -18,10 +18,10 @@ package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
 import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.helpers.TestData.{fakePlannedWork, serviceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
 import uk.gov.hmrc.http.*
 import org.mockito.Mockito.*
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.http.client.RequestBuilder
 
 import java.net.URL
