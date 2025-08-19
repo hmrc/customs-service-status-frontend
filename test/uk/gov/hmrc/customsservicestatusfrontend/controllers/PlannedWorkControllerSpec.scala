@@ -38,7 +38,9 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
   private val controller: PlannedWorkController = new PlannedWorkController(
     stubMessagesControllerComponents(),
     plannedWorkPage,
-    mockService
+    mockService,
+    "http://localhost:8993/customs-service-status/service-availability/status",
+    "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
   )
 
   "GET /service-availability/planned-work" should {
@@ -83,7 +85,7 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
       val doc  = Jsoup.parse(contentAsString(view))
 
       status(view)                                 shouldBe OK
-      doc.getElementById("no-work-planned").text() shouldBe "No maintenance work is planned at the moment"
+      doc.getElementById("no-work-planned").text() shouldBe "No maintenance work is planned at the moment."
     }
   }
 
