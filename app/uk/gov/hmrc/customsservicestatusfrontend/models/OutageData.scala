@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.models
 
 import play.api.libs.json.{JsResult, JsValue, Json, OFormat}
-import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{Details, InternalReference}
+import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.*
 
 import java.time.Instant
 import java.util.UUID
@@ -28,7 +28,7 @@ case class OutageData(
   internalReference: InternalReference,
   startDateTime:     Instant,
   endDateTime:       Option[Instant] = None,
-  details:           Details,
+  commsText:         CommsText,
   publishedDateTime: Instant,
   clsNotes:          Option[String] = None
 )

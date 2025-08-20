@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.models
 
-import play.api.libs.json.{Format, JsError, JsResult, JsString, JsValue}
+import play.api.libs.json.*
+import uk.gov.hmrc.customsservicestatusfrontend.utils.EqualUtils.AnyOps
 
 enum OutageType {
   case Unplanned
@@ -29,7 +30,7 @@ enum OutageType {
 object OutageType {
 
   def apply(value: String): Option[OutageType] =
-    values.find(_.value == value)
+    values.find(_.value === value)
 
   def unapply(outageType: OutageType): String =
     outageType.value

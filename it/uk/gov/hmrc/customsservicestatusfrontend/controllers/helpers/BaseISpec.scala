@@ -46,6 +46,7 @@ abstract class BaseISpec
     with ScalaFutures
     with DefaultAwaitTimeout
     with Writeables
+    with FutureAwaits
     with EssentialActionCaller
     with RouteInvokers
     with LoneElement
@@ -58,8 +59,8 @@ abstract class BaseISpec
     with HttpProtocol
     with HttpVerbs
     with ResultExtractors
-    with WireMockHelper
     with AdditionalAppConfig
+    with WireMockHelper
     with WireMockSupport
     with WireMockConfig {
 

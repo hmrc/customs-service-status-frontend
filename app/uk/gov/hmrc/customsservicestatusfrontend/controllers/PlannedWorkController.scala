@@ -16,15 +16,27 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
-import jakarta.inject.Inject
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
 
+import javax.inject.{Inject, Named, Singleton}
+import scala.concurrent.ExecutionContext
+
+@Singleton
 class PlannedWorkController @Inject() (
-  mcc: MessagesControllerComponents
+  mcc:                                                                       MessagesControllerComponents,
+  plannedWorkView:                                                           PlannedWorkPage,
+  plannedWorkService:                                                        PlannedWorkService,
+  @Named("gvmsServiceStatusUrl") gvmsServiceStatusUrl:                       String,
+  @Named("availabilityForOtherServicesUrl") availabilityForOtherServicesUrl: String
+)(implicit
+  ec: ExecutionContext
 ) extends BaseFrontendController(mcc) {
 
-  val show: Action[AnyContent] = Action { implicit request =>
-    Ok
+  def show: Action[AnyContent] = Action.async { implicit request =>
+    plannedWorkService.getAllPlannedWorks().map { plannedWorks =>
+      Ok(plannedWorkView(plannedWorks, gvmsServiceStatusUrl, availabilityForOtherServicesUrl))
+    }
   }
-
 }

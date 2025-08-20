@@ -17,8 +17,12 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import play.api.http.Status
 import play.api.test.FakeRequest
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.{now, serviceStatuses, validPlannedOutageData, validUnplannedOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Planned
@@ -27,14 +31,14 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, Ou
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, StatusService}
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
-import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.Instant
 import scala.concurrent.Future
 
 class DashboardControllerSpec extends ControllerBaseSpec {
 
   private val fakeRequest = FakeRequest("GET", "/service-availability")
-  private val dashboardPage: DashboardPage = app.injector.instanceOf[DashboardPage]
+  private val dashboardPage: DashboardPage = new DashboardPage(layout, govukInsetText)
   private val mockService       = mock[StatusService]
   private val mockOutageService = mock[OutageService]
 
@@ -47,18 +51,15 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
   "GET /service-availability" should {
     "show dashboard content as expected when there are no issues, no planned work and no CLS updates posted" in {
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(*, *)
-        .returns(
+      when(
+        mockOutageService
+          .getLatest(any())(any())
+      )
+        .thenReturn(
           Future.successful(None)
         )
-        .twice()
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -80,20 +81,19 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     }
 
     "show dashboard content as expected when there are no issues, no planned work and there is a CLS update" in {
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Planned, *)
-        .returns(Future.successful(None))
+      when(
+        mockOutageService
+          .getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any())
+      )
+        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Unplanned, *)
-        .returns(Future.successful(Some(validUnplannedOutageData)))
+      when(
+        mockOutageService
+          .getLatest(ArgumentMatchers.eq(OutageType.Planned))(any())
+      )
+        .thenReturn(Future.successful(None))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -129,20 +129,19 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     }
 
     "show dashboard content as expected when there are no issues, there is planned work and there is a CLS update" in {
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Planned, *)
-        .returns(Future.successful(Some(validPlannedOutageData)))
+      when(
+        mockOutageService
+          .getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any())
+      )
+        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Unplanned, *)
-        .returns(Future.successful(Some(validUnplannedOutageData)))
+      when(
+        mockOutageService
+          .getLatest(ArgumentMatchers.eq(OutageType.Planned))(any())
+      )
+        .thenReturn(Future.successful(Some(validPlannedOutageData)))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -165,7 +164,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         s"From: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
       )
       doc.getElementsByClass("govuk-body").text() should include(
-        s"To: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+        s"To: ${Formatters.instantFormatHours(validPlannedOutageData.endDateTime.get)} on ${Formatters.instantFormatDate(validPlannedOutageData.endDateTime.get)}"
       )
       doc.getElementsByClass("govuk-body").text() should include("Details:")
 
@@ -188,20 +187,13 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     }
 
     "show dashboard content as expected when there are no issues, there is planned work and no CLS update" in {
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Planned, *)
-        .returns(Future.successful(Some(validPlannedOutageData)))
-
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Unplanned, *)
-        .returns(Future.successful(None))
+      when(
+        mockOutageService
+          .getLatest(any())(any())
+      )
+        .thenReturn(Future.successful(Some(validPlannedOutageData)))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -217,10 +209,10 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
 
       doc.getElementsByClass("govuk-body").text() should include(
-        s"From: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+        s"From: ${Formatters.instantFormatHours(validPlannedOutageData.startDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.startDateTime)}"
       )
       doc.getElementsByClass("govuk-body").text() should include(
-        s"To: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+        s"To: ${Formatters.instantFormatHours(validPlannedOutageData.endDateTime.get)} on ${Formatters.instantFormatDate(validPlannedOutageData.endDateTime.get)}"
       )
       doc.getElementsByClass("govuk-body").text() should include("Details:")
 
@@ -246,18 +238,15 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
       val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
 
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(*, *)
-        .returns(
+      when(
+        mockOutageService
+          .getLatest(any())(any())
+      )
+        .thenReturn(
           Future.successful(None)
         )
-        .twice()
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -296,20 +285,23 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
       val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
 
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(
+        mockService
+          .getStatus()(any())
+      )
+        .thenReturn(Future.successful(serviceStatuses))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Planned, *)
-        .returns(Future.successful(None))
+      when(
+        mockOutageService
+          .getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any())
+      )
+        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Unplanned, *)
-        .returns(Future.successful(Some(validUnplannedOutageData)))
+      when(
+        mockOutageService
+          .getLatest(ArgumentMatchers.eq(OutageType.Planned))(any())
+      )
+        .thenReturn(Future.successful(None))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -345,20 +337,19 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
       val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
 
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Planned, *)
-        .returns(Future.successful(Some(validPlannedOutageData)))
+      when(
+        mockOutageService
+          .getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any())
+      )
+        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(OutageType.Unplanned, *)
-        .returns(Future.successful(Some(validUnplannedOutageData)))
+      when(
+        mockOutageService
+          .getLatest(ArgumentMatchers.eq(OutageType.Planned))(any())
+      )
+        .thenReturn(Future.successful(Some(validPlannedOutageData)))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK
@@ -385,10 +376,10 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
 
       doc.getElementsByClass("govuk-body").text() should include(
-        s"From: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+        s"From: ${Formatters.instantFormatHours(validPlannedOutageData.startDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.startDateTime)}"
       )
       doc.getElementsByClass("govuk-body").text() should include(
-        s"To: ${Formatters.instantFormatHours(validPlannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+        s"To: ${Formatters.instantFormatHours(validPlannedOutageData.endDateTime.get)} on ${Formatters.instantFormatDate(validPlannedOutageData.endDateTime.get)}"
       )
       doc.getElementsByClass("govuk-body").text() should include("Details:")
 
@@ -409,20 +400,19 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     "show dashboard content as expected when status is unknown" in {
       val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNKNOWN), Some(now), Some(now))
       val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
-      (mockService
-        .getStatus()(_: HeaderCarrier))
-        .expects(*)
-        .returns(Future.successful(serviceStatuses))
+      when(
+        mockService
+          .getStatus()(any())
+      )
+        .thenReturn(Future.successful(serviceStatuses))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(*, *)
-        .returns(Future.successful(Some(validPlannedOutageData)))
+      when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
-      (mockOutageService
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(*, *)
-        .returns(Future.successful(Some(validUnplannedOutageData)))
+      when(
+        mockOutageService
+          .getLatest(any())(any())
+      )
+        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
 
       val result = controller.show(fakeRequest)
       status(result) shouldBe Status.OK

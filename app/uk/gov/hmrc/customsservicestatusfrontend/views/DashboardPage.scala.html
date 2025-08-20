@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,17 @@
  *@
 
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State
-@import uk.gov.hmrc.customsservicestatusfrontend.models.State._
+@import uk.gov.hmrc.customsservicestatusfrontend.models.State.*
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-@import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 @import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 @import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType
 
 @import java.time.Instant
 
-@this(layout: Layout)
+@this(layout: govukLayoutFullWidth, govukInsetText : GovukInsetText)
 
 @(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedOutageData: Option[OutageData])(implicit request: RequestHeader, messages: Messages)
 
@@ -69,8 +70,8 @@
                 @Html(messages("dashboard.available.unplanned.p1", s"<b>${Formatters.instantFormatHours(unplannedOutageData.get.publishedDateTime)}</b>", s"<b>${Formatters.instantFormatDate(unplannedOutageData.get.publishedDateTime)}</b>"))
             </h2>
             <div class="hmrc-timeline__event-content">
-                    @unplannedOutageData.get.details match {
-                        case DetailType.Details(html) => {@Html(html)}
+                    @unplannedOutageData.get.commsText match {
+                        case DetailType.CommsText(html) => {@Html(html)}
                         }
             </div>
         </li>
@@ -86,8 +87,8 @@
             @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.endDateTime.get)}"))
         </p>
         <p class="govuk-body">
-            @plannedOutageData.get.details match {
-            case DetailType.Details(html) => {@Html("<b>" + Messages("dashboard.available.planned.p4") + "</b>" + " " + Messages(s"dashboard.available.planned.p4.details", s"${html}"))
+            @plannedOutageData.get.commsText match {
+            case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.available.planned.p4") + "</b>" + " " + Messages(s"dashboard.available.planned.p4.details", s"${html}"))
                 }
             }
         </p>
@@ -127,8 +128,8 @@
                     @Html(messages("dashboard.unavailable.unplanned.p1", s"<b>${Formatters.instantFormatHours(unplannedOutageData.get.publishedDateTime)}</b>", s"<b>${Formatters.instantFormatDate(unplannedOutageData.get.publishedDateTime)}</b>"))
                 </h2>
                 <div class="hmrc-timeline__event-content">
-                    @unplannedOutageData.get.details match {
-                    case DetailType.Details(html) => {@Html(html)}
+                    @unplannedOutageData.get.commsText match {
+                    case DetailType.CommsText(html) => {@Html(html)}
                     }
                 </div>
             </li>
@@ -167,8 +168,8 @@
             @Html("<b>" + Messages(s"dashboard.unavailable.planned.p3") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.endDateTime.get)}"))
         </p>
         <p class="govuk-body">
-            @plannedOutageData.get.details match {
-            case DetailType.Details(html) => {@Html("<b>" + Messages("dashboard.unavailable.planned.p4") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p4.details", s"${html}"))
+            @plannedOutageData.get.commsText match {
+            case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.unavailable.planned.p4") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p4.details", s"${html}"))
             }
         }
         </p>

@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{Details, InternalReference}
-import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
+import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{CommsText, InternalReference}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
-import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, ServiceStatuses}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
 
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 object TestData {
@@ -32,25 +33,46 @@ object TestData {
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
+  val fakeDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")
+
   val validUnplannedOutageData: OutageData = OutageData(
     id = UUID.randomUUID(),
     outageType = Unplanned,
     internalReference = InternalReference("Test reference"),
-    startDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
+    startDateTime = fakeDate,
     endDateTime = None,
-    details = Details("Test details"),
-    publishedDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
-    clsNotes = Some("Notes for CLS users")
+    commsText = CommsText("Test details"),
+    publishedDateTime = fakeDate,
+    clsNotes = Some("Notes")
   )
 
   val validPlannedOutageData: OutageData = OutageData(
     id = UUID.randomUUID(),
     outageType = Planned,
     internalReference = InternalReference("Test reference"),
-    startDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
+    startDateTime = fakeDate,
     endDateTime = Some(Instant.parse("2025-01-01T00:00:00.000Z")),
-    details = Details("Test details"),
-    publishedDateTime = Instant.parse("2025-01-01T00:00:00.000Z"),
-    clsNotes = Some("Notes for CLS users")
+    commsText = CommsText("Test details"),
+    publishedDateTime = fakeDate,
+    clsNotes = Some("Notes")
+  )
+
+  def fakeOutageData(outageType: OutageType, endDateTime: Option[Instant]): OutageData =
+    OutageData(
+      id = UUID.randomUUID(),
+      outageType = outageType,
+      internalReference = InternalReference("Test reference"),
+      startDateTime = fakeDate,
+      endDateTime = endDateTime,
+      commsText = CommsText("Test details"),
+      publishedDateTime = fakeDate,
+      clsNotes = Some("Notes")
+    )
+
+  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(1, ChronoUnit.DAYS)))
+  val fakePlannedWorks: List[OutageData] = List(
+    fakePlannedWork.copy(commsText = CommsText("Test one")),
+    fakePlannedWork.copy(commsText = CommsText("Test two")),
+    fakePlannedWork.copy(commsText = CommsText("Test three"))
   )
 }

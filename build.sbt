@@ -1,6 +1,6 @@
 import play.sbt.PlayImport.PlayKeys.playDefaultPort
-import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import sbt.Keys.evictionErrorLevel
+import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 
 val appName = "customs-service-status-frontend"
 

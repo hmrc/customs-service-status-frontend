@@ -18,6 +18,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.config
 
 import com.google.inject.{AbstractModule, Provides}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 
 import javax.inject.{Named, Singleton}
 
@@ -28,4 +29,16 @@ class Module extends AbstractModule {
   @Singleton
   def registerCustomsServiceStatusUrlProvider(servicesConfig: ServicesConfig): String =
     servicesConfig.baseUrl("customs-service-status")
+
+  @Provides
+  @Named("gvmsServiceStatusUrl")
+  @Singleton
+  def registerGvmsServiceStatusUrlProvider(servicesConfig: ServicesConfig): String =
+    servicesConfig.baseUrl("customs-service-status-frontend") + s"/customs-service-status${routes.DashboardController.show.url}"
+
+  @Provides
+  @Named("availabilityForOtherServicesUrl")
+  @Singleton
+  def registerAvailabilityForOtherServicesUrlProvider(servicesConfig: ServicesConfig): String =
+    servicesConfig.getString("availability-for-other-services")
 }

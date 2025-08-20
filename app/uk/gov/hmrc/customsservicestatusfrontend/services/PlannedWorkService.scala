@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.govukfrontend.views.html.components.Text
+package uk.gov.hmrc.customsservicestatusfrontend.services
 
-@this(layout: govukLayoutFullWidth)
+import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
+import uk.gov.hmrc.http.HeaderCarrier
 
-@(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader, messages: Messages)
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.Future
 
-@layout(pageTitle = Some(pageTitle)) {
-    <h1 class="govuk-heading-xl">@{Text(heading).asHtml}</h1>
-    <p class="govuk-body">@{Text(message).asHtml}</p>
-}
+@Singleton
+class PlannedWorkService @Inject() (customsServiceStatusConnector: CustomsServiceStatusConnector) {
 
-@{
-    //$COVERAGE-OFF$
+  def getAllPlannedWorks()(implicit hc: HeaderCarrier): Future[List[OutageData]] = customsServiceStatusConnector.getAllPlannedWorks()
+
 }

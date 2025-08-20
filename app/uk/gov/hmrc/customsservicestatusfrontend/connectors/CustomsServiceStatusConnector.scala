@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
-import play.api.Logging
+import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
+import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, OutageType, ServiceStatuses}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -28,8 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CustomsServiceStatusConnector @Inject() (
   httpClient:                                                    HttpClientV2,
   @Named("customsServiceStatusUrl") customsServiceStatusBaseUrl: String
-)(implicit ec: ExecutionContext)
-    extends Logging {
+)(implicit ec: ExecutionContext) {
 
   private val baseUrl = s"$customsServiceStatusBaseUrl/customs-service-status"
 
@@ -37,6 +37,11 @@ class CustomsServiceStatusConnector @Inject() (
     httpClient
       .get(url"$baseUrl/services")
       .execute
+
+  def getAllPlannedWorks()(implicit headerCarrier: HeaderCarrier): Future[List[OutageData]] =
+    httpClient
+      .get(url"$baseUrl/services/planned-work")
+      .execute[List[OutageData]]
 
   def getLatest(outageType: OutageType)(implicit headerCarrier: HeaderCarrier): Future[Option[OutageData]] =
     httpClient

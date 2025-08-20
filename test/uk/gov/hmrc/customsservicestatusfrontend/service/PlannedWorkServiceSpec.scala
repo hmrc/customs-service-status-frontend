@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,31 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.service
 
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.*
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
+import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
-import uk.gov.hmrc.customsservicestatusfrontend.services.StatusService
+import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.any
 
 import scala.concurrent.Future
 
-class StatusServiceSpec extends BaseSpec {
+class PlannedWorkServiceSpec extends BaseSpec {
 
   val mockConnector: CustomsServiceStatusConnector = mock[CustomsServiceStatusConnector]
+  val service = new PlannedWorkService(mockConnector)
 
-  val service = new StatusService(mockConnector)
-
-  "getStatus" should {
-    "return response as expected" in {
+  "getAllPlannedWork" should {
+    "return planned work as expected" in {
       when(
         mockConnector
-          .getStatus()(any())
+          .getAllPlannedWorks()(any())
       )
-        .thenReturn(Future.successful(serviceStatuses))
+        .thenReturn(Future.successful(List(fakePlannedWork)))
 
-      service.getStatus().futureValue shouldBe serviceStatuses
+      service.getAllPlannedWorks().futureValue shouldBe List(fakePlannedWork)
     }
   }
+
 }

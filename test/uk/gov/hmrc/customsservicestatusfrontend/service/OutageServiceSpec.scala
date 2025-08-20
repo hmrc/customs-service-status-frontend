@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.service
 
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.validUnplannedOutageData
@@ -34,10 +36,11 @@ class OutageServiceSpec extends BaseSpec {
 
   "getLatest" should {
     "return response as expected" in {
-      (mockConnector
-        .getLatest(_: OutageType)(_: HeaderCarrier))
-        .expects(*, *)
-        .returns(Future.successful(Some(validUnplannedOutageData)))
+      when(
+        mockConnector
+          .getLatest(any())(any())
+      )
+        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
 
       service.getLatest(Unplanned).futureValue shouldBe Some(validUnplannedOutageData)
     }

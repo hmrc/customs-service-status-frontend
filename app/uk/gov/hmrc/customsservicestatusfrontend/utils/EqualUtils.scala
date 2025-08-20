@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.govukfrontend.views.html.components.Text
+package uk.gov.hmrc.customsservicestatusfrontend.utils
 
-@this(layout: govukLayoutFullWidth)
+object EqualUtils {
+  implicit final class AnyOps[A](self: A) {
+    def ===(other: A): Boolean = self == other
 
-@(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader, messages: Messages)
-
-@layout(pageTitle = Some(pageTitle)) {
-    <h1 class="govuk-heading-xl">@{Text(heading).asHtml}</h1>
-    <p class="govuk-body">@{Text(message).asHtml}</p>
-}
-
-@{
-    //$COVERAGE-OFF$
+    def =!=(other: A): Boolean = self != other
+  }
 }
