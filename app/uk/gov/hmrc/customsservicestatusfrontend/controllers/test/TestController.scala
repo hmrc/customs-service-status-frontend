@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.controllers.test
 
-import com.google.inject._
+import com.google.inject.*
 import play.api.Logging
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}

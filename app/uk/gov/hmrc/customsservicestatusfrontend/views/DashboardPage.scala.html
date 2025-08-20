@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,14 @@
  *@
 
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State
-@import uk.gov.hmrc.customsservicestatusfrontend.models.State._
+@import uk.gov.hmrc.customsservicestatusfrontend.models.State.*
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-@import uk.gov.hmrc.customsservicestatusfrontend.views.html.Layout
-@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInsetText, GovukTable, _}
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
 
 @import java.time.Instant
 
-@this(layout: Layout, govukInsetText : GovukInsetText, govukTable : GovukTable)
+@this(layout: govukLayoutFullWidth, govukInsetText : GovukInsetText)
 
 @(state: State, stateChangedAt: Instant, serviceId: String)(implicit request: RequestHeader, messages: Messages)
 

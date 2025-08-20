@@ -47,3 +47,15 @@ dashboard.status.haulier.longName=Goods Vehicle Movement Service
 service.state.AVAILABLE=Available
 service.state.UNAVAILABLE=Known issues
 service.state.UNKNOWN=Unknown
+
+planned_work.title=Planned work that will affect GVMS
+planned_work.service_availability_status_link=Return to Check GVMS availability page
+planned_work.from=From:
+planned_work.to=To:
+planned_work.details=Details:
+planned_work.at=at
+planned_work.no_work_planned=No maintenance work is planned at the moment.
+planned_work.no_work_planned.gvms_service_availability.h2=View live service availability
+planned_work.no_work_planned.gvms_service_availability.link=GVMS service status
+planned_work.no_work_planned.other_hmrc_services.h2=Other HMRC services
+planned_work.no_work_planned.other_hmrc_services.link=Track availability for other HMRC services

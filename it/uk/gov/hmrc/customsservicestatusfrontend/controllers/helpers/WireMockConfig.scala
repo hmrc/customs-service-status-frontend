@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.govukfrontend.views.html.components.Text
+package uk.gov.hmrc.customsservicestatusfrontend.controllers.helpers
 
-@this(layout: govukLayoutFullWidth)
+trait WireMockConfig {
+  me: BaseISpec & WireMockSupport =>
 
-@(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader, messages: Messages)
+  additionalAppConfig ++=
+    setWireMockPort(
+      "customs-service-status"
+    )
 
-@layout(pageTitle = Some(pageTitle)) {
-    <h1 class="govuk-heading-xl">@{Text(heading).asHtml}</h1>
-    <p class="govuk-body">@{Text(message).asHtml}</p>
-}
-
-@{
-    //$COVERAGE-OFF$
+  private def setWireMockPort(services: String*): Map[String, Any] =
+    services.foldLeft(Map.empty[String, Any]) { case (map, service) =>
+      map + (s"microservice.services.$service.port" -> mockServerPort)
+    }
 }

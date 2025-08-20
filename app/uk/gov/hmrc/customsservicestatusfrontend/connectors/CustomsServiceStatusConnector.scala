@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
+import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
@@ -35,4 +35,9 @@ class CustomsServiceStatusConnector @Inject() (
     httpClient
       .get(url"$baseUrl/services")
       .execute
+
+  def getAllPlannedWorks()(implicit headerCarrier: HeaderCarrier): Future[List[OutageData]] =
+    httpClient
+      .get(url"$baseUrl/services/planned-work")
+      .execute[List[OutageData]]
 }

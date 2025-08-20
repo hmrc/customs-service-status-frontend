@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.govukfrontend.views.html.components.Text
+package uk.gov.hmrc.customsservicestatusfrontend.models
 
-@this(layout: govukLayoutFullWidth)
+import play.api.libs.json.{Json, OFormat}
 
-@(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader, messages: Messages)
+sealed trait DetailType
 
-@layout(pageTitle = Some(pageTitle)) {
-    <h1 class="govuk-heading-xl">@{Text(heading).asHtml}</h1>
-    <p class="govuk-body">@{Text(message).asHtml}</p>
-}
+object DetailType {
+  final case class InternalReference(text: String) extends DetailType
+  final case class CommsText(html: String) extends DetailType
 
-@{
-    //$COVERAGE-OFF$
+  object InternalReference {
+    implicit val format: OFormat[InternalReference] = Json.format[InternalReference]
+  }
+
+  object CommsText {
+    implicit val format: OFormat[CommsText] = Json.format[CommsText]
+  }
 }
