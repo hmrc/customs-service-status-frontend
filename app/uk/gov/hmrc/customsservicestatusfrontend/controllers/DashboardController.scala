@@ -53,7 +53,7 @@ class DashboardController @Inject() (
 
       Ok(
         dashboardPage(uiState, stateChangedAt, "haulier", unplannedOutageData, plannedOutageData)
-      ) // The hard coded haulier will be fixed in the forthcoming ticket.
+      )
     }
   }
 }
