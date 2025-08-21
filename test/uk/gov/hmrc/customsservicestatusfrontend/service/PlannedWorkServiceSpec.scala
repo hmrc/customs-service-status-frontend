@@ -19,7 +19,6 @@ package uk.gov.hmrc.customsservicestatusfrontend.service
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import org.mockito.Mockito.*
 import org.mockito.ArgumentMatchers.any
