@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customsservicestatusfrontend.services
 
 import com.google.inject.{Inject, Singleton}
-import play.api.Logging
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.models.ServiceStatuses
 import uk.gov.hmrc.http.HeaderCarrier

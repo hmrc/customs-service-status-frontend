@@ -22,7 +22,6 @@ import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import play.api.http.Status
 import play.api.test.FakeRequest
-import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.{now, serviceStatuses, validPlannedOutageData, validUnplannedOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Planned
@@ -32,7 +31,6 @@ import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, StatusS
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 
-import java.time.Instant
 import scala.concurrent.Future
 
 class DashboardControllerSpec extends ControllerBaseSpec {

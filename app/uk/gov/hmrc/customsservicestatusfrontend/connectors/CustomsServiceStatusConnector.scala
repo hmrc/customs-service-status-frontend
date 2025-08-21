@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, OutageType, ServiceStatuses}
 import uk.gov.hmrc.http.HttpReads.Implicits._

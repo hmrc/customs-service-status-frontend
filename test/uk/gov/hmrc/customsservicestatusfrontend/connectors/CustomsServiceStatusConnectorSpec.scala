@@ -17,23 +17,16 @@
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.verify
 import play.api.http.Status
-import play.api.libs.json.Json
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
-import uk.gov.hmrc.http.*
 import org.mockito.Mockito.*
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
-import uk.gov.hmrc.http.client.RequestBuilder
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.{serviceStatuses, validUnplannedOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
-import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.HttpResponse
 
-import java.net.URL
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class CustomsServiceStatusConnectorSpec extends BaseSpec {
 

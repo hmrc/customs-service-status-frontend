@@ -31,7 +31,6 @@ import play.api.mvc.*
 import play.api.test.*
 import play.api.test.Helpers.route
 import play.api.{Application, Mode}
-import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.{ExecutionContext, Future}

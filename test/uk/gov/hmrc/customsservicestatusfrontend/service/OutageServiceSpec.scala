@@ -20,11 +20,10 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.TestData.validUnplannedOutageData
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.{validPlannedOutageData, validUnplannedOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
@@ -35,7 +34,7 @@ class OutageServiceSpec extends BaseSpec {
   val service = new OutageService(mockConnector)
 
   "getLatest" should {
-    "return response as expected" in {
+    "return response as expected for unplanned outage" in {
       when(
         mockConnector
           .getLatest(any())(any())
@@ -43,6 +42,15 @@ class OutageServiceSpec extends BaseSpec {
         .thenReturn(Future.successful(Some(validUnplannedOutageData)))
 
       service.getLatest(Unplanned).futureValue shouldBe Some(validUnplannedOutageData)
+    }
+    "return response as expected for planned outage" in {
+      when(
+        mockConnector
+          .getLatest(any())(any())
+      )
+        .thenReturn(Future.successful(Some(validPlannedOutageData)))
+
+      service.getLatest(Unplanned).futureValue shouldBe Some(validPlannedOutageData)
     }
   }
 }
