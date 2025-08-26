@@ -94,12 +94,16 @@
         </p>
         <br>
         <p class="govuk-heading-m">@Html(messages("dashboard.h6"))</p>
-        <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p2.link", s"dashboard.available.$serviceId.p2", "available_p2_link")</p>
+        <p class="govuk-body">
+            <a class="govuk-link" id='plannedwork-link' href=@routes.PlannedWorkController.show>@messages(s"dashboard.available.$serviceId.p2")</a>
+        </p>
         <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
         <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p3.link", s"dashboard.available.$serviceId.p3", "available_p3_link")</p>
     }else{
         <p class="govuk-heading-m">@Html(messages("dashboard.h3"))</p>
-        <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p2.link", s"dashboard.available.$serviceId.p2", "available_p2_link")</p>
+        <p class="govuk-body">
+            <a class="govuk-link" id='plannedwork-link' href=@routes.PlannedWorkController.show>@messages(s"dashboard.available.$serviceId.p2")</a>
+        </p>
 
         <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
         <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p3.link", s"dashboard.available.$serviceId.p3", "available_p3_link")</p>
@@ -175,12 +179,16 @@
         </p>
         <br>
         <p class="govuk-heading-m">@Html(messages("dashboard.h6"))</p>
-        <p class="govuk-body">@optionalLink(s"dashboard.unavailable.$serviceId.p2.link", s"dashboard.unavailable.$serviceId.p2", "unavailable_p2_link")</p>
+        <p class="govuk-body">
+            <a class="govuk-link" id='plannedwork-link' href=@routes.PlannedWorkController.show>@messages(s"dashboard.available.$serviceId.p2")</a>
+        </p>
         <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
         <p class="govuk-body">@optionalLink(s"dashboard.unavailable.$serviceId.p3.link", s"dashboard.unavailable.$serviceId.p3", "unavailable_p3_link")</p>
         }else{
         <p class="govuk-heading-m">@Html(messages("dashboard.h3"))</p>
-        <p class="govuk-body">@optionalLink(s"dashboard.unavailable.$serviceId.p2.link", s"dashboard.unavailable.$serviceId.p2", "unavailable_p2_link")</p>
+        <p class="govuk-body">
+            <a class="govuk-link" id='plannedwork-link' href=@routes.PlannedWorkController.show>@messages(s"dashboard.available.$serviceId.p2")</a>
+        </p>
 
         <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
         <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p3.link", s"dashboard.unavailable.$serviceId.p3", "unavailable_p3_link")</p>

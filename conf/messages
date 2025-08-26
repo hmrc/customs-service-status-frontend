@@ -25,7 +25,6 @@ dashboard.available.haulier.p1.link=Refresh this page
 dashboard.available.haulier.p1=to check for changes.
 dashboard.available.unplanned.p1= Update at {0} on {1}
 dashboard.available.haulier.p2=Find out when future outages are happening
-dashboard.available.haulier.p2.link=https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues
 dashboard.available.planned.p2=From:
 dashboard.available.planned.p2.fromDate={0} on {1}
 dashboard.available.planned.p3=To:

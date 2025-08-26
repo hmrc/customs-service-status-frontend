@@ -109,12 +109,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       )
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
-      doc
-        .getElementById("available_p2_link")
-        .attr("href")
-        .contains(
-          "https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues"
-        )
+      doc.getElementById("plannedwork-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
       doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
@@ -167,12 +162,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementsByClass("govuk-body").text() should include("Details:")
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-      doc
-        .getElementById("available_p2_link")
-        .attr("href")
-        .contains(
-          "https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues"
-        )
+      doc.getElementById("plannedwork-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
       doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
@@ -215,12 +205,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementsByClass("govuk-body").text() should include("Details:")
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-      doc
-        .getElementById("available_p2_link")
-        .attr("href")
-        .contains(
-          "https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues"
-        )
+      doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
       doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
@@ -382,12 +367,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       doc.getElementsByClass("govuk-body").text() should include("Details:")
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-      doc
-        .getElementById("unavailable_p2_link")
-        .attr("href")
-        .contains(
-          "https://www.gov.uk/government/publications/register-for-the-goods-vehicle-movement-service-service-availability-and-issues/register-for-the-goods-vehicle-movement-service-service-availability-and-issues"
-        )
+      doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
       doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
 
       doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
