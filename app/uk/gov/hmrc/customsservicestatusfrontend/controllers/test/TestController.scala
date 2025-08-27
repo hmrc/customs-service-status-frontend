@@ -49,19 +49,19 @@ class TestController @Inject() (
 
   val showAvailable: Action[AnyContent] = Action.async { implicit request =>
     outageService.getLatest(outageType = Unplanned).map { outageData =>
-      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), Some(LocalDate.now()), Some(LocalDate.now())))
+      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), None, None))
     }
   }
 
   val showUnavailable: Action[AnyContent] = Action.async { implicit request =>
     outageService.getLatest(outageType = Unplanned).map { outageData =>
-      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), Some(LocalDate.now()), Some(LocalDate.now())))
+      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), None, None))
     }
   }
 
   val showUnknown: Action[AnyContent] = Action.async { implicit request =>
     outageService.getLatest(outageType = Unplanned).map { outageData =>
-      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", outageData, None, LocalDate.now(), Some(LocalDate.now()), Some(LocalDate.now())))
+      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", outageData, None, LocalDate.now(), None, None))
     }
   }
 }
