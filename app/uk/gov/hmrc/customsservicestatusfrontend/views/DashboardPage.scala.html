@@ -23,11 +23,11 @@
 @import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 @import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType
 
-@import java.time.Instant
+@import java.time.{Instant, LocalDate}
 
 @this(layout: govukLayoutFullWidth, govukInsetText : GovukInsetText)
 
-@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedOutageData: Option[OutageData])(implicit request: RequestHeader, messages: Messages)
+@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedOutageData: Option[OutageData], today: LocalDate, plannedOutageStartDate: Option[LocalDate], plannedOutageEndDate: Option[LocalDate])(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -78,7 +78,7 @@
     </ol>
     }
 
-    @if(plannedOutageData.isDefined) {
+    @if(plannedOutageData.isDefined && !today.isBefore(plannedOutageStartDate.get) && !today.isAfter(plannedOutageEndDate.get)) {
         <p class="govuk-heading-m">@Html(messages("dashboard.h5"))</p>
         <p class="govuk-body">
             @Html("<b>" + Messages(s"dashboard.available.planned.p2") + "</b>" + " " + Messages(s"dashboard.available.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.startDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.startDateTime)}"))
@@ -163,7 +163,7 @@
         </ol>
     }
 
-    @if(plannedOutageData.isDefined) {
+    @if(plannedOutageData.isDefined && !today.isBefore(plannedOutageStartDate.get) && !today.isAfter(plannedOutageEndDate.get)) {
         <p class="govuk-heading-m">@Html(messages("dashboard.h5"))</p>
         <p class="govuk-body">
             @Html("<b>" + Messages(s"dashboard.unavailable.planned.p2") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.startDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.startDateTime)}"))

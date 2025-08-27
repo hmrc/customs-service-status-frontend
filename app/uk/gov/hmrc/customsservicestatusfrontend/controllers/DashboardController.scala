@@ -22,7 +22,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAIL
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, StatusService}
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 
-import java.time.Instant
+import java.time.{Instant, LocalDate, ZoneId}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
@@ -51,8 +51,12 @@ class DashboardController @Inject() (
 
       val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
 
+      val today = LocalDate.now(ZoneId.systemDefault())
+      val plannedOutageStartDate: Option[LocalDate] = plannedOutageData.map(_.startDateTime.atZone(ZoneId.systemDefault()).toLocalDate)
+      val plannedOutageEndDate:   Option[LocalDate] = plannedOutageData.flatMap(_.endDateTime.map(_.atZone(ZoneId.systemDefault()).toLocalDate))
+
       Ok(
-        dashboardPage(uiState, stateChangedAt, "haulier", unplannedOutageData, plannedOutageData)
+        dashboardPage(uiState, stateChangedAt, "haulier", unplannedOutageData, plannedOutageData, today, plannedOutageStartDate, plannedOutageEndDate)
       )
     }
   }

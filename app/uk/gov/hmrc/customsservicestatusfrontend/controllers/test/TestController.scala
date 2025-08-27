@@ -26,7 +26,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.services.test.TestService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import java.time.Instant
+import java.time.{Instant, LocalDate}
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -49,19 +49,19 @@ class TestController @Inject() (
 
   val showAvailable: Action[AnyContent] = Action.async { implicit request =>
     outageService.getLatest(outageType = Unplanned).map { outageData =>
-      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", outageData, None))
+      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), Some(LocalDate.now()), Some(LocalDate.now())))
     }
   }
 
   val showUnavailable: Action[AnyContent] = Action.async { implicit request =>
     outageService.getLatest(outageType = Unplanned).map { outageData =>
-      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", outageData, None))
+      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), Some(LocalDate.now()), Some(LocalDate.now())))
     }
   }
 
   val showUnknown: Action[AnyContent] = Action.async { implicit request =>
     outageService.getLatest(outageType = Unplanned).map { outageData =>
-      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", outageData, None))
+      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", outageData, None, LocalDate.now(), Some(LocalDate.now()), Some(LocalDate.now())))
     }
   }
 }
