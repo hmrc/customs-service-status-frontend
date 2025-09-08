@@ -20,8 +20,6 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{CommsText, In
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
-import uk.gov.hmrc.govukfrontend.views.viewmodels.details.Details
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -36,6 +34,28 @@ object TestData {
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
   val fakeDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")
+
+  val validUnplannedOutageData: OutageData = OutageData(
+    id = UUID.randomUUID(),
+    outageType = Unplanned,
+    internalReference = InternalReference("Test reference"),
+    startDateTime = fakeDate,
+    endDateTime = None,
+    commsText = CommsText("Test details"),
+    publishedDateTime = fakeDate,
+    clsNotes = Some("Notes")
+  )
+
+  val validPlannedOutageData: OutageData = OutageData(
+    id = UUID.randomUUID(),
+    outageType = Planned,
+    internalReference = InternalReference("Test reference"),
+    startDateTime = fakeDate,
+    endDateTime = Some(Instant.now()),
+    commsText = CommsText("Test details"),
+    publishedDateTime = fakeDate,
+    clsNotes = Some("Notes")
+  )
 
   def fakeOutageData(outageType: OutageType, endDateTime: Option[Instant]): OutageData =
     OutageData(

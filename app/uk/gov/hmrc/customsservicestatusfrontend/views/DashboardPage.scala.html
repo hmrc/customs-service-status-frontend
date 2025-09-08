@@ -19,12 +19,15 @@
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
+@import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
+@import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
+@import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType
 
-@import java.time.Instant
+@import java.time.{Instant, LocalDate}
 
 @this(layout: govukLayoutFullWidth, govukInsetText : GovukInsetText)
 
-@(state: State, stateChangedAt: Instant, serviceId: String)(implicit request: RequestHeader, messages: Messages)
+@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedOutageData: Option[OutageData], today: LocalDate, plannedOutageStartDate: Option[LocalDate], plannedOutageEndDate: Option[LocalDate])(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -47,7 +50,7 @@
 
 @availableContent = {
     <h1 class="govuk-heading-l">@messages(s"dashboard.$serviceId.h1")</h1>
-    <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
+    <p class="govuk-heading-m">@Html(messages("dashboard.h2"))</p>
     <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
     </span>
@@ -56,45 +59,140 @@
     </strong>
     <br>
     <br>
-    <p class="govuk-body">@messages(s"dashboard.available.$serviceId.p1")</p>
-    <hr aria-hidden="true" class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-    <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p2.link", s"dashboard.available.$serviceId.p2", "available_p2_link")</p>
+    <p class="govuk-body">
+        <a class="govuk-link" id='refresh-link' href=@routes.DashboardController.show>@messages(s"dashboard.available.$serviceId.p1.link")</a> @messages(s"dashboard.available.$serviceId.p1")
+    </p>
+
+    @if(unplannedOutageData.isDefined) {
+    <ol class="hmrc-timeline">
+        <li class="hmrc-timeline__event">
+            <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
+                @Html(messages("dashboard.available.unplanned.p1", s"<b>${Formatters.instantFormatHours(unplannedOutageData.get.publishedDateTime)}</b>", s"<b>${Formatters.instantFormatDate(unplannedOutageData.get.publishedDateTime)}</b>"))
+            </h2>
+            <div class="hmrc-timeline__event-content">
+                    @unplannedOutageData.get.commsText match {
+                        case DetailType.CommsText(html) => {@Html(html)}
+                        }
+            </div>
+        </li>
+    </ol>
+    }
+
+    @if(plannedOutageData.isDefined && !today.isBefore(plannedOutageStartDate.get) && !today.isAfter(plannedOutageEndDate.get)) {
+        <p class="govuk-heading-m">@Html(messages("dashboard.h5"))</p>
+        <p class="govuk-body">
+            @Html("<b>" + Messages(s"dashboard.available.planned.p2") + "</b>" + " " + Messages(s"dashboard.available.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.startDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.startDateTime)}"))
+        </p>
+        <p class="govuk-body">
+            @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.endDateTime.get)}"))
+        </p>
+        <p class="govuk-body">
+            @plannedOutageData.get.commsText match {
+            case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.available.planned.p4") + "</b>" + " " + Messages(s"dashboard.available.planned.p4.details", s"${html}"))
+                }
+            }
+        </p>
+        <br>
+        <p class="govuk-heading-m">@Html(messages("dashboard.h6"))</p>
+        <p class="govuk-body">
+            <a class="govuk-link" id='plannedwork-link' href=@routes.PlannedWorkController.show>@messages(s"dashboard.available.$serviceId.p2")</a>
+        </p>
+        <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
+        <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p3.link", s"dashboard.available.$serviceId.p3", "available_p3_link")</p>
+    }else{
+        <p class="govuk-heading-m">@Html(messages("dashboard.h3"))</p>
+        <p class="govuk-body">
+            <a class="govuk-link" id='plannedwork-link' href=@routes.PlannedWorkController.show>@messages(s"dashboard.available.$serviceId.p2")</a>
+        </p>
+
+        <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
+        <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p3.link", s"dashboard.available.$serviceId.p3", "available_p3_link")</p>
+        }
 }
 
 @unavailableContent = {
     <h1 class="govuk-heading-l">@messages(s"dashboard.$serviceId.h1")</h1>
-    <p class="govuk-body">@Html(messages("dashboard.p1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>"))</p>
+    <p class="govuk-heading-m">@Html(messages("dashboard.h2"))</p>
     <span class="govuk-visually-hidden-focusable" for="service-status">
         @messages("dashboard.status.screen.reader", messages(s"dashboard.status.$serviceId.longName"))
     </span>
     <strong class="@statusClass" id="service-status">
         @messages("service.state.UNAVAILABLE")
     </strong>
+    <br>
+    <br>
+    <p class="govuk-body">
+        <a class="govuk-link" id='refresh-link' href=@routes.DashboardController.show>@messages(s"dashboard.unavailable.$serviceId.p1.link")</a> @messages(s"dashboard.unavailable.$serviceId.p1")
+    </p>
 
-    @govukInsetText(InsetText(
-        content = HtmlContent(unavailableInsetContent)
-    ))
+    @if(unplannedOutageData.isDefined) {
+        <ol class="hmrc-timeline">
+            <li class="hmrc-timeline__event">
+                <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
+                    @Html(messages("dashboard.unavailable.unplanned.p1", s"<b>${Formatters.instantFormatHours(unplannedOutageData.get.publishedDateTime)}</b>", s"<b>${Formatters.instantFormatDate(unplannedOutageData.get.publishedDateTime)}</b>"))
+                </h2>
+                <div class="hmrc-timeline__event-content">
+                    @unplannedOutageData.get.commsText match {
+                    case DetailType.CommsText(html) => {@Html(html)}
+                    }
+                </div>
+            </li>
+            <li class="hmrc-timeline__event">
+                <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
+                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(unplannedOutageData.get.publishedDateTime)}</b>", s"<b>${Formatters.instantFormatDate(unplannedOutageData.get.publishedDateTime)}</b>"))
+                </h2>
+            </li>
+        </ol>
+    }else{
+        <ol class="hmrc-timeline">
+            <li class="hmrc-timeline__event">
+                <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
+                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>", s"<b>${Formatters.instantFormatDate(Instant.now)}</b>"))
+                </h2>
+                <div class="hmrc-timeline__event-content">
+                    <p class="govuk-body">
+                        @Html(messages("dashboard.unavailable.issues_with_the_service.p1"))
+                    </p>
+                <div class="hmrc-timeline__event-content">
+                    <p class="govuk-body">
+                        @Html(messages("dashboard.unavailable.issues_with_the_service.p2"))
+                    </p>
+                </div>
+                </div>
+            </li>
+        </ol>
+    }
 
-    <h2 class="govuk-heading-m">@messages("dashboard.unavailable.issues_with_the_service.header")</h2>
-    <p class="govuk-body">@messages("dashboard.unavailable.issues_with_the_service.p1")</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li class="govuk-body">@messages(s"dashboard.unavailable.issues_with_the_service.$serviceId.l1")</li>
-        <li class="govuk-body">@messages(s"dashboard.unavailable.issues_with_the_service.$serviceId.l2")</li>
-    </ul>
+    @if(plannedOutageData.isDefined && !today.isBefore(plannedOutageStartDate.get) && !today.isAfter(plannedOutageEndDate.get)) {
+        <p class="govuk-heading-m">@Html(messages("dashboard.h5"))</p>
+        <p class="govuk-body">
+            @Html("<b>" + Messages(s"dashboard.unavailable.planned.p2") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.startDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.startDateTime)}"))
+        </p>
+        <p class="govuk-body">
+            @Html("<b>" + Messages(s"dashboard.unavailable.planned.p3") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.endDateTime.get)}"))
+        </p>
+        <p class="govuk-body">
+            @plannedOutageData.get.commsText match {
+            case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.unavailable.planned.p4") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p4.details", s"${html}"))
+            }
+        }
+        </p>
+        <br>
+        <p class="govuk-heading-m">@Html(messages("dashboard.h6"))</p>
+        <p class="govuk-body">
+            <a class="govuk-link" id='plannedwork-link' href=@routes.PlannedWorkController.show>@messages(s"dashboard.available.$serviceId.p2")</a>
+        </p>
+        <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
+        <p class="govuk-body">@optionalLink(s"dashboard.unavailable.$serviceId.p3.link", s"dashboard.unavailable.$serviceId.p3", "unavailable_p3_link")</p>
+        }else{
+        <p class="govuk-heading-m">@Html(messages("dashboard.h3"))</p>
+        <p class="govuk-body">
+            <a class="govuk-link" id='plannedwork-link' href=@routes.PlannedWorkController.show>@messages(s"dashboard.available.$serviceId.p2")</a>
+        </p>
 
-    <h2 class="govuk-heading-m">@messages("dashboard.unavailable.what_can_you_do_next.header")</h2>
-    <p class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p1")</p>
-    <p class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p2")</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.l1")</li>
-        <li class="govuk-body">@messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.l2")</li>
-    </ul>
-    <p class="govuk-body">@Html(messages(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3", optionalLink(s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3.link", s"dashboard.unavailable.what_can_you_do_next.$serviceId.p3.link_text", "service_info_link")))</p>
-}
-
-@unavailableInsetContent = {
-    <p class="govuk-body">@Html(messages("dashboard.unavailable.inset.p1", s"<b>${Formatters.instantFormatHours(stateChangedAt)}</b>", s"<b>${Formatters.instantFormatDate(stateChangedAt)}</b>"))</p>
-    <p class="govuk-body">@messages("dashboard.unavailable.inset.p2")</p>
+        <p class="govuk-heading-m">@Html(messages("dashboard.h4"))</p>
+        <p class="govuk-body">@optionalLink(s"dashboard.available.$serviceId.p3.link", s"dashboard.unavailable.$serviceId.p3", "unavailable_p3_link")</p>
+    }
 }
 
 @optionalLink(linkMsgKey: String, linkTextKey: String, anchorId: String) = @{

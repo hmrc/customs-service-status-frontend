@@ -17,15 +17,16 @@
 package uk.gov.hmrc.customsservicestatusfrontend.connectors
 
 import org.mockito.ArgumentMatchers.any
+import play.api.http.Status
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
-import uk.gov.hmrc.http.*
 import org.mockito.Mockito.*
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
-import uk.gov.hmrc.http.client.RequestBuilder
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.{serviceStatuses, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
+import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
+import uk.gov.hmrc.http.HttpResponse
 
-import java.net.URL
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
@@ -58,6 +59,93 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
         .thenReturn(Future(List(fakePlannedWork)))
 
       connector.getAllPlannedWorks().futureValue shouldBe List(fakePlannedWork)
+    }
+  }
+
+  "getLatest" should {
+    "return unplanned OutageData as expected" in {
+      when(
+        mockHttpClient
+          .get(any())(any())
+      )
+        .thenReturn(mockRequestBuilder)
+
+      when(
+        mockRequestBuilder
+          .execute(any(), any())
+      )
+        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
+
+      connector.getLatest(Unplanned).futureValue shouldBe Some(validUnplannedOutageData)
+
+    }
+
+    "return planned OutageData as expected" in {
+      when(
+        mockHttpClient
+          .get(any())(any())
+      )
+        .thenReturn(mockRequestBuilder)
+
+      when(
+        mockRequestBuilder
+          .execute(any(), any())
+      )
+        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
+
+      connector.getLatest(Planned).futureValue shouldBe Some(validUnplannedOutageData)
+    }
+
+    "return 404 when there is no unplanned OutageData" in {
+      when(
+        mockHttpClient
+          .get(any())(any())
+      )
+        .thenReturn(mockRequestBuilder)
+
+      when(
+        mockRequestBuilder
+          .execute(any(), any())
+      )
+        .thenReturn(Future.successful(None))
+
+      connector.getLatest(Unplanned).futureValue shouldBe None
+    }
+
+    "return 404 when there is no planned OutageData" in {
+      when(
+        mockHttpClient
+          .get(any())(any())
+      )
+        .thenReturn(mockRequestBuilder)
+
+      when(
+        mockRequestBuilder
+          .execute(any(), any())
+      )
+        .thenReturn(Future.successful(None))
+
+      connector.getLatest(Planned).futureValue shouldBe None
+    }
+
+    "return errors when there is an exception" in {
+      val errorResponse = HttpResponse(status = Status.BAD_REQUEST)
+
+      when(
+        mockHttpClient
+          .get(any())(any())
+      )
+        .thenReturn(mockRequestBuilder)
+
+      when(
+        mockRequestBuilder
+          .execute(any(), any())
+      )
+        .thenReturn(Future.successful(errorResponse))
+
+      intercept[Exception](
+        connector.getLatest(Unplanned).futureValue
+      )
     }
   }
 }

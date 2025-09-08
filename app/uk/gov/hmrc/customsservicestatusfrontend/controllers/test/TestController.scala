@@ -19,18 +19,21 @@ package uk.gov.hmrc.customsservicestatusfrontend.controllers.test
 import com.google.inject.*
 import play.api.Logging
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
+import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService
 import uk.gov.hmrc.customsservicestatusfrontend.services.test.TestService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import java.time.Instant
-import scala.concurrent.{ExecutionContext, Future}
+import java.time.{Instant, LocalDate}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class TestController @Inject() (
   dashboardPage: DashboardPage,
-  testService:   TestService
+  testService:   TestService,
+  outageService: OutageService
 )(implicit val ec: ExecutionContext, mcc: MessagesControllerComponents)
     extends FrontendController(mcc)
     with Logging {
@@ -45,14 +48,20 @@ class TestController @Inject() (
     }
 
   val showAvailable: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier")))
+    outageService.getLatest(outageType = Unplanned).map { outageData =>
+      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), None, None))
+    }
   }
 
   val showUnavailable: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier")))
+    outageService.getLatest(outageType = Unplanned).map { outageData =>
+      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), None, None))
+    }
   }
 
   val showUnknown: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier")))
+    outageService.getLatest(outageType = Unplanned).map { outageData =>
+      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", outageData, None, LocalDate.now(), None, None))
+    }
   }
 }
