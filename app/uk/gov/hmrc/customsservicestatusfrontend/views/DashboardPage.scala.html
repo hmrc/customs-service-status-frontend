@@ -27,7 +27,7 @@
 
 @this(layout: govukLayoutFullWidth, govukInsetText : GovukInsetText)
 
-@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedOutageData: Option[OutageData], today: LocalDate, plannedOutageStartDate: Option[LocalDate], plannedOutageEndDate: Option[LocalDate])(implicit request: RequestHeader, messages: Messages)
+@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedWorksHappeningToday: List[OutageData])(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -37,6 +37,23 @@
     if(state == AVAILABLE || state == UNAVAILABLE) {
         messages(s"dashboard.$serviceId.h1")
     } else { messages(s"dashboard.$serviceId.unknown.h1") }
+}
+
+@renderPlannedWorks(plannedWorksHappeningToday: List[OutageData]) = {
+    @plannedWorksHappeningToday.map { plannedWork =>
+        <p class="govuk-body">
+            @Html("<b>" + Messages(s"dashboard.available.planned.p2") + "</b>" + " " + Messages(s"dashboard.available.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedWork.startDateTime)}", s" ${Formatters.instantFormatDate(plannedWork.startDateTime)}"))
+        </p>
+        <p class="govuk-body">
+            @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedWork.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedWork.endDateTime.get)}"))
+        </p>
+        <p class="govuk-body">
+            @plannedWork.commsText match {
+            case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.available.planned.p4") + "</b>" + " " + Messages(s"dashboard.available.planned.p4.details", s"${html}"))
+                }
+            }
+        </p>
+    }
 }
 
 @layout(pageTitle = Some(s"$pageTitlePrefix - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
@@ -78,20 +95,9 @@
     </ol>
     }
 
-    @if(plannedOutageData.isDefined && !today.isBefore(plannedOutageStartDate.get) && !today.isAfter(plannedOutageEndDate.get)) {
+    @if(plannedWorksHappeningToday) {
         <p class="govuk-heading-m">@Html(messages("dashboard.h5"))</p>
-        <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.available.planned.p2") + "</b>" + " " + Messages(s"dashboard.available.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.startDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.startDateTime)}"))
-        </p>
-        <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.endDateTime.get)}"))
-        </p>
-        <p class="govuk-body">
-            @plannedOutageData.get.commsText match {
-            case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.available.planned.p4") + "</b>" + " " + Messages(s"dashboard.available.planned.p4.details", s"${html}"))
-                }
-            }
-        </p>
+            @renderPlannedWorks(plannedWorksHappeningToday)
         <br>
         <p class="govuk-heading-m">@Html(messages("dashboard.h6"))</p>
         <p class="govuk-body">
@@ -163,20 +169,9 @@
         </ol>
     }
 
-    @if(plannedOutageData.isDefined && !today.isBefore(plannedOutageStartDate.get) && !today.isAfter(plannedOutageEndDate.get)) {
+    @if(plannedWorksHappeningToday) {
         <p class="govuk-heading-m">@Html(messages("dashboard.h5"))</p>
-        <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.unavailable.planned.p2") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedOutageData.get.startDateTime)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.startDateTime)}"))
-        </p>
-        <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.unavailable.planned.p3") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedOutageData.get.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedOutageData.get.endDateTime.get)}"))
-        </p>
-        <p class="govuk-body">
-            @plannedOutageData.get.commsText match {
-            case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.unavailable.planned.p4") + "</b>" + " " + Messages(s"dashboard.unavailable.planned.p4.details", s"${html}"))
-            }
-        }
-        </p>
+            @renderPlannedWorks(plannedWorksHappeningToday)
         <br>
         <p class="govuk-heading-m">@Html(messages("dashboard.h6"))</p>
         <p class="govuk-body">
