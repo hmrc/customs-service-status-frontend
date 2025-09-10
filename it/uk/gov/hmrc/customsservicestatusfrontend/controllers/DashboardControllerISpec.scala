@@ -19,7 +19,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.controllers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.customsservicestatusfrontend.controllers.helpers.BaseISpec
-import uk.gov.hmrc.customsservicestatusfrontend.TestData.{fakePlannedWork, serviceStatuses, validPlannedOutageData, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.{fakePlannedWork, serviceStatuses, validUnplannedOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 
 class DashboardControllerISpec extends BaseISpec with MockitoSugar {

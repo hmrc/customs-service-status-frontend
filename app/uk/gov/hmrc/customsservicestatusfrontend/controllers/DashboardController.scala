@@ -17,8 +17,7 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
-import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
@@ -53,13 +52,13 @@ class DashboardController @Inject() (
 
       val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
 
-      val today = LocalDate.now(ZoneId.systemDefault())
+      val today = LocalDate.now(ZoneId.of("Europe/London"))
 
       val plannedWorksHappeningToday = plannedOutageData.filter { outage =>
-        val start = outage.startDateTime.atZone(ZoneId.systemDefault()).toLocalDate
+        val start = outage.startDateTime.atZone(ZoneId.of("Europe/London")).toLocalDate
         outage.endDateTime match {
           case Some(endDate) =>
-            val end = endDate.atZone(ZoneId.systemDefault()).toLocalDate
+            val end = endDate.atZone(ZoneId.of("Europe/London")).toLocalDate
             !today.isBefore(start) && !today.isAfter(end)
           case None =>
             today.isEqual(start)
