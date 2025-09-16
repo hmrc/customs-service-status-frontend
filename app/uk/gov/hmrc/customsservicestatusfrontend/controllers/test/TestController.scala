@@ -19,7 +19,9 @@ package uk.gov.hmrc.customsservicestatusfrontend.controllers.test
 import com.google.inject.*
 import play.api.Logging
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
+import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{CommsText, InternalReference}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService
 import uk.gov.hmrc.customsservicestatusfrontend.services.test.TestService
@@ -27,6 +29,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import java.time.{Instant, LocalDate}
+import java.util.UUID
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -48,20 +51,56 @@ class TestController @Inject() (
     }
 
   val showAvailable: Action[AnyContent] = Action.async { implicit request =>
-    outageService.getLatest(outageType = Unplanned).map { outageData =>
-      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), None, None))
+    val plannedWorksHappeningToday = List(
+      OutageData(
+        id = UUID.randomUUID(),
+        outageType = Planned,
+        internalReference = InternalReference("Test reference"),
+        startDateTime = Instant.parse("2020-01-01T00:00:00.000Z"),
+        endDateTime = Some(Instant.now()),
+        commsText = CommsText("Test details"),
+        publishedDateTime = Instant.parse("2020-01-01T00:00:00.000Z"),
+        clsNotes = Some("Notes")
+      )
+    )
+    outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
+      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
     }
   }
 
   val showUnavailable: Action[AnyContent] = Action.async { implicit request =>
-    outageService.getLatest(outageType = Unplanned).map { outageData =>
-      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", outageData, None, LocalDate.now(), None, None))
+    val plannedWorksHappeningToday = List(
+      OutageData(
+        id = UUID.randomUUID(),
+        outageType = Planned,
+        internalReference = InternalReference("Test reference"),
+        startDateTime = Instant.parse("2020-01-01T00:00:00.000Z"),
+        endDateTime = Some(Instant.now()),
+        commsText = CommsText("Test details"),
+        publishedDateTime = Instant.parse("2020-01-01T00:00:00.000Z"),
+        clsNotes = Some("Notes")
+      )
+    )
+    outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
+      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
     }
   }
 
   val showUnknown: Action[AnyContent] = Action.async { implicit request =>
-    outageService.getLatest(outageType = Unplanned).map { outageData =>
-      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", outageData, None, LocalDate.now(), None, None))
+    val plannedWorksHappeningToday = List(
+      OutageData(
+        id = UUID.randomUUID(),
+        outageType = Planned,
+        internalReference = InternalReference("Test reference"),
+        startDateTime = Instant.parse("2020-01-01T00:00:00.000Z"),
+        endDateTime = Some(Instant.now()),
+        commsText = CommsText("Test details"),
+        publishedDateTime = Instant.parse("2020-01-01T00:00:00.000Z"),
+        clsNotes = Some("Notes")
+      )
+    )
+    outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
+      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
     }
   }
 }
