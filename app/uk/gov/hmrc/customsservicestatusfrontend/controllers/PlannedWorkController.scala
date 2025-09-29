@@ -28,7 +28,6 @@ class PlannedWorkController @Inject() (
   mcc:                                                                       MessagesControllerComponents,
   plannedWorkView:                                                           PlannedWorkPage,
   plannedWorkService:                                                        PlannedWorkService,
-  @Named("gvmsServiceStatusUrl") gvmsServiceStatusUrl:                       String,
   @Named("availabilityForOtherServicesUrl") availabilityForOtherServicesUrl: String
 )(implicit
   ec: ExecutionContext
@@ -36,7 +35,7 @@ class PlannedWorkController @Inject() (
 
   def show: Action[AnyContent] = Action.async { implicit request =>
     plannedWorkService.getAllPlannedWorks().map { plannedWorks =>
-      Ok(plannedWorkView(plannedWorks, gvmsServiceStatusUrl, availabilityForOtherServicesUrl))
+      Ok(plannedWorkView(plannedWorks, availabilityForOtherServicesUrl))
     }
   }
 }

@@ -22,7 +22,7 @@
 
 @this(layout: govukLayoutTwoThirds)
 
-@(plannedWorks: List[OutageData], gvmsServiceStatusUrl: String, availabilityForOtherServicesUrl: String)(implicit request: RequestHeader, messages: Messages)
+@(plannedWorks: List[OutageData], availabilityForOtherServicesUrl: String)(implicit request: RequestHeader, messages: Messages)
 
 @renderPlannedWorks(plannedWorks: List[OutageData]) = {
  @plannedWorks.map { plannedWork =>
@@ -44,7 +44,7 @@
     @if(plannedWorks.isEmpty) {
       <p id="no-work-planned" class="govuk-body">@messages("planned_work.no_work_planned")</p>
       <h2 class="govuk-heading-m">@messages("planned_work.no_work_planned.gvms_service_availability.h2")</h2>
-      <p class="govuk-body"><a href="@gvmsServiceStatusUrl" class="govuk-link govuk-body"> @messages("planned_work.no_work_planned.gvms_service_availability.link")</a></p>
+      <p class="govuk-body"><a href="@routes.DashboardController.show.url" class="govuk-link govuk-body"> @messages("planned_work.no_work_planned.gvms_service_availability.link")</a></p>
       <h2 class="govuk-heading-m">@messages("planned_work.no_work_planned.other_hmrc_services.h2")</h2>
       <p class="govuk-body"><a href="@availabilityForOtherServicesUrl" class="govuk-link">@messages("planned_work.no_work_planned.other_hmrc_services.link")</a></p>
       </p>
