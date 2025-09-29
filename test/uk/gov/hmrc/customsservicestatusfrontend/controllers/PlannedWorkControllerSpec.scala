@@ -39,7 +39,6 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
     stubMessagesControllerComponents(),
     plannedWorkPage,
     mockService,
-    "http://localhost:8993/customs-service-status/service-availability/status",
     "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
   )
 

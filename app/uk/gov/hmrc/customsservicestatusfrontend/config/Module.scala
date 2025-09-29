@@ -31,12 +31,6 @@ class Module extends AbstractModule {
     servicesConfig.baseUrl("customs-service-status")
 
   @Provides
-  @Named("gvmsServiceStatusUrl")
-  @Singleton
-  def registerGvmsServiceStatusUrlProvider(servicesConfig: ServicesConfig): String =
-    servicesConfig.baseUrl("customs-service-status-frontend") + s"/customs-service-status${routes.DashboardController.show.url}"
-
-  @Provides
   @Named("availabilityForOtherServicesUrl")
   @Singleton
   def registerAvailabilityForOtherServicesUrlProvider(servicesConfig: ServicesConfig): String =
