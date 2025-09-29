@@ -38,7 +38,7 @@
  }
 }
 
-@layout(pageTitle = Some(messages("planned_work.title"))) {
+@layout(pageTitle = Some(s"${messages("planned_work.title")} - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
     <h1 class="govuk-heading-l">@messages("planned_work.title")</h1>
 
     @if(plannedWorks.isEmpty) {
