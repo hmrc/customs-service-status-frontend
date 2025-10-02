@@ -28,7 +28,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.services.test.TestService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import java.time.{Instant, LocalDate}
+import java.time.Instant
 import java.util.UUID
 import scala.concurrent.ExecutionContext
 

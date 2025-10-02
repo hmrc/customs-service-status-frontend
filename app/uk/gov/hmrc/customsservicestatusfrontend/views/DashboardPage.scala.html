@@ -17,15 +17,13 @@
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State.*
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-@import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 @import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 @import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType
 
 @import java.time.Instant
 
-@this(layout: govukLayoutFullWidth, govukInsetText : GovukInsetText)
+@this(layout: govukLayoutFullWidth)
 
 @(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedWorksHappeningToday: List[OutageData])(implicit request: RequestHeader, messages: Messages)
 

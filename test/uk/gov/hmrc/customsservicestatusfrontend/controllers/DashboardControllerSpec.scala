@@ -31,12 +31,11 @@ import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 
 import scala.concurrent.Future
-import java.time.Instant
 
 class DashboardControllerSpec extends ControllerBaseSpec {
 
   private val fakeRequest = FakeRequest("GET", "/service-availability")
-  private val dashboardPage: DashboardPage = new DashboardPage(layout, govukInsetText)
+  private val dashboardPage: DashboardPage = new DashboardPage(layout)
   private val mockService            = mock[StatusService]
   private val mockOutageService      = mock[OutageService]
   private val mockPlannedWorkService = mock[PlannedWorkService]
