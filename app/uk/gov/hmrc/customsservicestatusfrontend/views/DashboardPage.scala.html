@@ -45,7 +45,7 @@
             @Html("<b>" + Messages(s"dashboard.available.planned.p2") + "</b>" + " " + Messages(s"dashboard.available.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedWork.startDateTime)}", s" ${Formatters.instantFormatDate(plannedWork.startDateTime)}"))
         </p>
         <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedWork.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedWork.endDateTime.get)}"))
+            @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedWork.endDateTime.getOrElse(throw new Exception("endDateTime missing")))}", s" ${Formatters.instantFormatDate(plannedWork.endDateTime.getOrElse(throw new Exception("endDateTime missing")))}"))
         </p>
         <p class="govuk-body">
             @plannedWork.commsText match {
