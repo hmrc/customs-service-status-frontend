@@ -10,7 +10,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     majorVersion := 0,
     playDefaultPort := 8993,
-    scalaVersion := "3.3.3",
+    scalaVersion := "3.5.1",
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalafmtOnCompile := true,
     pipelineStages := Seq(gzip)

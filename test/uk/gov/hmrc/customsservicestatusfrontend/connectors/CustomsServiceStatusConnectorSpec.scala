@@ -38,7 +38,7 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
     "return response as expected" in {
 
       when(mockHttpClient.get(any())(any())).thenReturn(mockRequestBuilder)
-      when(mockRequestBuilder.execute(any(), any())).thenReturn(Future.successful(serviceStatuses))
+      when(mockRequestBuilder.execute(using any(), any())).thenReturn(Future.successful(serviceStatuses))
 
       connector.getStatus().futureValue shouldBe serviceStatuses
     }
@@ -54,7 +54,7 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
       when(
         mockRequestBuilder
-          .execute(any(), any())
+          .execute(using any(), any())
       )
         .thenReturn(Future(List(fakePlannedWork)))
 
@@ -72,7 +72,7 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
       when(
         mockRequestBuilder
-          .execute(any(), any())
+          .execute(using any(), any())
       )
         .thenReturn(Future.successful(Some(validUnplannedOutageData)))
 
@@ -89,7 +89,7 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
       when(
         mockRequestBuilder
-          .execute(any(), any())
+          .execute(using any(), any())
       )
         .thenReturn(Future.successful(Some(validUnplannedOutageData)))
 
@@ -105,7 +105,7 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
       when(
         mockRequestBuilder
-          .execute(any(), any())
+          .execute(using any(), any())
       )
         .thenReturn(Future.successful(None))
 
@@ -121,7 +121,7 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
       when(
         mockRequestBuilder
-          .execute(any(), any())
+          .execute(using any(), any())
       )
         .thenReturn(Future.successful(None))
 
@@ -139,7 +139,7 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
 
       when(
         mockRequestBuilder
-          .execute(any(), any())
+          .execute(using any(), any())
       )
         .thenReturn(Future.successful(errorResponse))
 

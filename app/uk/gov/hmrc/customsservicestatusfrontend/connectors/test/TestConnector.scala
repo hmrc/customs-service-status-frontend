@@ -29,8 +29,6 @@ class TestConnector @Inject() (
   @Named("customsServiceStatusUrl") customsServiceStatusBaseUrl: String
 )(implicit ec: ExecutionContext) {
 
-  implicit val rawReads: HttpReads[HttpResponse] = HttpReads.Implicits.throwOnFailure(HttpReads.Implicits.readEitherOf(HttpReads.Implicits.readRaw))
-
   def clearAllData()(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] =
     httpClient
       .get(url"$customsServiceStatusBaseUrl/customs-service-status/test-only/clear-all")
