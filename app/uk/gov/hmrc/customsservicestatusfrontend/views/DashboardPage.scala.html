@@ -47,8 +47,7 @@
         </p>
         <p class="govuk-body">
             @plannedWork.commsText match {
-            case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.available.planned.p4") + "</b>" + " " + Messages(s"dashboard.available.planned.p4.details", s"${html}"))
-                }
+                case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.available.planned.p4") + "</b>" + " " + Messages(s"dashboard.available.planned.p4.details", s"$html"))}
             }
         </p>
     }
@@ -58,7 +57,7 @@
 
 @if(state == Available) {
    @availableContent
- } else if(state == Unavailable) {
+ } else if (state == Unavailable) {
    @unavailableContent
  } else { @unknownContent }
 }
@@ -87,7 +86,7 @@
             <div class="hmrc-timeline__event-content">
                     @unplannedOutageData.get.commsText match {
                         case DetailType.CommsText(html) => {@Html(html)}
-                        }
+                    }
             </div>
         </li>
     </ol>
@@ -137,7 +136,7 @@
                 </h2>
                 <div class="hmrc-timeline__event-content">
                     @unplannedOutageData.get.commsText match {
-                    case DetailType.CommsText(html) => {@Html(html)}
+                        case DetailType.CommsText(html) => {@Html(html)}
                     }
                 </div>
             </li>
