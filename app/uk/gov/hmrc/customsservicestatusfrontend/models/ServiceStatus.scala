@@ -23,26 +23,20 @@ import uk.gov.hmrc.customsservicestatusfrontend.utils.EqualUtils.AnyOps
 import java.time.Instant
 
 enum State {
-  case Available
-  case Unavailable
-  case Unknown
+  case AVAILABLE
+  case UNAVAILABLE
+  case UNKNOWN
 
   val value: String = toString
 }
 
 object State {
 
-  def apply(value: String): Option[State] =
-    values.find(_.value === value)
-
-  def unapply(state: State): String =
-    state.value
-
   implicit val format: Format[State] = new Format[State] {
 
     override def reads(json: JsValue): JsResult[State] =
       try json.validate[String] map State.valueOf
-      catch case e: IllegalArgumentException => JsError("Invalid State")
+      catch case e: IllegalArgumentException => JsError(s"invalid value: $e for State type")
 
     override def writes(o: State): JsValue = JsString(o.value)
   }
@@ -58,7 +52,7 @@ case class CustomsServiceStatus(
 )
 
 object CustomsServiceStatus {
-  implicit val format: OFormat[CustomsServiceStatus] = Json.using[WithDefaultValues].format[CustomsServiceStatus]
+  implicit val format: OFormat[CustomsServiceStatus] = Json.format[CustomsServiceStatus]
 }
 
 case class ServiceStatuses(services: List[CustomsServiceStatus])

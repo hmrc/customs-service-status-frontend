@@ -18,7 +18,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
-import uk.gov.hmrc.customsservicestatusfrontend.models.State.{Available, Unavailable, Unknown}
+import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 
@@ -43,14 +43,14 @@ class DashboardController @Inject() (
       plannedOutageData   <- plannedWorkService.getAllPlannedWorks()
     } yield {
       val uiState =
-        if (statuses.services.forall(_.state.contains(Available)))
-          Available
-        else if (statuses.services.exists(_.state.contains(Unavailable)))
-          Unavailable
+        if (statuses.services.forall(_.state.contains(AVAILABLE)))
+          AVAILABLE
+        else if (statuses.services.exists(_.state.contains(UNAVAILABLE)))
+          UNAVAILABLE
         else
-          Unknown
+          UNKNOWN
 
-      val stateChangedAt = statuses.services.find(_.state.contains(Unavailable)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
+      val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
 
       val today = LocalDate.now(ZoneId.of("Europe/London"))
 

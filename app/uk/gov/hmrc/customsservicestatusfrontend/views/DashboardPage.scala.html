@@ -28,11 +28,11 @@
 @(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedWorksHappeningToday: List[OutageData])(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
-     if(state == Available) "govuk-tag govuk-tag--green" else if (state == Unavailable) "govuk-tag govuk-tag--orange" else ""
+     if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
 }
 
 @pageTitlePrefix = @{
-    if(state == Available || state == Unavailable) {
+    if(state == AVAILABLE || state == UNAVAILABLE) {
         messages(s"dashboard.$serviceId.h1")
     } else { messages(s"dashboard.$serviceId.unknown.h1") }
 }
@@ -55,9 +55,9 @@
 
 @layout(pageTitle = Some(s"$pageTitlePrefix - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
 
-@if(state == Available) {
+@if(state == AVAILABLE) {
    @availableContent
- } else if (state == Unavailable) {
+ } else if (state == UNAVAILABLE) {
    @unavailableContent
  } else { @unknownContent }
 }
