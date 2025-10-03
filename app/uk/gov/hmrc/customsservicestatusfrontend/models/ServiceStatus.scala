@@ -18,31 +18,33 @@ package uk.gov.hmrc.customsservicestatusfrontend.models
 
 import play.api.libs.json.*
 import play.api.libs.json.Json.WithDefaultValues
+import uk.gov.hmrc.customsservicestatusfrontend.utils.EqualUtils.AnyOps
 
 import java.time.Instant
 
-sealed trait State {
+enum State {
+  case Available
+  case Unavailable
+  case Unknown
+
   val value: String = toString
 }
 
 object State {
-  case object AVAILABLE extends State
-  case object UNAVAILABLE extends State
-  case object UNKNOWN extends State
 
-  val values: Seq[State] = Seq(AVAILABLE, UNAVAILABLE, UNKNOWN)
+  def apply(value: String): Option[State] =
+    values.find(_.value === value)
+
+  def unapply(state: State): String =
+    state.value
 
   implicit val format: Format[State] = new Format[State] {
 
-    override def writes(o: State): JsValue = JsString(o.value)
-
     override def reads(json: JsValue): JsResult[State] =
-      json.validate[String].flatMap {
-        case AVAILABLE.value   => JsSuccess(AVAILABLE)
-        case UNAVAILABLE.value => JsSuccess(UNAVAILABLE)
-        case UNKNOWN.value     => JsSuccess(UNKNOWN)
-        case e                 => JsError(s"invalid value: $e for State type")
-      }
+      try json.validate[String] map State.valueOf
+      catch case e: IllegalArgumentException => JsError("Invalid State")
+
+    override def writes(o: State): JsValue = JsString(o.value)
   }
 }
 

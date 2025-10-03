@@ -22,7 +22,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{CommsText, InternalReference}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
-import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
+import uk.gov.hmrc.customsservicestatusfrontend.models.State.{Available, Unavailable, Unknown}
 import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService
 import uk.gov.hmrc.customsservicestatusfrontend.services.test.TestService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
@@ -64,7 +64,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
+      Ok(dashboardPage(Available, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
     }
   }
 
@@ -82,7 +82,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
+      Ok(dashboardPage(Unavailable, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
     }
   }
 
@@ -100,7 +100,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
+      Ok(dashboardPage(Unknown, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
     }
   }
 }
