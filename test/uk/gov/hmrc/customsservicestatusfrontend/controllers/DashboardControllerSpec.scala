@@ -22,8 +22,9 @@ import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import play.api.http.Status
 import play.api.test.FakeRequest
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.TestData.{fakeDate, fakePlannedWork, serviceStatuses, validPlannedOutageData, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageType, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
@@ -32,6 +33,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import scala.concurrent.Future
 
 class DashboardControllerSpec extends ControllerBaseSpec {
@@ -41,7 +43,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
   private val mockService            = mock[StatusService]
   private val mockOutageService      = mock[OutageService]
   private val mockPlannedWorkService = mock[PlannedWorkService]
-  private val mockNow: Now = new Now {
+  private val fakeNow: Now = new Now {
     override def apply: Instant = fakeDate
   }
 
@@ -51,7 +53,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     mockService,
     mockOutageService,
     mockPlannedWorkService
-  )(ec, mockNow)
+  )(ec, fakeNow)
 
   "GET /service-availability" should {
     "show dashboard content as expected" when {
@@ -162,11 +164,12 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
       }
 
-      "there are no issues, there is planned work and no CLS update" in {
+      "there are no issues, there is planned work with start date before current date, end date being after current date and no CLS update" in {
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
         when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(None))
-        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
+        when(mockPlannedWorkService.getAllPlannedWorks()(any()))
+          .thenReturn(Future.successful(List(fakeOutageData(Planned, Some(fakeCurrentDate.plus(1, ChronoUnit.DAYS))))))
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -183,6 +186,138 @@ class DashboardControllerSpec extends ControllerBaseSpec {
           s"From: ${Formatters.instantFormatHours(fakePlannedWork.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWork.startDateTime)}"
         val expectedDateTo: String =
           s"To: ${Formatters.instantFormatHours(fakePlannedWork.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWork.endDateTime.get)}"
+        val expectedDetails: String = fakePlannedWork.commsText.html
+
+        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
+        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateFrom")
+        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateTo")
+        doc.getElementsByClass("govuk-body").text()      should include("Details:")
+        doc.getElementsByClass("govuk-body").text()      should include(expectedDetails)
+        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
+
+        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
+        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
+        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
+
+        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+        doc
+          .getElementById("available_p3_link")
+          .attr("href")
+          .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
+        doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
+
+      }
+
+      "there are no issues, there is planned work with start date being the current date, end date being after current date and no CLS update" in {
+        when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
+
+        when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(None))
+        when(mockPlannedWorkService.getAllPlannedWorks()(any()))
+          .thenReturn(Future.successful(List(fakePlannedWorkWithCurrentDateAsStartDate)))
+
+        val result = controller.show(fakeRequest)
+        status(result) shouldBe Status.OK
+
+        val doc = Jsoup.parse(contentAsString(result))
+        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
+        doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
+
+        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
+        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
+
+        val expectedDateFrom: String =
+          s"From: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsStartDate.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsStartDate.startDateTime)}"
+        val expectedDateTo: String =
+          s"To: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsStartDate.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsStartDate.endDateTime.get)}"
+        val expectedDetails: String = fakePlannedWork.commsText.html
+
+        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
+        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateFrom")
+        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateTo")
+        doc.getElementsByClass("govuk-body").text()      should include("Details:")
+        doc.getElementsByClass("govuk-body").text()      should include(expectedDetails)
+        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
+
+        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
+        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
+        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
+
+        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+        doc
+          .getElementById("available_p3_link")
+          .attr("href")
+          .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
+        doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
+
+      }
+
+      "there are no issues, there is planned work with start date before current date, end date being the current date and no CLS update" in {
+        when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
+
+        when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(None))
+        when(mockPlannedWorkService.getAllPlannedWorks()(any()))
+          .thenReturn(Future.successful(List(fakePlannedWorkWithCurrentDateAsEndDate)))
+
+        val result = controller.show(fakeRequest)
+        status(result) shouldBe Status.OK
+
+        val doc = Jsoup.parse(contentAsString(result))
+        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
+        doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
+
+        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
+        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
+
+        val expectedDateFrom: String =
+          s"From: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsEndDate.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsEndDate.startDateTime)}"
+        val expectedDateTo: String =
+          s"To: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsEndDate.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsEndDate.endDateTime.get)}"
+        val expectedDetails: String = fakePlannedWork.commsText.html
+
+        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
+        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateFrom")
+        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateTo")
+        doc.getElementsByClass("govuk-body").text()      should include("Details:")
+        doc.getElementsByClass("govuk-body").text()      should include(expectedDetails)
+        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
+
+        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
+        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
+        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
+
+        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
+        doc
+          .getElementById("available_p3_link")
+          .attr("href")
+          .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
+        doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
+
+      }
+
+      "there are no issues, there is planned work with start and end date being the current date and no CLS update" in {
+        when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
+
+        when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(None))
+        when(mockPlannedWorkService.getAllPlannedWorks()(any()))
+          .thenReturn(Future.successful(List(fakePlannedWorkWithCurrentDateAsStartAndEndDate)))
+
+        val result = controller.show(fakeRequest)
+        status(result) shouldBe Status.OK
+
+        val doc = Jsoup.parse(contentAsString(result))
+        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
+        doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
+
+        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
+        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
+        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
+
+        val expectedDateFrom: String =
+          s"From: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsStartAndEndDate.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsStartAndEndDate.startDateTime)}"
+        val expectedDateTo: String =
+          s"To: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsStartAndEndDate.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsStartAndEndDate.endDateTime.get)}"
         val expectedDetails: String = fakePlannedWork.commsText.html
 
         doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")

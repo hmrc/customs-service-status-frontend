@@ -60,7 +60,7 @@ class DashboardController @Inject() (
         outage.endDateTime match {
           case Some(endDate) =>
             val end = endDate.atZone(ZoneId.of("Europe/London")).toLocalDate
-            today.isAfter(start) && today.isBefore(end)
+            !(today.isBefore(start) || today.isAfter(end))
           case None =>
             today.isEqual(start)
         }
