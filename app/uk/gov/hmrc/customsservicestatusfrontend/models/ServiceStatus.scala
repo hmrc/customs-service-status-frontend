@@ -17,8 +17,6 @@
 package uk.gov.hmrc.customsservicestatusfrontend.models
 
 import play.api.libs.json.*
-import play.api.libs.json.Json.WithDefaultValues
-import uk.gov.hmrc.customsservicestatusfrontend.utils.EqualUtils.AnyOps
 
 import java.time.Instant
 

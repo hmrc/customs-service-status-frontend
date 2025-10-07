@@ -20,12 +20,13 @@
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 @import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 @import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType
+@import uk.gov.hmrc.customsservicestatusfrontend.utils.EqualUtils.*
 
 @import java.time.Instant
 
 @this(layout: govukLayoutFullWidth)
 
-@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedWorksHappeningToday: List[OutageData])(implicit request: RequestHeader, messages: Messages)
+@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedWorksHappeningToday: List[OutageData], now: Instant)(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -55,9 +56,9 @@
 
 @layout(pageTitle = Some(s"$pageTitlePrefix - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
 
-@if(state == AVAILABLE) {
+@if(state === AVAILABLE) {
    @availableContent
- } else if (state == UNAVAILABLE) {
+ } else if (state === UNAVAILABLE) {
    @unavailableContent
  } else { @unknownContent }
 }
@@ -150,7 +151,7 @@
         <ol class="hmrc-timeline">
             <li class="hmrc-timeline__event">
                 <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
-                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>", s"<b>${Formatters.instantFormatDate(Instant.now)}</b>"))
+                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(now)}</b>", s"<b>${Formatters.instantFormatDate(now)}</b>"))
                 </h2>
                 <div class="hmrc-timeline__event-content">
                     <p class="govuk-body">

@@ -23,13 +23,15 @@ import org.mockito.Mockito.*
 import play.api.http.Status
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.TestData.{fakePlannedWork, now, serviceStatuses, validPlannedOutageData, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.{fakeDate, fakePlannedWork, serviceStatuses, validPlannedOutageData, validUnplannedOutageData}
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageType, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
+import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 
+import java.time.Instant
 import scala.concurrent.Future
 
 class DashboardControllerSpec extends ControllerBaseSpec {
@@ -39,6 +41,9 @@ class DashboardControllerSpec extends ControllerBaseSpec {
   private val mockService            = mock[StatusService]
   private val mockOutageService      = mock[OutageService]
   private val mockPlannedWorkService = mock[PlannedWorkService]
+  private val mockNow: Now = new Now {
+    override def apply: Instant = fakeDate
+  }
 
   private val controller = new DashboardController(
     stubMessagesControllerComponents(),
@@ -46,7 +51,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     mockService,
     mockOutageService,
     mockPlannedWorkService
-  )
+  )(ec, mockNow)
 
   "GET /service-availability" should {
     "show dashboard content as expected" when {
@@ -201,8 +206,9 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       }
 
       "there are issues, but no planned work and no CLS updates posted" in {
-        val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
-        val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
+        val serviceStatus: CustomsServiceStatus =
+          CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(fakeDate), Some(fakeDate))
+        val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
@@ -221,7 +227,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
 
         doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
-          s"Issue detected at ${Formatters.instantFormatHours(now)} on ${Formatters.instantFormatDate(now)}"
+          s"Issue detected at ${Formatters.instantFormatHours(fakeDate)} on ${Formatters.instantFormatDate(fakeDate)}"
         )
 
         val timelineText = doc.getElementsByClass("hmrc-timeline__event-content")
@@ -243,8 +249,9 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       }
 
       "there are issues, no planned work and there is a CLS update" in {
-        val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
-        val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
+        val serviceStatus: CustomsServiceStatus =
+          CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(fakeDate), Some(fakeDate))
+        val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
@@ -283,8 +290,9 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       }
 
       "there are issues, there is planned work and there is a CLS update" in {
-        val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(now), Some(now))
-        val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
+        val serviceStatus: CustomsServiceStatus =
+          CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(fakeDate), Some(fakeDate))
+        val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 
@@ -337,8 +345,9 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       }
 
       "status is unknown" in {
-        val serviceStatus:   CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(UNKNOWN), Some(now), Some(now))
-        val serviceStatuses: ServiceStatuses      = ServiceStatuses(List(serviceStatus))
+        val serviceStatus: CustomsServiceStatus =
+          CustomsServiceStatus("haulier", "Haulier", "description", Some(UNKNOWN), Some(fakeDate), Some(fakeDate))
+        val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
 

@@ -51,7 +51,7 @@ object TestData {
     outageType = Planned,
     internalReference = InternalReference("Test reference"),
     startDateTime = fakeDate,
-    endDateTime = Some(Instant.now()),
+    endDateTime = Some(fakeDate.plus(1, ChronoUnit.DAYS)),
     commsText = CommsText("Test details"),
     publishedDateTime = fakeDate,
     clsNotes = Some("Notes")

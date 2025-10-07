@@ -27,6 +27,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService
 import uk.gov.hmrc.customsservicestatusfrontend.services.test.TestService
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 
 import java.time.Instant
 import java.util.UUID
@@ -37,7 +38,7 @@ class TestController @Inject() (
   dashboardPage: DashboardPage,
   testService:   TestService,
   outageService: OutageService
-)(implicit val ec: ExecutionContext, mcc: MessagesControllerComponents)
+)(implicit val ec: ExecutionContext, mcc: MessagesControllerComponents, now: Now)
     extends FrontendController(mcc)
     with Logging {
 
@@ -64,7 +65,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
+      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
     }
   }
 
@@ -82,7 +83,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
+      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
     }
   }
 
@@ -100,7 +101,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday))
+      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
     }
   }
 }
