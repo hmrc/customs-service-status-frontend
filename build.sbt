@@ -10,13 +10,14 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     majorVersion := 0,
     playDefaultPort := 8993,
-    scalaVersion := "3.3.3",
+    scalaVersion := "3.5.1",
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalafmtOnCompile := true,
     pipelineStages := Seq(gzip)
   )
   .configs(IntegrationTest)
   .settings(integrationTestSettings() *)
+  .settings(ThisBuild / scalacOptions += "-Wconf:msg=Flag.*repeatedly:s")
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
     IntegrationTest / unmanagedSourceDirectories :=

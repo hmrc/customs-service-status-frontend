@@ -31,7 +31,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits, ResultExtractors}
 import uk.gov.hmrc.customsservicestatusfrontend.config.AppConfig
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.{govukLayoutFullWidth, govukLayoutTwoThirds}
-import uk.gov.hmrc.govukfrontend.views.html.components.{FixedWidthPageLayout, GovukBackLink, GovukButton, GovukExitThisPage, GovukFooter, GovukHeader, GovukInsetText, GovukLayout, GovukPhaseBanner, GovukSkipLink, GovukTag, GovukTemplate, TwoThirdsMainContent}
+import uk.gov.hmrc.govukfrontend.views.html.components.{FixedWidthPageLayout, GovukBackLink, GovukButton, GovukExitThisPage, GovukFooter, GovukHeader, GovukInsetText, GovukLayout, GovukPhaseBanner, GovukServiceNavigation, GovukSkipLink, GovukTag, GovukTemplate, TwoThirdsMainContent}
 import uk.gov.hmrc.govukfrontend.views.html.helpers.GovukLogo
 import uk.gov.hmrc.hmrcfrontend.config.{AccessibilityStatementConfig, AssetsConfig, ContactFrontendConfig, LanguageConfig, RebrandConfig, TrackingConsentConfig, TudorCrownConfig}
 import uk.gov.hmrc.hmrcfrontend.views.config.{HmrcFooterItems, StandardBetaBanner}
@@ -104,7 +104,16 @@ trait BaseSpec
   val hmrcUserResearchBanner = new HmrcUserResearchBanner
   val govukPhaseBanner       = new GovukPhaseBanner(govukTag)
   val govukInsetText         = new GovukInsetText
-  val hmrcHeader = new HmrcHeader(hmrcBanner, hmrcUserResearchBanner, govukPhaseBanner, tudorCrownConfig, RebrandConfig(configuration), govukLogo)
+  val govukServiceNavigation = new GovukServiceNavigation
+  val hmrcHeader = new HmrcHeader(
+    hmrcBanner,
+    hmrcUserResearchBanner,
+    govukPhaseBanner,
+    tudorCrownConfig,
+    RebrandConfig(configuration),
+    govukLogo,
+    govukServiceNavigation
+  )
   val hmrcStandardHeader           = new HmrcStandardHeader(hmrcHeader)
   val govukFooter                  = new GovukFooter(RebrandConfig(configuration), govukLogo)
   val hmrcFooter                   = new HmrcFooter(govukFooter)

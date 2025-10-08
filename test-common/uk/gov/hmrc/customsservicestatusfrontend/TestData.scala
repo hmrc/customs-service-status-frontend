@@ -35,6 +35,8 @@ object TestData {
 
   val fakeDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")
 
+  val fakeCurrentDate: Instant = Instant.now
+
   val validUnplannedOutageData: OutageData = OutageData(
     id = UUID.randomUUID(),
     outageType = Unplanned,
@@ -51,7 +53,7 @@ object TestData {
     outageType = Planned,
     internalReference = InternalReference("Test reference"),
     startDateTime = fakeDate,
-    endDateTime = Some(Instant.now()),
+    endDateTime = Some(fakeDate.plus(1, ChronoUnit.DAYS)),
     commsText = CommsText("Test details"),
     publishedDateTime = fakeDate,
     clsNotes = Some("Notes")
@@ -69,7 +71,23 @@ object TestData {
       clsNotes = Some("Notes")
     )
 
+  def fakeOutageDataWithCurrentDateAsStartDate(outageType: OutageType, endDateTime: Option[Instant]): OutageData =
+    OutageData(
+      id = UUID.randomUUID(),
+      outageType = outageType,
+      internalReference = InternalReference("Test reference"),
+      startDateTime = fakeCurrentDate,
+      endDateTime = endDateTime,
+      commsText = CommsText("Test details"),
+      publishedDateTime = fakeCurrentDate,
+      clsNotes = Some("Notes")
+    )
+
   val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(1, ChronoUnit.DAYS)))
+  val fakePlannedWorkWithCurrentDateAsStartDate: OutageData =
+    fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeCurrentDate.plus(1, ChronoUnit.DAYS)))
+  val fakePlannedWorkWithCurrentDateAsEndDate:         OutageData = fakeOutageData(Planned, Some(fakeCurrentDate))
+  val fakePlannedWorkWithCurrentDateAsStartAndEndDate: OutageData = fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeCurrentDate))
   val fakePlannedWorks: List[OutageData] = List(
     fakePlannedWork.copy(commsText = CommsText("Test one")),
     fakePlannedWork.copy(commsText = CommsText("Test two")),

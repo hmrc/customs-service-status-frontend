@@ -17,32 +17,26 @@
 package uk.gov.hmrc.customsservicestatusfrontend.models
 
 import play.api.libs.json.*
-import play.api.libs.json.Json.WithDefaultValues
 
 import java.time.Instant
 
-sealed trait State {
+enum State {
+  case AVAILABLE
+  case UNAVAILABLE
+  case UNKNOWN
+
   val value: String = toString
 }
 
 object State {
-  case object AVAILABLE extends State
-  case object UNAVAILABLE extends State
-  case object UNKNOWN extends State
-
-  val values: Seq[State] = Seq(AVAILABLE, UNAVAILABLE, UNKNOWN)
 
   implicit val format: Format[State] = new Format[State] {
 
-    override def writes(o: State): JsValue = JsString(o.value)
-
     override def reads(json: JsValue): JsResult[State] =
-      json.validate[String].flatMap {
-        case AVAILABLE.value   => JsSuccess(AVAILABLE)
-        case UNAVAILABLE.value => JsSuccess(UNAVAILABLE)
-        case UNKNOWN.value     => JsSuccess(UNKNOWN)
-        case e                 => JsError(s"invalid value: $e for State type")
-      }
+      try json.validate[String] map State.valueOf
+      catch case e: IllegalArgumentException => JsError(s"invalid value: $e for State type")
+
+    override def writes(o: State): JsValue = JsString(o.value)
   }
 }
 
@@ -56,7 +50,7 @@ case class CustomsServiceStatus(
 )
 
 object CustomsServiceStatus {
-  implicit val format: OFormat[CustomsServiceStatus] = Json.using[WithDefaultValues].format[CustomsServiceStatus]
+  implicit val format: OFormat[CustomsServiceStatus] = Json.format[CustomsServiceStatus]
 }
 
 case class ServiceStatuses(services: List[CustomsServiceStatus])

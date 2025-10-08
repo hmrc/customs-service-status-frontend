@@ -19,6 +19,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.connectors.test
 import com.google.inject.Singleton
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 
 import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,8 +29,6 @@ class TestConnector @Inject() (
   httpClient:                                                    HttpClientV2,
   @Named("customsServiceStatusUrl") customsServiceStatusBaseUrl: String
 )(implicit ec: ExecutionContext) {
-
-  implicit val rawReads: HttpReads[HttpResponse] = HttpReads.Implicits.throwOnFailure(HttpReads.Implicits.readEitherOf(HttpReads.Implicits.readRaw))
 
   def clearAllData()(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] =
     httpClient

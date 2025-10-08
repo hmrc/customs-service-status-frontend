@@ -21,6 +21,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
+import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 
 import java.time.{Instant, LocalDate, ZoneId}
 import javax.inject.{Inject, Singleton}
@@ -33,7 +34,7 @@ class DashboardController @Inject() (
   statusService:      StatusService,
   outageService:      OutageService,
   plannedWorkService: PlannedWorkService
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, now: Now)
     extends BaseFrontendController(mcc) {
 
   val show: Action[AnyContent] = Action.async { implicit request =>
@@ -59,14 +60,14 @@ class DashboardController @Inject() (
         outage.endDateTime match {
           case Some(endDate) =>
             val end = endDate.atZone(ZoneId.of("Europe/London")).toLocalDate
-            !today.isBefore(start) && !today.isAfter(end)
+            !(today.isBefore(start) || today.isAfter(end))
           case None =>
             today.isEqual(start)
         }
       }
 
       Ok(
-        dashboardPage(uiState, stateChangedAt, "haulier", unplannedOutageData, plannedWorksHappeningToday)
+        dashboardPage(uiState, stateChangedAt, "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply)
       )
     }
   }

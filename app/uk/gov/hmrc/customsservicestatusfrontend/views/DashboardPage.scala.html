@@ -17,17 +17,16 @@
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State
 @import uk.gov.hmrc.customsservicestatusfrontend.models.State.*
 @import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-@import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.insettext.InsetText
 @import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
 @import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 @import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType
+@import uk.gov.hmrc.customsservicestatusfrontend.utils.EqualUtils.*
 
 @import java.time.Instant
 
-@this(layout: govukLayoutFullWidth, govukInsetText : GovukInsetText)
+@this(layout: govukLayoutFullWidth)
 
-@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedWorksHappeningToday: List[OutageData])(implicit request: RequestHeader, messages: Messages)
+@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedWorksHappeningToday: List[OutageData], now: Instant)(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -45,12 +44,11 @@
             @Html("<b>" + Messages(s"dashboard.available.planned.p2") + "</b>" + " " + Messages(s"dashboard.available.planned.p2.fromDate", s"${Formatters.instantFormatHours(plannedWork.startDateTime)}", s" ${Formatters.instantFormatDate(plannedWork.startDateTime)}"))
         </p>
         <p class="govuk-body">
-            @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedWork.endDateTime.get)}", s" ${Formatters.instantFormatDate(plannedWork.endDateTime.get)}"))
+            @Html("<b>" + Messages(s"dashboard.available.planned.p3") + "</b>" + " " + Messages(s"dashboard.available.planned.p3.toDate", s"${Formatters.instantFormatHours(plannedWork.endDateTime.getOrElse(throw new Exception("endDateTime missing")))}", s" ${Formatters.instantFormatDate(plannedWork.endDateTime.getOrElse(throw new Exception("endDateTime missing")))}"))
         </p>
         <p class="govuk-body">
             @plannedWork.commsText match {
-            case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.available.planned.p4") + "</b>" + " " + Messages(s"dashboard.available.planned.p4.details", s"${html}"))
-                }
+                case DetailType.CommsText(html) => {@Html("<b>" + Messages("dashboard.available.planned.p4") + "</b>" + " " + Messages(s"dashboard.available.planned.p4.details", s"$html"))}
             }
         </p>
     }
@@ -58,9 +56,9 @@
 
 @layout(pageTitle = Some(s"$pageTitlePrefix - ${messages("service.name")} - ${messages("service.title.suffix")}")) {
 
- @if(state == AVAILABLE) {
+@if(state === AVAILABLE) {
    @availableContent
- } else if(state == UNAVAILABLE) {
+ } else if (state === UNAVAILABLE) {
    @unavailableContent
  } else { @unknownContent }
 }
@@ -89,7 +87,7 @@
             <div class="hmrc-timeline__event-content">
                     @unplannedOutageData.get.commsText match {
                         case DetailType.CommsText(html) => {@Html(html)}
-                        }
+                    }
             </div>
         </li>
     </ol>
@@ -139,7 +137,7 @@
                 </h2>
                 <div class="hmrc-timeline__event-content">
                     @unplannedOutageData.get.commsText match {
-                    case DetailType.CommsText(html) => {@Html(html)}
+                        case DetailType.CommsText(html) => {@Html(html)}
                     }
                 </div>
             </li>
@@ -153,7 +151,7 @@
         <ol class="hmrc-timeline">
             <li class="hmrc-timeline__event">
                 <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
-                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(Instant.now)}</b>", s"<b>${Formatters.instantFormatDate(Instant.now)}</b>"))
+                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(now)}</b>", s"<b>${Formatters.instantFormatDate(now)}</b>"))
                 </h2>
                 <div class="hmrc-timeline__event-content">
                     <p class="govuk-body">
