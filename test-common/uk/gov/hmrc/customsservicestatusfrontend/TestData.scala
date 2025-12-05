@@ -21,19 +21,25 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
 
-import java.time.Instant
+import java.time.{Instant, LocalDate, ZoneId}
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 object TestData {
 
+  private def zoneId = ZoneId.of("CET")
+
   val now: Instant = Instant.now()
+
+  val mockAvailabilityForOtherServicesUrl = "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
 
   val serviceStatus: CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(AVAILABLE), Some(now), Some(now))
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
 
   val fakeDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")
+
+  val fakeEndDate: Instant = LocalDate.now.plusDays(1).atStartOfDay(zoneId).toInstant
 
   val fakeCurrentDate: Instant = Instant.now
 

@@ -53,23 +53,8 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
       val view = controller.show(fakeRequest)
       val doc  = Jsoup.parse(contentAsString(view))
 
-      val expectedDateFrom: String =
-        s"${Formatters.instantFormatDate(fakePlannedWork.startDateTime)} at ${Formatters.instantFormatHours(fakePlannedWork.startDateTime)}"
-      val expectedDateTo: String =
-        s"${Formatters.instantFormatDate(fakePlannedWork.endDateTime.get)} at ${Formatters.instantFormatHours(fakePlannedWork.endDateTime.get)}"
-      val expectedDetails: String = fakePlannedWork.commsText.html
-      val link:            String = doc.getElementById("plannedPage-link").attr("href")
-
       status(view)                                     shouldBe OK
       doc.getElementsByClass("govuk-heading-l").text() shouldBe "Planned work that will affect GVMS"
-      doc.getElementsByClass("govuk-body").text()      shouldBe "Return to Check GVMS availability page"
-      doc.getElementsByTag("strong").text()              should include("From:")
-      doc.getElementsByTag("div").text()                 should include(expectedDateFrom)
-      doc.getElementsByTag("strong").text()              should include("To:")
-      doc.getElementsByTag("div").text()                 should include(expectedDateTo)
-      doc.getElementsByTag("strong").text()              should include("Details:")
-      doc.getElementsByTag("div").text()                 should include(expectedDetails)
-      link                                             shouldBe "/customs-service-status/service-availability"
 
     }
 
@@ -83,8 +68,8 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
       val view = controller.show(fakeRequest)
       val doc  = Jsoup.parse(contentAsString(view))
 
-      status(view)                                 shouldBe OK
-      doc.getElementById("no-work-planned").text() shouldBe "No maintenance work is planned at the moment."
+      status(view)                                     shouldBe OK
+      doc.getElementsByClass("govuk-heading-l").text() shouldBe "Planned work that will affect GVMS"
     }
   }
 

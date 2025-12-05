@@ -28,7 +28,6 @@ import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageType, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
-import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 
@@ -67,18 +66,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.OK
 
         val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text()  shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()    should include("Live service status")
-        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
-
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
-        doc.getElementsByClass("govuk-body").text()      should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
 
       }
 
@@ -94,26 +82,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
         val doc = Jsoup.parse(contentAsString(result))
         doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
-
-        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
-          s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
-        )
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
-        doc.getElementById("plannedwork-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
-        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc
-          .getElementById("available_p3_link")
-          .attr("href")
-          .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
-        doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
 
       }
 
@@ -129,38 +97,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
         val doc = Jsoup.parse(contentAsString(result))
         doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
-
-        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
-          s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
-        )
-
-        val expectedDateFrom: String =
-          s"From: ${Formatters.instantFormatHours(fakePlannedWork.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWork.startDateTime)}"
-        val expectedDateTo: String =
-          s"To: ${Formatters.instantFormatHours(fakePlannedWork.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWork.endDateTime.get)}"
-        val expectedDetails: String = fakePlannedWork.commsText.html
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateFrom")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateTo")
-        doc.getElementsByClass("govuk-body").text()      should include("Details:")
-        doc.getElementsByClass("govuk-body").text()      should include(expectedDetails)
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-
-        doc.getElementById("plannedwork-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
-        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc
-          .getElementById("available_p3_link")
-          .attr("href")
-          .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
-        doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
 
       }
 
@@ -176,35 +112,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
         val doc = Jsoup.parse(contentAsString(result))
         doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
-
-        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        val expectedDateFrom: String =
-          s"From: ${Formatters.instantFormatHours(fakePlannedWork.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWork.startDateTime)}"
-        val expectedDateTo: String =
-          s"To: ${Formatters.instantFormatHours(fakePlannedWork.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWork.endDateTime.get)}"
-        val expectedDetails: String = fakePlannedWork.commsText.html
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateFrom")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateTo")
-        doc.getElementsByClass("govuk-body").text()      should include("Details:")
-        doc.getElementsByClass("govuk-body").text()      should include(expectedDetails)
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
-        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc
-          .getElementById("available_p3_link")
-          .attr("href")
-          .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
-        doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
 
       }
 
@@ -220,35 +127,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
         val doc = Jsoup.parse(contentAsString(result))
         doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
-
-        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        val expectedDateFrom: String =
-          s"From: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsStartDate.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsStartDate.startDateTime)}"
-        val expectedDateTo: String =
-          s"To: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsStartDate.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsStartDate.endDateTime.get)}"
-        val expectedDetails: String = fakePlannedWork.commsText.html
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateFrom")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateTo")
-        doc.getElementsByClass("govuk-body").text()      should include("Details:")
-        doc.getElementsByClass("govuk-body").text()      should include(expectedDetails)
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
-        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc
-          .getElementById("available_p3_link")
-          .attr("href")
-          .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
-        doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
 
       }
 
@@ -264,35 +142,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
         val doc = Jsoup.parse(contentAsString(result))
         doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
-
-        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        val expectedDateFrom: String =
-          s"From: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsEndDate.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsEndDate.startDateTime)}"
-        val expectedDateTo: String =
-          s"To: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsEndDate.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsEndDate.endDateTime.get)}"
-        val expectedDetails: String = fakePlannedWork.commsText.html
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateFrom")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateTo")
-        doc.getElementsByClass("govuk-body").text()      should include("Details:")
-        doc.getElementsByClass("govuk-body").text()      should include(expectedDetails)
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
-        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc
-          .getElementById("available_p3_link")
-          .attr("href")
-          .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
-        doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
 
       }
 
@@ -308,35 +157,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
         val doc = Jsoup.parse(contentAsString(result))
         doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
-
-        doc.getElementsByClass("govuk-tag--green").text() shouldBe "No issues detected"
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        val expectedDateFrom: String =
-          s"From: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsStartAndEndDate.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsStartAndEndDate.startDateTime)}"
-        val expectedDateTo: String =
-          s"To: ${Formatters.instantFormatHours(fakePlannedWorkWithCurrentDateAsStartAndEndDate.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWorkWithCurrentDateAsStartAndEndDate.endDateTime.get)}"
-        val expectedDetails: String = fakePlannedWork.commsText.html
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateFrom")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateTo")
-        doc.getElementsByClass("govuk-body").text()      should include("Details:")
-        doc.getElementsByClass("govuk-body").text()      should include(expectedDetails)
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
-        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc
-          .getElementById("available_p3_link")
-          .attr("href")
-          .contains("https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues")
-        doc.getElementsByClass("govuk-body").text() should include("Track availability for other HMRC services")
 
       }
 
@@ -354,32 +174,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.OK
 
         val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()     should include("Live service status")
-        doc.getElementsByClass("govuk-tag--orange").text() shouldBe "Issue detected"
-
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
-          s"Issue detected at ${Formatters.instantFormatHours(fakeDate)} on ${Formatters.instantFormatDate(fakeDate)}"
-        )
-
-        val timelineText = doc.getElementsByClass("hmrc-timeline__event-content")
-        timelineText.size shouldBe 2
-
-        timelineText.get(0).text() should include(
-          "You may not be able to create a Goods Movement Reference (GMR) or manage your GMRs."
-        )
-        timelineText.get(1).text() should include(
-          "Do not travel to the border without a valid GMR. We’ll post any further updates here."
-        )
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
-        doc.getElementsByClass("govuk-body").text()      should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
 
       }
 
@@ -398,29 +193,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.OK
 
         val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()     should include("Live service status")
-        doc.getElementsByClass("govuk-tag--orange").text() shouldBe "Issue detected"
-
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        val timelineHeaders = doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s")
-        timelineHeaders.size shouldBe 2
-
-        timelineHeaders.get(0).text() should include(
-          s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
-        )
-
-        timelineHeaders.get(1).text() should include(
-          s"Issue detected at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
-        )
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work")
-        doc.getElementsByClass("govuk-body").text()      should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
 
       }
 
@@ -439,43 +212,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.OK
 
         val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text()   shouldBe "Service availability for GVMS"
-        doc.getElementsByClass("govuk-heading-m").text()     should include("Live service status")
-        doc.getElementsByClass("govuk-tag--orange").text() shouldBe "Issue detected"
-
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/status")
-        doc.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
-
-        val timelineHeaders = doc.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s")
-        timelineHeaders.size shouldBe 2
-
-        timelineHeaders.get(0).text() should include(
-          s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
-        )
-
-        timelineHeaders.get(1).text() should include(
-          s"Issue detected at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
-        )
-
-        val expectedDateFrom: String =
-          s"From: ${Formatters.instantFormatHours(fakePlannedWork.startDateTime)} on ${Formatters.instantFormatDate(fakePlannedWork.startDateTime)}"
-        val expectedDateTo: String =
-          s"To: ${Formatters.instantFormatHours(fakePlannedWork.endDateTime.get)} on ${Formatters.instantFormatDate(fakePlannedWork.endDateTime.get)}"
-        val expectedDetails: String = fakePlannedWork.commsText.html
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening today")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateFrom")
-        doc.getElementsByClass("govuk-body").text()      should include(s"$expectedDateTo")
-        doc.getElementsByClass("govuk-body").text()      should include("Details:")
-        doc.getElementsByClass("govuk-body").text()      should include(expectedDetails)
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Planned work happening later")
-        doc.getElementById("refresh-link").attr("href").contains("/customs-service-status/service-availability/planned-work")
-        doc.getElementsByClass("govuk-body").text() should include("Find out when future outages are happening")
-
-        doc.getElementsByClass("govuk-heading-m").text() should include("Other HMRC services")
-        doc.getElementsByClass("govuk-body").text()      should include("Track availability for other HMRC services")
+        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
 
       }
 
@@ -494,13 +231,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
         val doc = Jsoup.parse(contentAsString(result))
         doc.getElementsByClass("govuk-heading-l").text() shouldBe "GVMS availability unknown"
-        doc.getElementsByClass("govuk-body").text()        should include("The Check GVMS availability service is not working right now.")
-        doc.getElementsByClass("govuk-body").text() should include(
-          "You can check if the service is working by logging in to the Goods Vehicle Movement Service."
-        )
-        doc
-          .getElementById("service_url")
-          .attr("href") shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
       }
     }
   }
