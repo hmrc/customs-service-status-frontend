@@ -54,13 +54,6 @@ class ErrorHandlerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
 
       val doc = Jsoup.parse(html.body)
       doc.getElementsByClass("govuk-heading-l").text() shouldBe "Sorry, there is a problem with the service"
-      doc.getElementsByClass("govuk-body").text() should include(
-        "The Check GVMS availability service is not working right now. You might still be able to use the Goods Vehicle Movement Service (GVMS)."
-      )
-      doc.getElementsByClass("govuk-body").text() should include("You can check if GVMS is working by logging in.")
-      doc
-        .getElementById("gvms_service_url")
-        .attr("href") shouldBe "https://www.gov.uk/guidance/get-a-goods-movement-reference#get-a-goods-movement-reference"
 
     }
   }

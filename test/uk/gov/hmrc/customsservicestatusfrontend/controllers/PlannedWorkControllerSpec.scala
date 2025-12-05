@@ -23,7 +23,6 @@ import org.mockito.Mockito.*
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
-import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
 
 import scala.concurrent.Future

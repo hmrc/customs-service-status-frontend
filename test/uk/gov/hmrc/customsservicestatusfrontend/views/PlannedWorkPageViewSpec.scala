@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.views
 
-import org.jsoup.Jsoup
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
