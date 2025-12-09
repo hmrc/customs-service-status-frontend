@@ -19,17 +19,17 @@ package uk.gov.hmrc.customsservicestatusfrontend.controllers
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardView
 
 class ManageDashboardControllerSpec extends ControllerBaseSpec {
 
-  val view = new ManageDashboardPage(
+  val manageDashboardView = new ManageDashboardView(
     layout = layout
   )
 
   val controller = new ManageDashboardController(
     stubMessagesControllerComponents(),
-    view
+    manageDashboardView
   )
 
   "show" should {

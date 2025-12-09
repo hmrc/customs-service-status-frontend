@@ -23,7 +23,7 @@ import org.mockito.Mockito.*
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkView
 
 import scala.concurrent.Future
 
@@ -32,11 +32,11 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
   private val fakeRequest = FakeRequest("GET", "/service-availability/planned-work")
   private val mockService: PlannedWorkService = mock[PlannedWorkService]
 
-  private val plannedWorkPage = new PlannedWorkPage(govukLayoutTwoThirds)
+  private val plannedWorkView = new PlannedWorkView(govukLayoutTwoThirds)
 
   private val controller: PlannedWorkController = new PlannedWorkController(
     stubMessagesControllerComponents(),
-    plannedWorkPage,
+    plannedWorkView,
     mockService,
     "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
   )

@@ -20,20 +20,22 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
+import uk.gov.hmrc.customsservicestatusfrontend.utils.PlannedWorksHappeningToday
 
-import java.time.{Instant, LocalDate, ZoneId}
+import java.time.Instant
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
 class DashboardController @Inject() (
   mcc:                MessagesControllerComponents,
-  dashboardPage:      DashboardPage,
+  dashboardPage:      DashboardView,
   statusService:      StatusService,
   outageService:      OutageService,
-  plannedWorkService: PlannedWorkService
+  plannedWorkService: PlannedWorkService,
+  plannedWorksUtil:   PlannedWorksHappeningToday
 )(implicit ec: ExecutionContext, now: Now)
     extends BaseFrontendController(mcc) {
 
@@ -53,21 +55,15 @@ class DashboardController @Inject() (
 
       val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
 
-      val today = LocalDate.now(ZoneId.of("Europe/London"))
-
-      val plannedWorksHappeningToday = plannedOutageData.filter { outage =>
-        val start = outage.startDateTime.atZone(ZoneId.of("Europe/London")).toLocalDate
-        outage.endDateTime match {
-          case Some(endDate) =>
-            val end = endDate.atZone(ZoneId.of("Europe/London")).toLocalDate
-            !(today.isBefore(start) || today.isAfter(end))
-          case None =>
-            today.isEqual(start)
-        }
-      }
-
       Ok(
-        dashboardPage(uiState, stateChangedAt, "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply)
+        dashboardPage(
+          uiState,
+          stateChangedAt,
+          "haulier",
+          unplannedOutageData,
+          plannedWorksUtil.plannedWorksHappeningToday(plannedOutageData),
+          now.apply
+        )
       )
     }
   }

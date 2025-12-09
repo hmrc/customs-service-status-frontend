@@ -32,11 +32,11 @@ class ViewBehaviours extends BaseViewSpec {
       "rendered" should {
 
         "display govuk header content" in {
-          document.getElementsByClass("govuk-header__link govuk-header__service-name").text() shouldBe customMessages("service.name")
+          document.getElementsByClass("govuk-header__link govuk-header__service-name").text() shouldBe messages("service.name")
         }
 
         "display the correct browser title" in {
-          assertEqualsMessage(document, "title", title(customMessages(headingKey, headingArgs*), section))
+          assertEqualsMessage(document, "title", title(Messages(headingKey, headingArgs*), section))
         }
 
         "display the correct page heading" in {
@@ -46,7 +46,7 @@ class ViewBehaviours extends BaseViewSpec {
     }
 
   private def assertPageHeadingEqualsMessage(doc: Document, expectedMessageKey: String, args: Any*): Assertion = {
-    val pageHeading = customMessages(expectedMessageKey, args*).replaceAll("&nbsp;", " ")
+    val pageHeading = Messages(expectedMessageKey, args*).replaceAll("&nbsp;", " ")
     val headers     = doc.getElementsByTag("h1")
     if (headers.isEmpty)
       doc.body().getElementsContainingOwnText(pageHeading).size shouldBe 1
@@ -57,7 +57,7 @@ class ViewBehaviours extends BaseViewSpec {
   }
 
   private def assertEqualsMessage(doc: Document, cssSelector: String, expectedMessageKey: String): Assertion =
-    assertEqualsValue(doc, cssSelector, customMessages(expectedMessageKey))
+    assertEqualsValue(doc, cssSelector, Messages(expectedMessageKey))
 
   private def assertEqualsValue(doc: Document, cssSelector: String, expectedValue: String): Assertion = {
     val elements = doc.select(cssSelector)
@@ -65,7 +65,7 @@ class ViewBehaviours extends BaseViewSpec {
     if (elements.isEmpty) throw new IllegalArgumentException(s"CSS Selector $cssSelector wasn't rendered.")
 
     // <p> HTML elements are rendered out with a carriage return on some pages, so discount for comparison
-    assert(elements.first().html().replace("\n", "") == expectedValue)
+    assert(elements.first().html().replace("\n", "") === expectedValue)
   }
 
   def title(heading: String, section: Option[String] = None)(implicit messages: Messages): String =

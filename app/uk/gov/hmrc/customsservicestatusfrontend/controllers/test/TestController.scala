@@ -25,7 +25,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unpl
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService
 import uk.gov.hmrc.customsservicestatusfrontend.services.test.TestService
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 
@@ -35,7 +35,7 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class TestController @Inject() (
-  dashboardPage: DashboardPage,
+  dashboardPage: DashboardView,
   testService:   TestService,
   outageService: OutageService
 )(implicit val ec: ExecutionContext, mcc: MessagesControllerComponents, now: Now)

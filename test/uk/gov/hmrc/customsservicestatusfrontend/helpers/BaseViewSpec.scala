@@ -18,16 +18,12 @@ package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.i18n.Lang
 import play.api.test.FakeRequest
 import play.twirl.api.Html
-import uk.gov.hmrc.customsservicestatusfrontend.config.messages.CustomMessages
 
 class BaseViewSpec extends BaseSpec {
 
   implicit val request: FakeRequest[?] = FakeRequest()
-
-  implicit val customMessages: CustomMessages = CustomMessages(Lang("en"), messagesApi)
 
   implicit class HtmlOps(html: Html) {
     def asDocument: Document = Jsoup.parse(html.toString())

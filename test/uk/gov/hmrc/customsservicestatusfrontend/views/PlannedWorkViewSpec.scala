@@ -19,22 +19,22 @@ package uk.gov.hmrc.customsservicestatusfrontend.views
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkView
 
-class PlannedWorkPageViewSpec extends ViewBehaviours {
+class PlannedWorkViewSpec extends ViewBehaviours {
 
   "/service-availability/planned work page" when {
 
-    val plannedWorkPage = PlannedWorkPage(govukLayoutTwoThirds)
+    val plannedWorkView = PlannedWorkView(govukLayoutTwoThirds)
 
     def view(plannedWorks: List[OutageData], availabilityForOtherServicesUrl: String) =
-      plannedWorkPage(plannedWorks, availabilityForOtherServicesUrl)
+      plannedWorkView(plannedWorks, availabilityForOtherServicesUrl)
 
     List(
-      (List(), mockAvailabilityForOtherServicesUrl),
+      (List(), availabilityForOtherServicesUrl),
       (List(fakePlannedWork), "")
     ).foreach { (plannedWorks, availabilityForOtherServicesUrl) =>
-      s"rendered, in the scenario where planned work: $plannedWorks and url: $availabilityForOtherServicesUrl" should {
+      s"rendered, in the scenario where planned work: $plannedWorks" should {
 
         behave like normalPage("planned_work.title")(view(plannedWorks, availabilityForOtherServicesUrl))
         behave like pageWithoutBackLink(view(plannedWorks, availabilityForOtherServicesUrl))
@@ -45,7 +45,7 @@ class PlannedWorkPageViewSpec extends ViewBehaviours {
 
     "show content with planned works as expected" in {
 
-      val document = view(List(fakePlannedWork), mockAvailabilityForOtherServicesUrl).asDocument
+      val document = view(List(fakePlannedWork), availabilityForOtherServicesUrl).asDocument
 
       val expectedDateFrom: String =
         s"${Formatters.instantFormatDate(fakePlannedWork.startDateTime)} at ${Formatters.instantFormatHours(fakePlannedWork.startDateTime)}"
@@ -68,9 +68,14 @@ class PlannedWorkPageViewSpec extends ViewBehaviours {
 
     "show content when there is no planned work scheduled" in {
 
-      val document = view(List(), mockAvailabilityForOtherServicesUrl).asDocument
+      val document = view(List(), availabilityForOtherServicesUrl).asDocument
 
-      document.getElementById("no-work-planned").text() shouldBe "No maintenance work is planned at the moment."
+      document.getElementsByClass("govuk-heading-l").text()         shouldBe "Planned work that will affect GVMS"
+      document.getElementById("no-work-planned").text()             shouldBe "No maintenance work is planned at the moment."
+      document.getElementsByClass("govuk-heading-m").first().text() shouldBe "View live service availability"
+      document.getElementsByClass("govuk-heading-m").last().text()  shouldBe "Other HMRC services"
+      document.getElementsByTag("a").text()                           should include("Track availability for other HMRC services")
+      document.getElementsByTag("div").text()                         should include("Return to Check GVMS availability page")
 
     }
   }

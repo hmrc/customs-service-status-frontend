@@ -21,23 +21,24 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unpl
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, State}
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
 
-import java.time.Instant
-import java.time.temporal.ChronoUnit
+import java.time.{Instant, LocalDate, ZoneId}
 
-class DashboardPageViewSpec extends ViewBehaviours {
+class DashboardViewSpec extends ViewBehaviours {
 
   "/service-availability/status page" should {
 
-    val dashboardPageView = DashboardPage(layout)
+    val fakeEndDate: Instant = LocalDate.now.plusDays(1).atStartOfDay(ZoneId.of("CET")).toInstant
+
+    val dashboardView = DashboardView(layout)
 
     def view(
       state:                      State = AVAILABLE,
       stateChangedAt:             Instant = Instant.now(),
       unplannedOutageData:        Option[OutageData] = None,
       plannedWorksHappeningToday: List[OutageData]
-    ) = dashboardPageView(state, stateChangedAt, "haulier", unplannedOutageData, plannedWorksHappeningToday, Instant.now)
+    ) = dashboardView(state, stateChangedAt, "haulier", unplannedOutageData, plannedWorksHappeningToday, Instant.now)
 
     List(
       (AVAILABLE, None, List()),
@@ -160,7 +161,7 @@ class DashboardPageViewSpec extends ViewBehaviours {
           view(
             AVAILABLE,
             unplannedOutageData = None,
-            plannedWorksHappeningToday = List(fakeOutageData(Planned, Some(fakeCurrentDate.plus(1, ChronoUnit.DAYS))))
+            plannedWorksHappeningToday = List(fakeOutageData(Planned, Some(fakeDateinTheFuture)))
           ).asDocument
 
         document.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"

@@ -21,17 +21,15 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
 
-import java.time.{Instant, LocalDate, ZoneId}
+import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 object TestData {
 
-  private def zoneId = ZoneId.of("CET")
-
   val now: Instant = Instant.now()
 
-  val mockAvailabilityForOtherServicesUrl = "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
+  val availabilityForOtherServicesUrl = "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
 
   val serviceStatus: CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(AVAILABLE), Some(now), Some(now))
 
@@ -39,9 +37,9 @@ object TestData {
 
   val fakeDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")
 
-  val fakeEndDate: Instant = LocalDate.now.plusDays(1).atStartOfDay(zoneId).toInstant
-
   val fakeCurrentDate: Instant = Instant.now
+
+  val fakeDateinTheFuture: Instant = fakeCurrentDate.plus(1, ChronoUnit.DAYS)
 
   val validUnplannedOutageData: OutageData = OutageData(
     id = UUID.randomUUID(),
@@ -89,9 +87,9 @@ object TestData {
       clsNotes = Some("Notes")
     )
 
-  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(1, ChronoUnit.DAYS)))
+  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(fakeDateinTheFuture))
   val fakePlannedWorkWithCurrentDateAsStartDate: OutageData =
-    fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeCurrentDate.plus(1, ChronoUnit.DAYS)))
+    fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeDateinTheFuture))
   val fakePlannedWorkWithCurrentDateAsEndDate:         OutageData = fakeOutageData(Planned, Some(fakeCurrentDate))
   val fakePlannedWorkWithCurrentDateAsStartAndEndDate: OutageData = fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeCurrentDate))
   val fakePlannedWorks: List[OutageData] = List(
