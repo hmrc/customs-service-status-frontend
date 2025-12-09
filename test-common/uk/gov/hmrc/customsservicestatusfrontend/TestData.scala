@@ -39,7 +39,7 @@ object TestData {
 
   val fakeCurrentDate: Instant = Instant.now
 
-  val fakeDateinTheFuture: Instant = fakeCurrentDate.plus(1, ChronoUnit.DAYS)
+  val fakeDateInTheFuture: Instant = fakeCurrentDate.plus(1, ChronoUnit.DAYS)
 
   val validUnplannedOutageData: OutageData = OutageData(
     id = UUID.randomUUID(),
@@ -87,9 +87,9 @@ object TestData {
       clsNotes = Some("Notes")
     )
 
-  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(fakeDateinTheFuture))
+  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(fakeDateiInTheFuture))
   val fakePlannedWorkWithCurrentDateAsStartDate: OutageData =
-    fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeDateinTheFuture))
+    fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeDateInTheFuture))
   val fakePlannedWorkWithCurrentDateAsEndDate:         OutageData = fakeOutageData(Planned, Some(fakeCurrentDate))
   val fakePlannedWorkWithCurrentDateAsStartAndEndDate: OutageData = fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeCurrentDate))
   val fakePlannedWorks: List[OutageData] = List(

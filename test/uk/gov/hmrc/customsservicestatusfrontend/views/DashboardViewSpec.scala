@@ -161,7 +161,7 @@ class DashboardViewSpec extends ViewBehaviours {
           view(
             AVAILABLE,
             unplannedOutageData = None,
-            plannedWorksHappeningToday = List(fakeOutageData(Planned, Some(fakeDateinTheFuture)))
+            plannedWorksHappeningToday = List(fakeOutageData(Planned, Some(fakeDateInTheFuture)))
           ).asDocument
 
         document.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"

@@ -56,7 +56,7 @@ class PlannedWorksHappeningTodaySpec extends BaseSpec {
 
       "there is a planned work with start and end date being the current date and a planned work not happening today" in {
 
-        plannedWorksUtil.plannedWorksHappeningToday(List(fakePlannedWork, fakePlannedWork.copy(startDateTime = fakeDateinTheFuture))) shouldBe List(
+        plannedWorksUtil.plannedWorksHappeningToday(List(fakePlannedWork, fakePlannedWork.copy(startDateTime = fakeDateInTheFuture))) shouldBe List(
           fakePlannedWork
         )
       }
