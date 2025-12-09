@@ -87,7 +87,7 @@ object TestData {
       clsNotes = Some("Notes")
     )
 
-  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(fakeDateiInTheFuture))
+  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(fakeDateInTheFuture))
   val fakePlannedWorkWithCurrentDateAsStartDate: OutageData =
     fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeDateInTheFuture))
   val fakePlannedWorkWithCurrentDateAsEndDate:         OutageData = fakeOutageData(Planned, Some(fakeCurrentDate))
