@@ -28,7 +28,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNO
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageType, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
-import uk.gov.hmrc.customsservicestatusfrontend.utils.{Now, PlannedWorksHappeningToday}
+import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 
 import java.time.Instant
 import scala.concurrent.Future
@@ -40,7 +40,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
   private val mockService            = mock[StatusService]
   private val mockOutageService      = mock[OutageService]
   private val mockPlannedWorkService = mock[PlannedWorkService]
-  private val mockPlannedWorksUtil   = mock[PlannedWorksHappeningToday]
   private val fakeNow: Now = new Now {
     override def apply: Instant = fakeDate
   }
@@ -50,8 +49,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     dashboardView,
     mockService,
     mockOutageService,
-    mockPlannedWorkService,
-    mockPlannedWorksUtil
+    mockPlannedWorkService
   )(ec, fakeNow)
 
   "GET /service-availability" should {
@@ -60,7 +58,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
         when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(None))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List()))
-        when(mockPlannedWorksUtil.plannedWorksHappeningToday(List())).thenReturn(List())
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -75,7 +72,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
           .thenReturn(Future.successful(Some(validUnplannedOutageData)))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List()))
-        when(mockPlannedWorksUtil.plannedWorksHappeningToday(List())).thenReturn(List())
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -90,7 +86,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
           .thenReturn(Future.successful(Some(validUnplannedOutageData)))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
-        when(mockPlannedWorksUtil.plannedWorksHappeningToday(List(fakePlannedWork))).thenReturn(List(fakePlannedWork))
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -105,7 +100,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
           .thenReturn(Future.successful(None))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
-        when(mockPlannedWorksUtil.plannedWorksHappeningToday(List(fakePlannedWork))).thenReturn(List(fakePlannedWork))
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -123,7 +117,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
         when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(None))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List()))
-        when(mockPlannedWorksUtil.plannedWorksHappeningToday(List())).thenReturn(List())
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -142,7 +135,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
           .thenReturn(Future.successful(Some(validUnplannedOutageData)))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List()))
-        when(mockPlannedWorksUtil.plannedWorksHappeningToday(List())).thenReturn(List())
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -161,7 +153,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
           .thenReturn(Future.successful(Some(validUnplannedOutageData)))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
-        when(mockPlannedWorksUtil.plannedWorksHappeningToday(List(fakePlannedWork))).thenReturn(List(fakePlannedWork))
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -180,7 +171,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
           .thenReturn(Future.successful(None))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
-        when(mockPlannedWorksUtil.plannedWorksHappeningToday(List(fakePlannedWork))).thenReturn(List(fakePlannedWork))
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -198,7 +188,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
         when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(Some(validUnplannedOutageData)))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
-        when(mockPlannedWorksUtil.plannedWorksHappeningToday(List(fakePlannedWork))).thenReturn(List(fakePlannedWork))
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK

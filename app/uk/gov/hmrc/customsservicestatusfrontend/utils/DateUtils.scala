@@ -17,16 +17,17 @@
 package uk.gov.hmrc.customsservicestatusfrontend.utils
 
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
+import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 
-import java.time.{LocalDate, ZoneId}
+import java.time.{Instant, LocalDate, ZoneId}
 
-class PlannedWorksHappeningToday {
+object DateUtils {
 
   private val today: LocalDate = LocalDate.now(ZoneId.of("Europe/London"))
 
-  def plannedWorksHappeningToday(plannedOutageData: List[OutageData]): List[OutageData] = plannedOutageData.filter { outage =>
-    val start = outage.startDateTime.atZone(ZoneId.of("Europe/London")).toLocalDate
-    outage.endDateTime match {
+  def isWithinDates(startDate: Instant, endDate: Option[Instant])(implicit now: Now): Boolean = {
+    val start: LocalDate = startDate.atZone(ZoneId.of("Europe/London")).toLocalDate
+    endDate match {
       case Some(endDate) =>
         val end = endDate.atZone(ZoneId.of("Europe/London")).toLocalDate
         !(today.isBefore(start) || today.isAfter(end))
@@ -34,5 +35,4 @@ class PlannedWorksHappeningToday {
         today.isEqual(start)
     }
   }
-
 }

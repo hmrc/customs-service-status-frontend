@@ -24,10 +24,10 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class ManageDashboardController @Inject (
   mcc:                 MessagesControllerComponents,
-  manageDashboardPage: ManageDashboardView
+  manageDashboardView: ManageDashboardView
 ) extends BaseFrontendController(mcc) {
 
   val show: Action[AnyContent] = Action { implicit request =>
-    Ok(manageDashboardPage())
+    Ok(manageDashboardView())
   }
 }

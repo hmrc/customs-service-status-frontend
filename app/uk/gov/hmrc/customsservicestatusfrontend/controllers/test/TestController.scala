@@ -35,7 +35,7 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class TestController @Inject() (
-  dashboardPage: DashboardView,
+  dashboardView: DashboardView,
   testService:   TestService,
   outageService: OutageService
 )(implicit val ec: ExecutionContext, mcc: MessagesControllerComponents, now: Now)
@@ -65,7 +65,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardPage(AVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
+      Ok(dashboardView(AVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
     }
   }
 
@@ -83,7 +83,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardPage(UNAVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
+      Ok(dashboardView(UNAVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
     }
   }
 
@@ -101,7 +101,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardPage(UNKNOWN, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
+      Ok(dashboardView(UNKNOWN, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
     }
   }
 }

@@ -23,6 +23,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, State}
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
 
+import java.time.temporal.ChronoUnit
 import java.time.{Instant, LocalDate, ZoneId}
 
 class DashboardViewSpec extends ViewBehaviours {
@@ -161,7 +162,7 @@ class DashboardViewSpec extends ViewBehaviours {
           view(
             AVAILABLE,
             unplannedOutageData = None,
-            plannedWorksHappeningToday = List(fakeOutageData(Planned, Some(fakeDateInTheFuture)))
+            plannedWorksHappeningToday = List(fakeOutageData(Planned, Some(now.plus(1, ChronoUnit.DAYS))))
           ).asDocument
 
         document.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
