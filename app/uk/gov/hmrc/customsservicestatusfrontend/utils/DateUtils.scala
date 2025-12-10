@@ -16,9 +16,6 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.utils
 
-import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
-import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
-
 import java.time.{Instant, LocalDate, ZoneId}
 
 object DateUtils {

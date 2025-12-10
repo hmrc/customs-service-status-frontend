@@ -54,51 +54,10 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
   "GET /service-availability" should {
     "show dashboard content as expected" when {
-      "there are no issues, no planned work and no CLS updates posted" in {
-        when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
-        when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(None))
-        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List()))
-
-        val result = controller.show(fakeRequest)
-        status(result) shouldBe Status.OK
-
-        val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-
-      }
-
-      "there are no issues, no planned work and there is a CLS update" in {
-        when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
-        when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
-          .thenReturn(Future.successful(Some(validUnplannedOutageData)))
-        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List()))
-
-        val result = controller.show(fakeRequest)
-        status(result) shouldBe Status.OK
-
-        val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-
-      }
-
       "there are no issues, there is planned work and there is a CLS update" in {
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
         when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
           .thenReturn(Future.successful(Some(validUnplannedOutageData)))
-        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
-
-        val result = controller.show(fakeRequest)
-        status(result) shouldBe Status.OK
-
-        val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-
-      }
-
-      "there are no issues, there is planned work but no CLS update" in {
-        when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
-        when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
-          .thenReturn(Future.successful(None))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
 
         val result = controller.show(fakeRequest)
@@ -117,60 +76,6 @@ class DashboardControllerSpec extends ControllerBaseSpec {
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
         when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(None))
         when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List()))
-
-        val result = controller.show(fakeRequest)
-        status(result) shouldBe Status.OK
-
-        val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-
-      }
-
-      "there are issues, no planned work and there is a CLS update" in {
-        val serviceStatus: CustomsServiceStatus =
-          CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(fakeDate), Some(fakeDate))
-        val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
-
-        when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
-        when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
-          .thenReturn(Future.successful(Some(validUnplannedOutageData)))
-        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List()))
-
-        val result = controller.show(fakeRequest)
-        status(result) shouldBe Status.OK
-
-        val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-
-      }
-
-      "there are issues, there is planned work and there is a CLS update" in {
-        val serviceStatus: CustomsServiceStatus =
-          CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(fakeDate), Some(fakeDate))
-        val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
-
-        when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
-        when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
-          .thenReturn(Future.successful(Some(validUnplannedOutageData)))
-        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
-
-        val result = controller.show(fakeRequest)
-        status(result) shouldBe Status.OK
-
-        val doc = Jsoup.parse(contentAsString(result))
-        doc.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
-
-      }
-
-      "there are issues, there is planned work but there is no CLS update" in {
-        val serviceStatus: CustomsServiceStatus =
-          CustomsServiceStatus("haulier", "Haulier", "description", Some(UNAVAILABLE), Some(fakeDate), Some(fakeDate))
-        val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
-
-        when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
-        when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
-          .thenReturn(Future.successful(None))
-        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
