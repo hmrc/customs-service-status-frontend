@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.controllers
+package uk.gov.hmrc.customsservicestatusfrontend.helpers
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardView
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import play.api.test.FakeRequest
+import play.twirl.api.Html
 
-import javax.inject.{Inject, Singleton}
+class BaseViewSpec extends BaseSpec {
 
-@Singleton
-class ManageDashboardController @Inject (
-  mcc:                 MessagesControllerComponents,
-  manageDashboardView: ManageDashboardView
-) extends BaseFrontendController(mcc) {
+  implicit val request: FakeRequest[?] = FakeRequest()
 
-  val show: Action[AnyContent] = Action { implicit request =>
-    Ok(manageDashboardView())
+  implicit class HtmlOps(html: Html) {
+    def asDocument: Document = Jsoup.parse(html.toString())
   }
+
 }

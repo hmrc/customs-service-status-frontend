@@ -23,8 +23,7 @@ import org.mockito.Mockito.*
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.ControllerBaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
-import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkView
 
 import scala.concurrent.Future
 
@@ -33,11 +32,11 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
   private val fakeRequest = FakeRequest("GET", "/service-availability/planned-work")
   private val mockService: PlannedWorkService = mock[PlannedWorkService]
 
-  private val plannedWorkPage = new PlannedWorkPage(govukLayoutTwoThirds)
+  private val plannedWorkView = new PlannedWorkView(govukLayoutTwoThirds)
 
   private val controller: PlannedWorkController = new PlannedWorkController(
     stubMessagesControllerComponents(),
-    plannedWorkPage,
+    plannedWorkView,
     mockService,
     "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
   )
@@ -53,23 +52,8 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
       val view = controller.show(fakeRequest)
       val doc  = Jsoup.parse(contentAsString(view))
 
-      val expectedDateFrom: String =
-        s"${Formatters.instantFormatDate(fakePlannedWork.startDateTime)} at ${Formatters.instantFormatHours(fakePlannedWork.startDateTime)}"
-      val expectedDateTo: String =
-        s"${Formatters.instantFormatDate(fakePlannedWork.endDateTime.get)} at ${Formatters.instantFormatHours(fakePlannedWork.endDateTime.get)}"
-      val expectedDetails: String = fakePlannedWork.commsText.html
-      val link:            String = doc.getElementById("plannedPage-link").attr("href")
-
       status(view)                                     shouldBe OK
       doc.getElementsByClass("govuk-heading-l").text() shouldBe "Planned work that will affect GVMS"
-      doc.getElementsByClass("govuk-body").text()      shouldBe "Return to Check GVMS availability page"
-      doc.getElementsByTag("strong").text()              should include("From:")
-      doc.getElementsByTag("div").text()                 should include(expectedDateFrom)
-      doc.getElementsByTag("strong").text()              should include("To:")
-      doc.getElementsByTag("div").text()                 should include(expectedDateTo)
-      doc.getElementsByTag("strong").text()              should include("Details:")
-      doc.getElementsByTag("div").text()                 should include(expectedDetails)
-      link                                             shouldBe "/customs-service-status/service-availability"
 
     }
 
@@ -83,8 +67,8 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
       val view = controller.show(fakeRequest)
       val doc  = Jsoup.parse(contentAsString(view))
 
-      status(view)                                 shouldBe OK
-      doc.getElementById("no-work-planned").text() shouldBe "No maintenance work is planned at the moment."
+      status(view)                                     shouldBe OK
+      doc.getElementsByClass("govuk-heading-l").text() shouldBe "Planned work that will affect GVMS"
     }
   }
 

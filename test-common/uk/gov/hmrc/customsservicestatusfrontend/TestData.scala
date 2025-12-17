@@ -29,6 +29,8 @@ object TestData {
 
   val now: Instant = Instant.now()
 
+  val availabilityForOtherServicesUrl = "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
+
   val serviceStatus: CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(AVAILABLE), Some(now), Some(now))
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
@@ -83,9 +85,9 @@ object TestData {
       clsNotes = Some("Notes")
     )
 
-  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(1, ChronoUnit.DAYS)))
+  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(now.plus(1, ChronoUnit.DAYS)))
   val fakePlannedWorkWithCurrentDateAsStartDate: OutageData =
-    fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeCurrentDate.plus(1, ChronoUnit.DAYS)))
+    fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(now.plus(1, ChronoUnit.DAYS)))
   val fakePlannedWorkWithCurrentDateAsEndDate:         OutageData = fakeOutageData(Planned, Some(fakeCurrentDate))
   val fakePlannedWorkWithCurrentDateAsStartAndEndDate: OutageData = fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeCurrentDate))
   val fakePlannedWorks: List[OutageData] = List(

@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.controllers
+package uk.gov.hmrc.customsservicestatusfrontend.utils
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardView
+import java.time.{Instant, LocalDate, ZoneId}
 
-import javax.inject.{Inject, Singleton}
+object DateUtils {
 
-@Singleton
-class ManageDashboardController @Inject (
-  mcc:                 MessagesControllerComponents,
-  manageDashboardView: ManageDashboardView
-) extends BaseFrontendController(mcc) {
+  private val today: LocalDate = LocalDate.now(ZoneId.of("Europe/London"))
 
-  val show: Action[AnyContent] = Action { implicit request =>
-    Ok(manageDashboardView())
+  def isWithinDates(startDate: Instant, endDate: Option[Instant])(implicit now: Now): Boolean = {
+    val start: LocalDate = startDate.atZone(ZoneId.of("Europe/London")).toLocalDate
+    endDate match {
+      case Some(endDate) =>
+        val end = endDate.atZone(ZoneId.of("Europe/London")).toLocalDate
+        !(today.isBefore(start) || today.isAfter(end))
+      case None =>
+        today.isEqual(start)
+    }
   }
 }

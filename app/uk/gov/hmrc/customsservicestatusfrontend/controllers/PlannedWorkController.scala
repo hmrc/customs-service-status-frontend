@@ -18,7 +18,7 @@ package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.services.PlannedWorkService
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkPage
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkView
 
 import javax.inject.{Inject, Named, Singleton}
 import scala.concurrent.ExecutionContext
@@ -26,7 +26,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class PlannedWorkController @Inject() (
   mcc:                                                                       MessagesControllerComponents,
-  plannedWorkView:                                                           PlannedWorkPage,
+  plannedWorkView:                                                           PlannedWorkView,
   plannedWorkService:                                                        PlannedWorkService,
   @Named("availabilityForOtherServicesUrl") availabilityForOtherServicesUrl: String
 )(implicit
