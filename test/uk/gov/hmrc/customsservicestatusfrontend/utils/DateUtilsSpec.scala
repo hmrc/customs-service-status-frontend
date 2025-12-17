@@ -20,6 +20,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Planned
 import uk.gov.hmrc.customsservicestatusfrontend.utils.DateUtils.*
+import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactories.*
 
 import java.time.temporal.ChronoUnit
 
@@ -65,12 +66,12 @@ class DateUtilsSpec extends BaseSpec {
       }
 
       "start date is the current date and end date before the current date" in {
-        val date = fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeDate))
+        val date = fakePlannedWorkWithCurrentDateAsEndDate.copy(endDateTime = Some(fakeDate))
         isWithinDates(date.startDateTime, date.endDateTime) shouldBe false
       }
 
       "start and end date are before the current date" in {
-        val date = fakeOutageData(Planned, Some(fakeDate))
+        val date = fakeOutageData(outageType = Planned, endDateTime = Some(fakeDate))
         isWithinDates(date.startDateTime, date.endDateTime) shouldBe false
       }
     }

@@ -21,7 +21,7 @@ import play.api.http.Status
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import org.mockito.Mockito.*
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
-import uk.gov.hmrc.customsservicestatusfrontend.TestData.{serviceStatuses, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.serviceStatuses
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, ServiceStatuses}
 import uk.gov.hmrc.http.HttpResponse
@@ -74,9 +74,9 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
         mockRequestBuilder
           .execute(using any(), any())
       )
-        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
+        .thenReturn(Future.successful(Some(fakeUnplannedOutage)))
 
-      connector.getLatest(Unplanned).futureValue shouldBe Some(validUnplannedOutageData)
+      connector.getLatest(Unplanned).futureValue shouldBe Some(fakeUnplannedOutage)
 
     }
 
@@ -91,9 +91,9 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
         mockRequestBuilder
           .execute(using any(), any())
       )
-        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
+        .thenReturn(Future.successful(Some(fakeUnplannedOutage)))
 
-      connector.getLatest(Planned).futureValue shouldBe Some(validUnplannedOutageData)
+      connector.getLatest(Planned).futureValue shouldBe Some(fakeUnplannedOutage)
     }
 
     "return 404 when there is no unplanned OutageData" in {

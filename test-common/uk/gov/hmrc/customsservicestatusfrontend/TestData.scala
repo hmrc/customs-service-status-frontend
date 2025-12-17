@@ -18,6 +18,8 @@ package uk.gov.hmrc.customsservicestatusfrontend
 
 import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{CommsText, InternalReference}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
+import uk.gov.hmrc.customsservicestatusfrontend.factories.ServiceStatusFactory.*
+import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactories.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
 
@@ -31,68 +33,26 @@ object TestData {
 
   val availabilityForOtherServicesUrl = "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
 
-  val serviceStatus: CustomsServiceStatus = CustomsServiceStatus("haulier", "Haulier", "description", Some(AVAILABLE), Some(now), Some(now))
-
-  val serviceStatuses: ServiceStatuses = ServiceStatuses(List(serviceStatus))
+  val serviceStatuses: ServiceStatuses = ServiceStatuses(
+    List(serviceStatus(state = Some(AVAILABLE), stateChangedAt = Some(now), lastUpdated = Some(now)))
+  )
 
   val fakeDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")
 
-  val fakeCurrentDate: Instant = Instant.now
+  val fakeUnplannedOutage: OutageData = fakeOutageData(outageType = Unplanned)
 
-  val validUnplannedOutageData: OutageData = OutageData(
-    id = UUID.randomUUID(),
-    outageType = Unplanned,
-    internalReference = InternalReference("Test reference"),
-    startDateTime = fakeDate,
-    endDateTime = None,
-    commsText = CommsText("Test details"),
-    publishedDateTime = fakeDate,
-    clsNotes = Some("Notes")
-  )
-
-  val validPlannedOutageData: OutageData = OutageData(
-    id = UUID.randomUUID(),
+  val fakePlannedWork: OutageData = fakeOutageData(
     outageType = Planned,
-    internalReference = InternalReference("Test reference"),
-    startDateTime = fakeDate,
-    endDateTime = Some(fakeDate.plus(1, ChronoUnit.DAYS)),
-    commsText = CommsText("Test details"),
-    publishedDateTime = fakeDate,
+    endDateTime = Some(now.plus(1, ChronoUnit.DAYS)),
     clsNotes = Some("Notes")
   )
 
-  def fakeOutageData(outageType: OutageType, endDateTime: Option[Instant]): OutageData =
-    OutageData(
-      id = UUID.randomUUID(),
-      outageType = outageType,
-      internalReference = InternalReference("Test reference"),
-      startDateTime = fakeDate,
-      endDateTime = endDateTime,
-      commsText = CommsText("Test details"),
-      publishedDateTime = fakeDate,
-      clsNotes = Some("Notes")
-    )
+  val fakePlannedWorkWithCurrentDateAsEndDate: OutageData = fakeOutageData(outageType = Planned, endDateTime = Some(now))
 
-  def fakeOutageDataWithCurrentDateAsStartDate(outageType: OutageType, endDateTime: Option[Instant]): OutageData =
-    OutageData(
-      id = UUID.randomUUID(),
-      outageType = outageType,
-      internalReference = InternalReference("Test reference"),
-      startDateTime = fakeCurrentDate,
-      endDateTime = endDateTime,
-      commsText = CommsText("Test details"),
-      publishedDateTime = fakeCurrentDate,
-      clsNotes = Some("Notes")
-    )
-
-  val fakePlannedWork: OutageData = fakeOutageData(Planned, Some(now.plus(1, ChronoUnit.DAYS)))
   val fakePlannedWorkWithCurrentDateAsStartDate: OutageData =
-    fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(now.plus(1, ChronoUnit.DAYS)))
-  val fakePlannedWorkWithCurrentDateAsEndDate:         OutageData = fakeOutageData(Planned, Some(fakeCurrentDate))
-  val fakePlannedWorkWithCurrentDateAsStartAndEndDate: OutageData = fakeOutageDataWithCurrentDateAsStartDate(Planned, Some(fakeCurrentDate))
-  val fakePlannedWorks: List[OutageData] = List(
-    fakePlannedWork.copy(commsText = CommsText("Test one")),
-    fakePlannedWork.copy(commsText = CommsText("Test two")),
-    fakePlannedWork.copy(commsText = CommsText("Test three"))
-  )
+    fakeOutageData(outageType = Planned, endDateTime = Some(now.plus(1, ChronoUnit.DAYS)), clsNotes = Some("Notes"))
+
+  val fakePlannedWorkWithCurrentDateAsStartAndEndDate: OutageData =
+    fakeOutageData(outageType = Planned, startDateTime = now, endDateTime = Some(now))
+
 }

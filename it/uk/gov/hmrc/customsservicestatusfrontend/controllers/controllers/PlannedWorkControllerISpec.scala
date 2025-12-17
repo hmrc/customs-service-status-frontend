@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customsservicestatusfrontend.controllers.helpers
+package uk.gov.hmrc.customsservicestatusfrontend.controllers.controllers
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.libs.json.Json
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
+import uk.gov.hmrc.customsservicestatusfrontend.controllers.helpers.BaseISpec
 import uk.gov.hmrc.customsservicestatusfrontend.controllers.routes
+import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.CommsText
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 
 class PlannedWorkControllerISpec extends BaseISpec {
+
+  val fakePlannedWorks: List[OutageData] = List(
+    fakePlannedWork.copy(commsText = CommsText("Test one")),
+    fakePlannedWork.copy(commsText = CommsText("Test two")),
+    fakePlannedWork.copy(commsText = CommsText("Test three"))
+  )
+
   "show" should {
     "show planned works if they exist" in {
       stubGet("/customs-service-status/services/planned-work", Json.stringify(Json.toJson(fakePlannedWorks)))

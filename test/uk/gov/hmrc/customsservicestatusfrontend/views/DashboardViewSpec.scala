@@ -17,20 +17,18 @@
 package uk.gov.hmrc.customsservicestatusfrontend.views
 
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
-import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.{Planned, Unplanned}
+import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, State}
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
+import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactories.*
 
-import java.time.temporal.ChronoUnit
-import java.time.{Instant, LocalDate, ZoneId}
+import java.time.Instant
 
 class DashboardViewSpec extends ViewBehaviours {
 
   "/service-availability/status page" should {
-
-    val fakeEndDate: Instant = LocalDate.now.plusDays(1).atStartOfDay(ZoneId.of("CET")).toInstant
 
     val dashboardView = DashboardView(layout)
 
@@ -44,12 +42,12 @@ class DashboardViewSpec extends ViewBehaviours {
     List(
       (AVAILABLE, None, List()),
       (UNAVAILABLE, None, List()),
-      (AVAILABLE, None, List(fakeOutageData(Planned, Some(fakeEndDate)))),
-      (UNAVAILABLE, None, List(fakeOutageData(Planned, Some(fakeEndDate)))),
-      (AVAILABLE, Some(fakeOutageData(Unplanned, None)), List()),
-      (UNAVAILABLE, Some(fakeOutageData(Unplanned, None)), List()),
-      (AVAILABLE, Some(fakeOutageData(Unplanned, None)), List(fakeOutageData(Planned, Some(fakeEndDate)))),
-      (UNAVAILABLE, Some(fakeOutageData(Unplanned, None)), List(fakeOutageData(Planned, Some(fakeEndDate))))
+      (AVAILABLE, None, List(fakePlannedWork)),
+      (UNAVAILABLE, None, List(fakePlannedWork)),
+      (AVAILABLE, Some(fakeOutageData(outageType = Unplanned)), List()),
+      (UNAVAILABLE, Some(fakeOutageData(outageType = Unplanned)), List()),
+      (AVAILABLE, Some(fakeOutageData(outageType = Unplanned)), List(fakePlannedWork)),
+      (UNAVAILABLE, Some(fakeOutageData(outageType = Unplanned)), List(fakePlannedWork))
     ).foreach { (state, unplannedOutageData, plannedWorksHappeningToday) =>
       s"rendered, in the scenario where state: $state, unplannedOutageData: $unplannedOutageData and plannedWorksHappeningToday: $plannedWorksHappeningToday" should {
         behave like normalPage("dashboard.haulier.h1")(
@@ -86,7 +84,8 @@ class DashboardViewSpec extends ViewBehaviours {
 
       "there are no issues, no planned work and there is a CLS update" in {
 
-        val document = view(AVAILABLE, unplannedOutageData = Some(fakeOutageData(Unplanned, None)), plannedWorksHappeningToday = List()).asDocument
+        val document =
+          view(AVAILABLE, unplannedOutageData = Some(fakeOutageData(outageType = Unplanned)), plannedWorksHappeningToday = List()).asDocument
 
         document.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
         document.getElementsByClass("govuk-heading-m").text()   should include("Live service status")
@@ -96,7 +95,7 @@ class DashboardViewSpec extends ViewBehaviours {
         document.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
 
         document.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
-          s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
+          s"Update at ${Formatters.instantFormatHours(fakeUnplannedOutage.publishedDateTime)} on ${Formatters.instantFormatDate(fakeUnplannedOutage.publishedDateTime)}"
         )
 
         document.getElementsByClass("govuk-heading-m").text() should include("Planned work")
@@ -116,7 +115,7 @@ class DashboardViewSpec extends ViewBehaviours {
 
         val document = view(
           AVAILABLE,
-          unplannedOutageData = Some(fakeOutageData(Unplanned, None)),
+          unplannedOutageData = Some(fakeOutageData(outageType = Unplanned)),
           plannedWorksHappeningToday = List(fakePlannedWork)
         ).asDocument
 
@@ -128,7 +127,7 @@ class DashboardViewSpec extends ViewBehaviours {
         document.getElementsByClass("govuk-body").text() should include("Refresh this page to check for changes.")
 
         document.getElementsByClass("hmrc-timeline__event-title govuk-table__caption--s").text() should include(
-          s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
+          s"Update at ${Formatters.instantFormatHours(fakeUnplannedOutage.publishedDateTime)} on ${Formatters.instantFormatDate(fakeUnplannedOutage.publishedDateTime)}"
         )
 
         val expectedDateFrom: String =
@@ -162,7 +161,7 @@ class DashboardViewSpec extends ViewBehaviours {
           view(
             AVAILABLE,
             unplannedOutageData = None,
-            plannedWorksHappeningToday = List(fakeOutageData(Planned, Some(now.plus(1, ChronoUnit.DAYS))))
+            plannedWorksHappeningToday = List(fakePlannedWork)
           ).asDocument
 
         document.getElementsByClass("govuk-heading-l").text() shouldBe "Service availability for GVMS"
@@ -367,7 +366,7 @@ class DashboardViewSpec extends ViewBehaviours {
         val document =
           view(
             UNAVAILABLE,
-            unplannedOutageData = Some(fakeOutageData(Unplanned, None)),
+            unplannedOutageData = Some(fakeOutageData(outageType = Unplanned)),
             plannedWorksHappeningToday = List()
           ).asDocument
 
@@ -382,11 +381,11 @@ class DashboardViewSpec extends ViewBehaviours {
         timelineHeaders.size shouldBe 2
 
         timelineHeaders.get(0).text() should include(
-          s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
+          s"Update at ${Formatters.instantFormatHours(fakeUnplannedOutage.publishedDateTime)} on ${Formatters.instantFormatDate(fakeUnplannedOutage.publishedDateTime)}"
         )
 
         timelineHeaders.get(1).text() should include(
-          s"Issue detected at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+          s"Issue detected at ${Formatters.instantFormatHours(fakeUnplannedOutage.publishedDateTime)} on ${Formatters.instantFormatDate(fakeUnplannedOutage.publishedDateTime)}"
         )
 
         document.getElementsByClass("govuk-heading-m").text() should include("Planned work")
@@ -402,7 +401,7 @@ class DashboardViewSpec extends ViewBehaviours {
         val document =
           view(
             UNAVAILABLE,
-            unplannedOutageData = Some(fakeOutageData(Unplanned, None)),
+            unplannedOutageData = Some(fakeOutageData(outageType = Unplanned)),
             plannedWorksHappeningToday = List(fakePlannedWork)
           ).asDocument
 
@@ -417,11 +416,11 @@ class DashboardViewSpec extends ViewBehaviours {
         timelineHeaders.size shouldBe 2
 
         timelineHeaders.get(0).text() should include(
-          s"Update at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validUnplannedOutageData.publishedDateTime)}"
+          s"Update at ${Formatters.instantFormatHours(fakeUnplannedOutage.publishedDateTime)} on ${Formatters.instantFormatDate(fakeUnplannedOutage.publishedDateTime)}"
         )
 
         timelineHeaders.get(1).text() should include(
-          s"Issue detected at ${Formatters.instantFormatHours(validUnplannedOutageData.publishedDateTime)} on ${Formatters.instantFormatDate(validPlannedOutageData.publishedDateTime)}"
+          s"Issue detected at ${Formatters.instantFormatHours(fakeUnplannedOutage.publishedDateTime)} on ${Formatters.instantFormatDate(fakeUnplannedOutage.publishedDateTime)}"
         )
 
         val expectedDateFrom: String =
@@ -451,7 +450,7 @@ class DashboardViewSpec extends ViewBehaviours {
         val document =
           view(
             UNKNOWN,
-            unplannedOutageData = Some(validUnplannedOutageData),
+            unplannedOutageData = Some(fakeUnplannedOutage),
             plannedWorksHappeningToday = List(fakePlannedWork)
           ).asDocument
 
