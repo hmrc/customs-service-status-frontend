@@ -19,7 +19,7 @@ package uk.gov.hmrc.customsservicestatusfrontend
 import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{CommsText, InternalReference}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.*
 import uk.gov.hmrc.customsservicestatusfrontend.factories.ServiceStatusFactory.*
-import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactories.*
+import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactory.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.AVAILABLE
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
 

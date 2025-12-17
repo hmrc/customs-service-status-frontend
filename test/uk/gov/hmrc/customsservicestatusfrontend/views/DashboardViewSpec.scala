@@ -22,7 +22,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAIL
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, State}
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
-import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactories.*
+import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactory.*
 
 import java.time.Instant
 

@@ -20,7 +20,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Planned
 import uk.gov.hmrc.customsservicestatusfrontend.utils.DateUtils.*
-import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactories.*
+import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactory.*
 
 import java.time.temporal.ChronoUnit
 

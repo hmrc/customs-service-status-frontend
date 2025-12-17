@@ -23,7 +23,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, OutageType}
 import java.time.Instant
 import java.util.UUID
 
-object OutageDataFactories {
+object OutageDataFactory {
 
   def fakeOutageData(
     id:                UUID = UUID.randomUUID(),
