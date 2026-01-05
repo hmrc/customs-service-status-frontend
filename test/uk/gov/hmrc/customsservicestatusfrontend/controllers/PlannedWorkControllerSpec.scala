@@ -47,7 +47,7 @@ class PlannedWorkControllerSpec extends ControllerBaseSpec {
         mockService
           .getAllPlannedWorks()(any())
       )
-        .thenReturn(Future.successful(List(fakePlannedWork)))
+        .thenReturn(Future.successful(List(plannedWork)))
 
       val view = controller.show(fakeRequest)
       val doc  = Jsoup.parse(contentAsString(view))

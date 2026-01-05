@@ -37,22 +37,22 @@ object TestData {
     List(serviceStatus(state = Some(AVAILABLE), stateChangedAt = Some(now), lastUpdated = Some(now)))
   )
 
-  val fakeDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")
+  val testDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")
 
-  val fakeUnplannedOutage: OutageData = fakeOutageData(outageType = Unplanned)
+  val unplannedOutage: OutageData = fakeOutageData(outageType = Unplanned)
 
-  val fakePlannedWork: OutageData = fakeOutageData(
+  val plannedWork: OutageData = fakeOutageData(
     outageType = Planned,
     endDateTime = Some(now.plus(1, ChronoUnit.DAYS)),
     clsNotes = Some("Notes")
   )
 
-  val fakePlannedWorkWithCurrentDateAsEndDate: OutageData = fakeOutageData(outageType = Planned, endDateTime = Some(now))
+  val plannedWorkWithCurrentDateAsEndDate: OutageData = fakeOutageData(outageType = Planned, endDateTime = Some(now))
 
-  val fakePlannedWorkWithCurrentDateAsStartDate: OutageData =
+  val plannedWorkWithCurrentDateAsStartDate: OutageData =
     fakeOutageData(outageType = Planned, endDateTime = Some(now.plus(1, ChronoUnit.DAYS)), clsNotes = Some("Notes"))
 
-  val fakePlannedWorkWithCurrentDateAsStartAndEndDate: OutageData =
+  val plannedWorkWithCurrentDateAsStartAndEndDate: OutageData =
     fakeOutageData(outageType = Planned, startDateTime = now, endDateTime = Some(now))
 
 }

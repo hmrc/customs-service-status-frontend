@@ -56,9 +56,9 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
         mockRequestBuilder
           .execute(using any(), any())
       )
-        .thenReturn(Future(List(fakePlannedWork)))
+        .thenReturn(Future(List(plannedWork)))
 
-      connector.getAllPlannedWorks().futureValue shouldBe List(fakePlannedWork)
+      connector.getAllPlannedWorks().futureValue shouldBe List(plannedWork)
     }
   }
 
@@ -74,9 +74,9 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
         mockRequestBuilder
           .execute(using any(), any())
       )
-        .thenReturn(Future.successful(Some(fakeUnplannedOutage)))
+        .thenReturn(Future.successful(Some(unplannedOutage)))
 
-      connector.getLatest(Unplanned).futureValue shouldBe Some(fakeUnplannedOutage)
+      connector.getLatest(Unplanned).futureValue shouldBe Some(unplannedOutage)
 
     }
 
@@ -91,9 +91,9 @@ class CustomsServiceStatusConnectorSpec extends BaseSpec {
         mockRequestBuilder
           .execute(using any(), any())
       )
-        .thenReturn(Future.successful(Some(fakeUnplannedOutage)))
+        .thenReturn(Future.successful(Some(unplannedOutage)))
 
-      connector.getLatest(Planned).futureValue shouldBe Some(fakeUnplannedOutage)
+      connector.getLatest(Planned).futureValue shouldBe Some(unplannedOutage)
     }
 
     "return 404 when there is no unplanned OutageData" in {

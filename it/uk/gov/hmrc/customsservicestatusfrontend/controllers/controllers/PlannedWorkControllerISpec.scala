@@ -28,9 +28,9 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 class PlannedWorkControllerISpec extends BaseISpec {
 
   val fakePlannedWorks: List[OutageData] = List(
-    fakePlannedWork.copy(commsText = CommsText("Test one")),
-    fakePlannedWork.copy(commsText = CommsText("Test two")),
-    fakePlannedWork.copy(commsText = CommsText("Test three"))
+    plannedWork.copy(commsText = CommsText("Test one")),
+    plannedWork.copy(commsText = CommsText("Test two")),
+    plannedWork.copy(commsText = CommsText("Test three"))
   )
 
   "show" should {

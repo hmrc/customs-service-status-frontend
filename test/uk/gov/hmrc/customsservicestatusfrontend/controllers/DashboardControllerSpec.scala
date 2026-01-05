@@ -42,7 +42,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
   private val mockOutageService      = mock[OutageService]
   private val mockPlannedWorkService = mock[PlannedWorkService]
   private val fakeNow: Now = new Now {
-    override def apply: Instant = fakeDate
+    override def apply: Instant = testDate
   }
 
   private val controller = new DashboardController(
@@ -60,8 +60,8 @@ class DashboardControllerSpec extends ControllerBaseSpec {
       "there are no issues, there is planned work and there is a CLS update" in {
         when(mockService.getStatus()(any())).thenReturn(Future.successful(serviceStatuses))
         when(mockOutageService.getLatest(ArgumentMatchers.eq(OutageType.Unplanned))(any()))
-          .thenReturn(Future.successful(Some(fakeUnplannedOutage)))
-        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
+          .thenReturn(Future.successful(Some(unplannedOutage)))
+        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(plannedWork)))
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
@@ -88,8 +88,8 @@ class DashboardControllerSpec extends ControllerBaseSpec {
 
       "status is unknown" in {
         when(mockService.getStatus()(any())).thenReturn(Future.successful(ServiceStatuses(List(serviceStatus(state = Some(UNKNOWN))))))
-        when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(Some(fakeUnplannedOutage)))
-        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(fakePlannedWork)))
+        when(mockOutageService.getLatest(any())(any())).thenReturn(Future.successful(Some(unplannedOutage)))
+        when(mockPlannedWorkService.getAllPlannedWorks()(any())).thenReturn(Future.successful(List(plannedWork)))
 
         val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK

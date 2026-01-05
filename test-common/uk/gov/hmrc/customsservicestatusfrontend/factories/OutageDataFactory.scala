@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.factories
 
-import uk.gov.hmrc.customsservicestatusfrontend.TestData.fakeDate
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.testDate
 import uk.gov.hmrc.customsservicestatusfrontend.models.DetailType.{CommsText, InternalReference}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, OutageType}
 
@@ -29,10 +29,10 @@ object OutageDataFactory {
     id:                UUID = UUID.randomUUID(),
     outageType:        OutageType,
     internalReference: InternalReference = InternalReference("Test reference"),
-    startDateTime:     Instant = fakeDate,
+    startDateTime:     Instant = testDate,
     endDateTime:       Option[Instant] = None,
     commsText:         CommsText = CommsText("Test details"),
-    publishedDateTime: Instant = fakeDate,
+    publishedDateTime: Instant = testDate,
     clsNotes:          Option[String] = None
   ): OutageData =
     OutageData(

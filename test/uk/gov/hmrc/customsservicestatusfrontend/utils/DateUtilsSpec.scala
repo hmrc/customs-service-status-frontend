@@ -32,46 +32,46 @@ class DateUtilsSpec extends BaseSpec {
     "return true" when {
       "start date is before current date and end date is after current date" in {
 
-        isWithinDates(fakePlannedWork.startDateTime, fakePlannedWork.endDateTime) shouldBe true
+        isWithinDates(plannedWork.startDateTime, plannedWork.endDateTime) shouldBe true
       }
 
       "start date being the current date and end date is after current date" in {
 
-        isWithinDates(fakePlannedWorkWithCurrentDateAsStartDate.startDateTime, fakePlannedWorkWithCurrentDateAsStartDate.endDateTime) shouldBe true
+        isWithinDates(plannedWorkWithCurrentDateAsStartDate.startDateTime, plannedWorkWithCurrentDateAsStartDate.endDateTime) shouldBe true
       }
 
       "start date is before current date and end date being the current date" in {
 
-        isWithinDates(fakePlannedWorkWithCurrentDateAsEndDate.startDateTime, fakePlannedWorkWithCurrentDateAsEndDate.endDateTime) shouldBe true
+        isWithinDates(plannedWorkWithCurrentDateAsEndDate.startDateTime, plannedWorkWithCurrentDateAsEndDate.endDateTime) shouldBe true
       }
 
       "start and end date being the current date" in {
 
         isWithinDates(
-          fakePlannedWorkWithCurrentDateAsStartAndEndDate.startDateTime,
-          fakePlannedWorkWithCurrentDateAsStartAndEndDate.endDateTime
+          plannedWorkWithCurrentDateAsStartAndEndDate.startDateTime,
+          plannedWorkWithCurrentDateAsStartAndEndDate.endDateTime
         ) shouldBe true
       }
     }
 
     "return false" when {
       "start date is after current date and end date being the current date" in {
-        val date = fakePlannedWorkWithCurrentDateAsEndDate.copy(startDateTime = now.apply.plus(1, ChronoUnit.DAYS))
+        val date = plannedWorkWithCurrentDateAsEndDate.copy(startDateTime = now.apply.plus(1, ChronoUnit.DAYS))
         isWithinDates(date.startDateTime, date.endDateTime) shouldBe false
       }
 
       "start and end date are after the current date" in {
-        val date = fakePlannedWork.copy(startDateTime = now.apply.plus(1, ChronoUnit.DAYS))
+        val date = plannedWork.copy(startDateTime = now.apply.plus(1, ChronoUnit.DAYS))
         isWithinDates(date.startDateTime, date.endDateTime) shouldBe false
       }
 
       "start date is the current date and end date before the current date" in {
-        val date = fakePlannedWorkWithCurrentDateAsEndDate.copy(endDateTime = Some(fakeDate))
+        val date = plannedWorkWithCurrentDateAsEndDate.copy(endDateTime = Some(testDate))
         isWithinDates(date.startDateTime, date.endDateTime) shouldBe false
       }
 
       "start and end date are before the current date" in {
-        val date = fakeOutageData(outageType = Planned, endDateTime = Some(fakeDate))
+        val date = fakeOutageData(outageType = Planned, endDateTime = Some(testDate))
         isWithinDates(date.startDateTime, date.endDateTime) shouldBe false
       }
     }

@@ -36,9 +36,9 @@ class PlannedWorkServiceSpec extends BaseSpec {
         mockConnector
           .getAllPlannedWorks()(any())
       )
-        .thenReturn(Future.successful(List(fakePlannedWork)))
+        .thenReturn(Future.successful(List(plannedWork)))
 
-      service.getAllPlannedWorks().futureValue shouldBe List(fakePlannedWork)
+      service.getAllPlannedWorks().futureValue shouldBe List(plannedWork)
     }
   }
 
