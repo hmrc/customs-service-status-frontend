@@ -27,7 +27,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 
 class PlannedWorkControllerISpec extends BaseISpec {
 
-  val fakePlannedWorks: List[OutageData] = List(
+  val plannedWorks: List[OutageData] = List(
     plannedWork.copy(commsText = CommsText("Test one")),
     plannedWork.copy(commsText = CommsText("Test two")),
     plannedWork.copy(commsText = CommsText("Test three"))
@@ -35,7 +35,7 @@ class PlannedWorkControllerISpec extends BaseISpec {
 
   "show" should {
     "show planned works if they exist" in {
-      stubGet("/customs-service-status/services/planned-work", Json.stringify(Json.toJson(fakePlannedWorks)))
+      stubGet("/customs-service-status/services/planned-work", Json.stringify(Json.toJson(plannedWorks)))
       val result = callRoute(fakeRequest(routes.PlannedWorkController.show))
 
       val document: Document = Jsoup.parse(contentAsString(result))
