@@ -33,7 +33,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.config.AppConfig
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.{govukLayoutFullWidth, govukLayoutTwoThirds}
 import uk.gov.hmrc.govukfrontend.views.html.components.{FixedWidthPageLayout, GovukBackLink, GovukButton, GovukExitThisPage, GovukFooter, GovukHeader, GovukInsetText, GovukLayout, GovukPhaseBanner, GovukServiceNavigation, GovukSkipLink, GovukTag, GovukTemplate, TwoThirdsMainContent}
 import uk.gov.hmrc.govukfrontend.views.html.helpers.GovukLogo
-import uk.gov.hmrc.hmrcfrontend.config.{AccessibilityStatementConfig, AssetsConfig, ContactFrontendConfig, LanguageConfig, RebrandConfig, TrackingConsentConfig, TudorCrownConfig}
+import uk.gov.hmrc.hmrcfrontend.config.{AccessibilityStatementConfig, AssetsConfig, ContactFrontendConfig, RebrandConfig, ServiceNavigationConfig, TrackingConsentConfig, TudorCrownConfig}
 import uk.gov.hmrc.hmrcfrontend.views.config.{HmrcFooterItems, StandardBetaBanner}
 import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcBanner, HmrcFooter, HmrcHeader, HmrcLanguageSelect, HmrcReportTechnicalIssue, HmrcUserResearchBanner}
 import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcHead, HmrcLanguageSelectHelper, HmrcReportTechnicalIssueHelper, HmrcScripts, HmrcStandardFooter, HmrcStandardHeader, HmrcStandardPage, HmrcTrackingConsentSnippet}
@@ -114,7 +114,8 @@ trait BaseSpec
     govukLogo,
     govukServiceNavigation
   )
-  val hmrcStandardHeader           = new HmrcStandardHeader(hmrcHeader)
+  val serviceNavigationConfig      = new ServiceNavigationConfig(configuration)
+  val hmrcStandardHeader           = new HmrcStandardHeader(hmrcHeader, serviceNavigationConfig, configuration)
   val govukFooter                  = new GovukFooter(RebrandConfig(configuration), govukLogo)
   val hmrcFooter                   = new HmrcFooter(govukFooter)
   val accessibilityStatementConfig = new AccessibilityStatementConfig(applicationConfig.config)
@@ -124,7 +125,7 @@ trait BaseSpec
   val hmrcTrackingConsentSnippet   = new HmrcTrackingConsentSnippet(trackingConsentConfig)
   val hmrcHead                     = new HmrcHead(hmrcTrackingConsentSnippet, assetsConfig)
   val hmrcLanguageSelectHelper =
-    new HmrcLanguageSelectHelper(hmrcLanguageSelect = new HmrcLanguageSelect, languageConfig = new LanguageConfig(applicationConfig.config))
+    new HmrcLanguageSelectHelper(hmrcLanguageSelect = new HmrcLanguageSelect, serviceNavigationConfig)
   val hmrcScripts        = new HmrcScripts(assetsConfig)
   val govukBackLink      = new GovukBackLink
   val govukExitThisPage  = new GovukExitThisPage(govukButton = new GovukButton)

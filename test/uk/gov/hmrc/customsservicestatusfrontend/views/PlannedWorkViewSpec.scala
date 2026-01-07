@@ -32,7 +32,7 @@ class PlannedWorkViewSpec extends ViewBehaviours {
 
     List(
       (List(), availabilityForOtherServicesUrl),
-      (List(fakePlannedWork), "")
+      (List(plannedWork), "")
     ).foreach { (plannedWorks, availabilityForOtherServicesUrl) =>
       s"rendered, in the scenario where planned work: $plannedWorks" should {
 
@@ -45,13 +45,13 @@ class PlannedWorkViewSpec extends ViewBehaviours {
 
     "show content with planned works as expected" in {
 
-      val document = view(List(fakePlannedWork), availabilityForOtherServicesUrl).asDocument
+      val document = view(List(plannedWork), availabilityForOtherServicesUrl).asDocument
 
       val expectedDateFrom: String =
-        s"${Formatters.instantFormatDate(fakePlannedWork.startDateTime)} at ${Formatters.instantFormatHours(fakePlannedWork.startDateTime)}"
+        s"${Formatters.instantFormatDate(plannedWork.startDateTime)} at ${Formatters.instantFormatHours(plannedWork.startDateTime)}"
       val expectedDateTo: String =
-        s"${Formatters.instantFormatDate(fakePlannedWork.endDateTime.get)} at ${Formatters.instantFormatHours(fakePlannedWork.endDateTime.get)}"
-      val expectedDetails: String = fakePlannedWork.commsText.html
+        s"${Formatters.instantFormatDate(plannedWork.endDateTime.get)} at ${Formatters.instantFormatHours(plannedWork.endDateTime.get)}"
+      val expectedDetails: String = plannedWork.commsText.html
       val link:            String = document.getElementById("plannedPage-link").attr("href")
 
       document.getElementsByClass("govuk-heading-l").text() shouldBe "Planned work that will affect GVMS"

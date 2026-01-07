@@ -20,7 +20,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import uk.gov.hmrc.customsservicestatusfrontend.connectors.CustomsServiceStatusConnector
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseSpec
-import uk.gov.hmrc.customsservicestatusfrontend.TestData.{validPlannedOutageData, validUnplannedOutageData}
+import uk.gov.hmrc.customsservicestatusfrontend.TestData.{plannedWork, unplannedOutage}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.services.OutageService
@@ -39,18 +39,18 @@ class OutageServiceSpec extends BaseSpec {
         mockConnector
           .getLatest(any())(any())
       )
-        .thenReturn(Future.successful(Some(validUnplannedOutageData)))
+        .thenReturn(Future.successful(Some(unplannedOutage)))
 
-      service.getLatest(Unplanned).futureValue shouldBe Some(validUnplannedOutageData)
+      service.getLatest(Unplanned).futureValue shouldBe Some(unplannedOutage)
     }
     "return response as expected for planned outage" in {
       when(
         mockConnector
           .getLatest(any())(any())
       )
-        .thenReturn(Future.successful(Some(validPlannedOutageData)))
+        .thenReturn(Future.successful(Some(plannedWork)))
 
-      service.getLatest(Unplanned).futureValue shouldBe Some(validPlannedOutageData)
+      service.getLatest(Unplanned).futureValue shouldBe Some(plannedWork)
     }
   }
 }
