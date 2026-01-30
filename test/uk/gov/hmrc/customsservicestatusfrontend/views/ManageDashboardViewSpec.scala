@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.customsservicestatusfrontend.views
 
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardView
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.manage_dashboard
 
 class ManageDashboardViewSpec extends ViewBehaviours {
 
   "/service-availability page" when {
     "rendered" should {
 
-      val manageDashboardView = ManageDashboardView(layout)
+      val manageDashboardView = manage_dashboard(layout)
 
       val view     = manageDashboardView()
       val document = view.asDocument

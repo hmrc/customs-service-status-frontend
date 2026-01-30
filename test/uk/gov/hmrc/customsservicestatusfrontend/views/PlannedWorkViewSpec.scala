@@ -19,13 +19,13 @@ package uk.gov.hmrc.customsservicestatusfrontend.views
 import uk.gov.hmrc.customsservicestatusfrontend.TestData.*
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageData
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.PlannedWorkView
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.planned_work
 
 class PlannedWorkViewSpec extends ViewBehaviours {
 
   "/service-availability/planned work page" when {
 
-    val plannedWorkView = PlannedWorkView(govukLayoutTwoThirds)
+    val plannedWorkView = planned_work(govukLayoutTwoThirds)
 
     def view(plannedWorks: List[OutageData], availabilityForOtherServicesUrl: String) =
       plannedWorkView(plannedWorks, availabilityForOtherServicesUrl)

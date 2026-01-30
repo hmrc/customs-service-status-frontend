@@ -28,7 +28,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.State.{UNAVAILABLE, UNKNO
 import uk.gov.hmrc.customsservicestatusfrontend.models.{CustomsServiceStatus, OutageData, OutageType, ServiceStatuses}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
 import uk.gov.hmrc.customsservicestatusfrontend.factories.ServiceStatusFactory.*
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.dashboard
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 
 import java.time.Instant
@@ -36,8 +36,8 @@ import scala.concurrent.Future
 
 class DashboardControllerSpec extends ControllerBaseSpec {
 
-  private val fakeRequest = FakeRequest("GET", "/service-availability")
-  private val dashboardView: DashboardView = new DashboardView(layout)
+  private val fakeRequest            = FakeRequest("GET", "/service-availability")
+  private val dashboardView          = new dashboard(layout)
   private val mockService            = mock[StatusService]
   private val mockOutageService      = mock[OutageService]
   private val mockPlannedWorkService = mock[PlannedWorkService]
