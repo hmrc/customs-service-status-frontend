@@ -21,7 +21,7 @@ import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.models.{OutageData, State}
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Formatters
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.dashboard
 import uk.gov.hmrc.customsservicestatusfrontend.factories.OutageDataFactory.*
 
 import java.time.Instant
@@ -30,7 +30,7 @@ class DashboardViewSpec extends ViewBehaviours {
 
   "/service-availability/status page" should {
 
-    val dashboardView = DashboardView(layout)
+    val dashboardView = dashboard(layout)
 
     def view(
       state:                      State = AVAILABLE,

@@ -17,14 +17,14 @@
 package uk.gov.hmrc.customsservicestatusfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.ManageDashboardView
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.manage_dashboard
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class ManageDashboardController @Inject (
   mcc:                 MessagesControllerComponents,
-  manageDashboardView: ManageDashboardView
+  manageDashboardView: manage_dashboard
 ) extends BaseFrontendController(mcc) {
 
   val show: Action[AnyContent] = Action { implicit request =>

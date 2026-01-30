@@ -20,7 +20,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.customsservicestatusfrontend.models.OutageType.Unplanned
 import uk.gov.hmrc.customsservicestatusfrontend.models.State.{AVAILABLE, UNAVAILABLE, UNKNOWN}
 import uk.gov.hmrc.customsservicestatusfrontend.services.{OutageService, PlannedWorkService, StatusService}
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.DashboardView
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.dashboard
 import uk.gov.hmrc.customsservicestatusfrontend.utils.Now
 import uk.gov.hmrc.customsservicestatusfrontend.utils.DateUtils.*
 
@@ -31,7 +31,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class DashboardController @Inject() (
   mcc:                MessagesControllerComponents,
-  dashboardView:      DashboardView,
+  dashboardView:      dashboard,
   statusService:      StatusService,
   outageService:      OutageService,
   plannedWorkService: PlannedWorkService

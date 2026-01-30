@@ -17,16 +17,16 @@
 package uk.gov.hmrc.customsservicestatusfrontend.views
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.customsservicestatusfrontend.views.html.ErrorTemplate
+import uk.gov.hmrc.customsservicestatusfrontend.views.html.error
 
-class ErrorTemplateViewSpec extends ViewBehaviours {
+class ErrorViewSpec extends ViewBehaviours {
 
   "service unavailable page" when {
     "rendered" should {
 
-      val errorTemplatePage = ErrorTemplate(layout)
+      val errorView = error(layout)
 
-      val view = errorTemplatePage(
+      val view = errorView(
         s"${messages("manage_dashboard.title")} - ${messages("service.name")} - ${messages("service.title.suffix")}",
         messages("manage_dashboard.heading"),
         messages("service_unavailable.message") + Messages("service_unavailable.p1", messages("service_unavailable.logging_in.label"))
