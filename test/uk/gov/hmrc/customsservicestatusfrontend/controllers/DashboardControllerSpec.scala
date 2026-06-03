@@ -53,7 +53,9 @@ class DashboardControllerSpec extends ControllerBaseSpec {
     mockPlannedWorkService
   )(ec, fakeNow)
 
-  private val serviceStatusesWithUnavailableState: ServiceStatuses = ServiceStatuses(List(serviceStatus(state = Some(UNAVAILABLE))))
+  private val serviceStatusesWithUnavailableState: ServiceStatuses = ServiceStatuses(
+    List(serviceStatus(state = Some(UNAVAILABLE), stateChangedAt = testDate))
+  )
 
   "GET /service-availability" should {
     "show dashboard content as expected" when {
