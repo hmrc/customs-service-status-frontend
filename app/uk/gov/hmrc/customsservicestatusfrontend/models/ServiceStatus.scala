@@ -45,7 +45,7 @@ case class CustomsServiceStatus(
   name:           String,
   description:    String,
   state:          Option[State],
-  stateChangedAt: Instant,
+  stateChangedAt: Option[Instant],
   lastUpdated:    Option[Instant]
 )
 

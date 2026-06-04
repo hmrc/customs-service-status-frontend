@@ -34,7 +34,7 @@ object TestData {
   val availabilityForOtherServicesUrl = "https://www.gov.uk/government/collections/hm-revenue-and-customs-service-availability-and-issues"
 
   val serviceStatuses: ServiceStatuses = ServiceStatuses(
-    List(serviceStatus(state = Some(AVAILABLE), stateChangedAt = now, lastUpdated = Some(now)))
+    List(serviceStatus(state = Some(AVAILABLE), stateChangedAt = Some(now), lastUpdated = Some(now)))
   )
 
   val testDate: Instant = Instant.parse("2020-01-01T00:00:00.000Z")

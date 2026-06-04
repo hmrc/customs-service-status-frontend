@@ -28,7 +28,7 @@ object ServiceStatusFactory {
     name:           String = "Haulier",
     description:    String = "description",
     state:          Option[State] = None,
-    stateChangedAt: Instant = Instant.now(),
+    stateChangedAt: Option[Instant] = None,
     lastUpdated:    Option[Instant] = None
   ): CustomsServiceStatus = CustomsServiceStatus(id, name, description, state, stateChangedAt, lastUpdated)
 

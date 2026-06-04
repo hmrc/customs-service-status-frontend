@@ -54,7 +54,7 @@ class DashboardControllerSpec extends ControllerBaseSpec {
   )(ec, fakeNow)
 
   private val serviceStatusesWithUnavailableState: ServiceStatuses = ServiceStatuses(
-    List(serviceStatus(state = Some(UNAVAILABLE), stateChangedAt = testDate))
+    List(serviceStatus(state = Some(UNAVAILABLE), stateChangedAt = Some(testDate)))
   )
 
   "GET /service-availability" should {
