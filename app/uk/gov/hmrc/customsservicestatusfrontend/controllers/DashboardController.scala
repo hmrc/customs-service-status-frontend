@@ -52,7 +52,7 @@ class DashboardController @Inject() (
         else
           UNKNOWN
 
-      val stateChangedAt = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt).getOrElse(Instant.now())
+      val stateChangedAt: Option[Instant] = statuses.services.find(_.state.contains(UNAVAILABLE)).flatMap(_.stateChangedAt)
 
       Ok(
         dashboardView(

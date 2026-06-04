@@ -65,7 +65,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardView(AVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
+      Ok(dashboardView(AVAILABLE, Some(Instant.now()), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
     }
   }
 
@@ -83,7 +83,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardView(UNAVAILABLE, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
+      Ok(dashboardView(UNAVAILABLE, Some(Instant.now()), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
     }
   }
 
@@ -101,7 +101,7 @@ class TestController @Inject() (
       )
     )
     outageService.getLatest(outageType = Unplanned).map { unplannedOutageData =>
-      Ok(dashboardView(UNKNOWN, Instant.now(), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
+      Ok(dashboardView(UNKNOWN, Some(Instant.now()), "haulier", unplannedOutageData, plannedWorksHappeningToday, now.apply))
     }
   }
 }

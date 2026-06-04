@@ -34,7 +34,7 @@ class DashboardViewSpec extends ViewBehaviours {
 
     def view(
       state:                      State = AVAILABLE,
-      stateChangedAt:             Instant = Instant.now(),
+      stateChangedAt:             Option[Instant] = Some(Instant.now()),
       unplannedOutageData:        Option[OutageData] = None,
       plannedWorksHappeningToday: List[OutageData]
     ) = dashboardView(state, stateChangedAt, "haulier", unplannedOutageData, plannedWorksHappeningToday, Instant.now)

@@ -26,7 +26,7 @@
 
 @this(layout: govuk_layout_full_width)
 
-@(state: State, stateChangedAt: Instant, serviceId: String, unplannedOutageData: Option[OutageData], plannedWorksHappeningToday: List[OutageData], now: Instant)(implicit request: RequestHeader, messages: Messages)
+@(state: State, stateChangedAt: Option[Instant], serviceId: String, unplannedOutageData: Option[OutageData], plannedWorksHappeningToday: List[OutageData], now: Instant)(implicit request: RequestHeader, messages: Messages)
 
 @statusClass = @{
      if(state == AVAILABLE) "govuk-tag govuk-tag--green" else if (state == UNAVAILABLE) "govuk-tag govuk-tag--orange" else ""
@@ -148,23 +148,25 @@
             </li>
         </ol>
     }else{
-        <ol class="hmrc-timeline">
-            <li class="hmrc-timeline__event">
-                <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
-                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(stateChangedAt)}</b>", s"<b>${Formatters.instantFormatDate(stateChangedAt)}</b>"))
-                </h2>
-                <div class="hmrc-timeline__event-content">
-                    <p class="govuk-body">
+        @if(stateChangedAt.isDefined) {
+            <ol class="hmrc-timeline">
+                <li class="hmrc-timeline__event">
+                    <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
+                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(stateChangedAt.getOrElse(now))}</b>", s"<b>${Formatters.instantFormatDate(stateChangedAt.getOrElse(now))}</b>"))
+                    </h2>
+                    <div class="hmrc-timeline__event-content">
+                        <p class="govuk-body">
                         @Html(messages("dashboard.unavailable.issues_with_the_service.p1"))
-                    </p>
-                <div class="hmrc-timeline__event-content">
-                    <p class="govuk-body">
-                        @Html(messages("dashboard.unavailable.issues_with_the_service.p2"))
-                    </p>
-                </div>
-                </div>
-            </li>
-        </ol>
+                        </p>
+                        <div class="hmrc-timeline__event-content">
+                            <p class="govuk-body">
+                            @Html(messages("dashboard.unavailable.issues_with_the_service.p2"))
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        }
     }
 
     @if(plannedWorksHappeningToday) {
