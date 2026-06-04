@@ -148,11 +148,11 @@
             </li>
         </ol>
     }else{
-        @if(stateChangedAt.isDefined) {
+        @stateChangedAt.map { changedAt =>
             <ol class="hmrc-timeline">
                 <li class="hmrc-timeline__event">
                     <h2 class="hmrc-timeline__event-title govuk-table__caption--s">
-                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(stateChangedAt.getOrElse(now))}</b>", s"<b>${Formatters.instantFormatDate(stateChangedAt.getOrElse(now))}</b>"))
+                    @Html(messages("dashboard.unavailable.issues_with_the_service.h1", s"<b>${Formatters.instantFormatHours(changedAt)}</b>", s"<b>${Formatters.instantFormatDate(changedAt)}</b>"))
                     </h2>
                     <div class="hmrc-timeline__event-content">
                         <p class="govuk-body">
