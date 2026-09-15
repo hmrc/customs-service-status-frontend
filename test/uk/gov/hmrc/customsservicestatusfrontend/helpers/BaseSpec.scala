@@ -33,10 +33,10 @@ import uk.gov.hmrc.customsservicestatusfrontend.config.AppConfig
 import uk.gov.hmrc.customsservicestatusfrontend.views.html.{govuk_layout_full_width, govuk_layout_two_thirds}
 import uk.gov.hmrc.govukfrontend.views.html.components.{FixedWidthPageLayout, GovukBackLink, GovukButton, GovukExitThisPage, GovukFooter, GovukHeader, GovukInsetText, GovukLayout, GovukPhaseBanner, GovukServiceNavigation, GovukSkipLink, GovukTag, GovukTemplate, TwoThirdsMainContent}
 import uk.gov.hmrc.govukfrontend.views.html.helpers.GovukLogo
-import uk.gov.hmrc.hmrcfrontend.config.{AccessibilityStatementConfig, AssetsConfig, ContactFrontendConfig, RebrandConfig, ServiceNavigationConfig, TrackingConsentConfig, TudorCrownConfig}
+import uk.gov.hmrc.hmrcfrontend.config.{AccessibilityStatementConfig, AssetsConfig, ContactFrontendConfig, TrackingConsentConfig}
 import uk.gov.hmrc.hmrcfrontend.views.config.{HmrcFooterItems, StandardBetaBanner}
-import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcBanner, HmrcFooter, HmrcHeader, HmrcLanguageSelect, HmrcReportTechnicalIssue, HmrcUserResearchBanner}
-import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcHead, HmrcLanguageSelectHelper, HmrcReportTechnicalIssueHelper, HmrcScripts, HmrcStandardFooter, HmrcStandardHeader, HmrcStandardPage, HmrcTrackingConsentSnippet}
+import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcBanner, HmrcFooter, HmrcHeader, HmrcReportTechnicalIssue, HmrcServiceNavigationLanguageSelect, HmrcUserResearchBanner}
+import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcHead, HmrcReportTechnicalIssueHelper, HmrcScripts, HmrcServiceNavigationLanguageSelectHelper, HmrcStandardFooter, HmrcStandardHeader, HmrcStandardPage, HmrcTrackingConsentSnippet}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -85,22 +85,21 @@ trait BaseSpec
 
   val govukLayout = new GovukLayout(
     govukTemplate = new GovukTemplate(
-      govukHeader = new GovukHeader(TudorCrownConfig(configuration), RebrandConfig(configuration), govukLogo),
-      govukFooter = new GovukFooter(RebrandConfig(configuration), govukLogo),
+      govukHeader = new GovukHeader(govukLogo),
+      govukFooter = new GovukFooter(govukLogo),
       govukSkipLink = new GovukSkipLink,
-      fixedWidthPageLayout = new FixedWidthPageLayout,
-      rebrandConfig = RebrandConfig(configuration)
+      fixedWidthPageLayout = new FixedWidthPageLayout
     ),
-    govukHeader = new GovukHeader(TudorCrownConfig(configuration), RebrandConfig(configuration), govukLogo),
-    govukFooter = new GovukFooter(RebrandConfig(configuration), govukLogo),
+    govukHeader = new GovukHeader(govukLogo),
+    govukServiceNavigation = new GovukServiceNavigation,
+    govukFooter = new GovukFooter(govukLogo),
     govukBackLink = new GovukBackLink,
     defaultMainContentLayout = new TwoThirdsMainContent,
     fixedWidthPageLayout = new FixedWidthPageLayout
   )
 
-  val govukTag = new GovukTag
-  val tudorCrownConfig: TudorCrownConfig = TudorCrownConfig(applicationConfig.config)
-  val hmrcBanner             = new HmrcBanner(tudorCrownConfig)
+  val govukTag               = new GovukTag
+  val hmrcBanner             = new HmrcBanner()
   val hmrcUserResearchBanner = new HmrcUserResearchBanner
   val govukPhaseBanner       = new GovukPhaseBanner(govukTag)
   val govukInsetText         = new GovukInsetText
@@ -109,14 +108,11 @@ trait BaseSpec
     hmrcBanner,
     hmrcUserResearchBanner,
     govukPhaseBanner,
-    tudorCrownConfig,
-    RebrandConfig(configuration),
     govukLogo,
     govukServiceNavigation
   )
-  val serviceNavigationConfig      = new ServiceNavigationConfig(configuration)
-  val hmrcStandardHeader           = new HmrcStandardHeader(hmrcHeader, serviceNavigationConfig, configuration)
-  val govukFooter                  = new GovukFooter(RebrandConfig(configuration), govukLogo)
+  val hmrcStandardHeader           = new HmrcStandardHeader(hmrcHeader, configuration)
+  val govukFooter                  = new GovukFooter(govukLogo)
   val hmrcFooter                   = new HmrcFooter(govukFooter)
   val accessibilityStatementConfig = new AccessibilityStatementConfig(applicationConfig.config)
   val hmrcFooterItems              = new HmrcFooterItems(accessibilityStatementConfig)
@@ -125,7 +121,7 @@ trait BaseSpec
   val hmrcTrackingConsentSnippet   = new HmrcTrackingConsentSnippet(trackingConsentConfig)
   val hmrcHead                     = new HmrcHead(hmrcTrackingConsentSnippet, assetsConfig)
   val hmrcLanguageSelectHelper =
-    new HmrcLanguageSelectHelper(hmrcLanguageSelect = new HmrcLanguageSelect, serviceNavigationConfig)
+    new HmrcServiceNavigationLanguageSelectHelper(new HmrcServiceNavigationLanguageSelect)
   val hmrcScripts        = new HmrcScripts(assetsConfig)
   val govukBackLink      = new GovukBackLink
   val govukExitThisPage  = new GovukExitThisPage(govukButton = new GovukButton)
@@ -138,7 +134,6 @@ trait BaseSpec
     hmrcStandardHeader = hmrcStandardHeader,
     hmrcStandardFooter = hmrcStandardFooter,
     hmrcHead = hmrcHead,
-    hmrcLanguageSelectHelper = hmrcLanguageSelectHelper,
     hmrcScripts = hmrcScripts,
     govukBackLink = govukBackLink,
     govukExitThisPage = govukExitThisPage,

@@ -14,9 +14,9 @@ $hmrc-assets-path: "/customs-service-status-frontend/assets/lib/hmrc-frontend/hm
     display: block;
     padding: 20px;
     margin-bottom: 20px;
-    border: 0.5px solid#b1b4b6;
+    border: 0.5px solid#cecece;
     border-radius: 0px;
-    background:#f3f2f1;
+    background:#f3f3f3;
     text-decoration: none;
     color:#0b0c0c;
     transition: background-color 0.2s;
@@ -132,5 +132,5 @@ a:hover .cards__item__header {
 
   .govuk-table__cell {
     padding-bottom: 30px;
-    border-bottom: 1px solid #b1b4b6;
+    border-bottom: 1px solid #cecece;
   }
