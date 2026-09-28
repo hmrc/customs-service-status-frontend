@@ -50,7 +50,7 @@ class DashboardViewSpec extends ViewBehaviours {
       (UNAVAILABLE, Some(fakeOutageData(outageType = Unplanned)), List(plannedWork))
     ).foreach { (state, unplannedOutageData, plannedWorksHappeningToday) =>
       s"rendered, in the scenario where state: $state, unplannedOutageData: $unplannedOutageData and plannedWorksHappeningToday: $plannedWorksHappeningToday" should {
-        behave like normalPage("dashboard.haulier.h1")(
+        behave like normalPage("Service availability for GVMS")(
           view(state = state, unplannedOutageData = unplannedOutageData, plannedWorksHappeningToday = plannedWorksHappeningToday)
         )
         behave like pageWithoutBackLink(

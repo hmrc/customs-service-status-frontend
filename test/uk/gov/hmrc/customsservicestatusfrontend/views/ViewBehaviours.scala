@@ -18,13 +18,12 @@ package uk.gov.hmrc.customsservicestatusfrontend.views
 
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.customsservicestatusfrontend.helpers.BaseViewSpec
 
 class ViewBehaviours extends BaseViewSpec {
 
-  def normalPage(headingKey: String, headingArgs: Seq[String] = Seq(), section: Option[String] = None)(html: Html): Unit =
+  def normalPage(heading: String, section: Option[String] = None)(html: Html): Unit =
     "behave like a normal page" when {
 
       val document = html.asDocument
@@ -32,21 +31,21 @@ class ViewBehaviours extends BaseViewSpec {
       "rendered" should {
 
         "display govuk header content" in {
-          document.getElementsByClass("govuk-header__link govuk-header__service-name").text() shouldBe messages("service.name")
+          document.getElementsByClass("govuk-header__link govuk-header__service-name").text() shouldBe "Check GVMS availability"
         }
 
         "display the correct browser title" in {
-          assertEqualsMessage(document, "title", title(Messages(headingKey, headingArgs*), section))
+          assertEqualsValue(document, "title", title(heading, section))
         }
 
         "display the correct page heading" in {
-          assertPageHeadingEqualsMessage(document, headingKey, headingArgs*)
+          assertPageHeadingEqualsValue(document, heading)
         }
       }
     }
 
-  private def assertPageHeadingEqualsMessage(doc: Document, expectedMessageKey: String, args: Any*): Assertion = {
-    val pageHeading = Messages(expectedMessageKey, args*).replaceAll("&nbsp;", " ")
+  private def assertPageHeadingEqualsValue(doc: Document, expectedHeading: String): Assertion = {
+    val pageHeading = expectedHeading.replaceAll("&nbsp;", " ")
     val headers     = doc.getElementsByTag("h1")
     if (headers.isEmpty)
       doc.body().getElementsContainingOwnText(pageHeading).size shouldBe 1
@@ -55,9 +54,6 @@ class ViewBehaviours extends BaseViewSpec {
       headers.first.text.replaceAll("\u00a0", " ") should include(pageHeading)
     }
   }
-
-  private def assertEqualsMessage(doc: Document, cssSelector: String, expectedMessageKey: String): Assertion =
-    assertEqualsValue(doc, cssSelector, Messages(expectedMessageKey))
 
   private def assertEqualsValue(doc: Document, cssSelector: String, expectedValue: String): Assertion = {
     val elements = doc.select(cssSelector)
@@ -68,10 +64,10 @@ class ViewBehaviours extends BaseViewSpec {
     assert(elements.first().html().replace("\n", "") === expectedValue)
   }
 
-  def title(heading: String, section: Option[String] = None)(implicit messages: Messages): String =
+  def title(heading: String, section: Option[String] = None): String =
     section match {
-      case Some(section) => s"$heading - $section - ${messages("service.name")} - ${messages("service.title.suffix")}"
-      case None          => s"$heading - ${messages("service.name")} - ${messages("service.title.suffix")}"
+      case Some(section) => s"$heading - $section - Check GVMS availability - GOV.UK"
+      case None          => s"$heading - Check GVMS availability - GOV.UK"
     }
 
   def pageWithoutBackLink(html: Html): Unit =
