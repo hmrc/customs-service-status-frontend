@@ -36,7 +36,7 @@ class PlannedWorkViewSpec extends ViewBehaviours {
     ).foreach { (plannedWorks, availabilityForOtherServicesUrl) =>
       s"rendered, in the scenario where planned work: $plannedWorks" should {
 
-        behave like normalPage("planned_work.title")(view(plannedWorks, availabilityForOtherServicesUrl))
+        behave like normalPage("Planned work that will affect GVMS")(view(plannedWorks, availabilityForOtherServicesUrl))
         behave like pageWithoutBackLink(view(plannedWorks, availabilityForOtherServicesUrl))
         behave like pageWithPageNotWorkingLink(view(plannedWorks, availabilityForOtherServicesUrl))
 

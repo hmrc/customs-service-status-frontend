@@ -34,7 +34,7 @@ class ErrorViewSpec extends ViewBehaviours {
 
       val document = view.asDocument
 
-      behave like normalPage("manage_dashboard.heading")(view)
+      behave like normalPage("GVMS availability")(view)
       behave like pageWithoutBackLink(view)
       behave like pageWithPageNotWorkingLink(view)
 
